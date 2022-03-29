@@ -3,6 +3,8 @@
  */
 package acquire;
 
+import java.lang.System;
+
 public class App {
     public String getGreeting() {
         return "Hello World!";
