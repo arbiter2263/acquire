@@ -108,7 +108,7 @@ public class Corporation implements CorporationInterface{
      * Method that updates this corporation's stockCount after a stock has been bought
      */
     protected void stockBought() {
-        this.stockCount--;
+        this.stockCount++;
         this.updateStockPrice();
         if (this.tileList.size() == this.STOCKCAP) {
             this.stockCapMet = true;
@@ -119,7 +119,7 @@ public class Corporation implements CorporationInterface{
      * Method that updates this corporation's stockCount after a stock has been sold
      */
     protected void stockSold() {
-        this.stockCount++;
+        this.stockCount--;
         this.updateStockPrice();
         this.stockCapMet = false;
     }

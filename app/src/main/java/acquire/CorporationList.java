@@ -54,8 +54,9 @@ public class CorporationList {
     /**
      * Method that removes a corporation from inactiveCorps and adds it to activeCorps
      * @param corporation The corporation to be activated
+     * @throws NoSuchElementException  If the corporation is not within the inactive list
      */
-    protected void activateCorp(Corporation corporation){
+    protected void activateCorp(Corporation corporation) throws NoSuchElementException{
         if (isCorpInList(corporation, inactiveCorps) > -1) {
             Iterator<Corporation> iterator = activeCorps.iterator();
             while (iterator.hasNext()) {
@@ -69,15 +70,16 @@ public class CorporationList {
             }
         } else {
             //Corp is already active
-            throw new RuntimeException();
+            throw new NoSuchElementException("Corporation " + corporation.getName() + " is not within the inactive list and can not be activated.");
         }
     }
 
     /**
      * Method that removes a corporation from activeCorps and adds it to inactiveCorps
      * @param corporation The corporation to be deactivated
+     * @throws NoSuchElementException  If the corporation is not within the active list
      */
-    protected void deactivateCorp(Corporation corporation){
+    protected void deactivateCorp(Corporation corporation) throws NoSuchElementException{
         if (isCorpInList(corporation, activeCorps) > -1) {
             Iterator<Corporation> iterator = inactiveCorps.iterator();
             while (iterator.hasNext()) {
@@ -91,7 +93,7 @@ public class CorporationList {
             }
         } else {
             //Corp is already inactive
-            throw new RuntimeException();
+            throw new NoSuchElementException("Corporation " + corporation.getName() + " is not within the active list and can not be deactivated.");
         }
     }
 
