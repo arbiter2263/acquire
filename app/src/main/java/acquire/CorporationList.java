@@ -12,6 +12,8 @@ public class CorporationList {
      * Private constructor to enforce only one instance
      */
     private CorporationList() {
+        this.inactiveCorps = new ArrayList<Corporation>();
+        this.activeCorps = new ArrayList<Corporation>();
         //Initialize all possible corporations as members of inactiveCorps
         for (int i = 0; i < CORPORATIONS.length; i++){
             inactiveCorps.add(new Corporation(CORPORATIONS[i]));
