@@ -1,14 +1,50 @@
 package acquire;
 
 public class Hint implements HintInterface{
-    private static String[] possibleHits = {"Hint 1", "Hint 2", "Hint 3"};
+    private static String[] possibleHits = {
+            "Until a corporation contains at least 11 tiles, it can be merged into another corporation.",
+            "Stock in any corporation is always cheaper when the corporation is smaller. Buying at this time is a great way to maximize your profits",
+            "No matter how much you paid for a stock, its price is always determined by how many tiles are in the corporation at the time of sale.",
+            "In the event of a tie in a merger, the player who played the tile gets to decide which company survives",
+            "Once a corporation becomes defunct through a merger, it can be reestablished when another corporation is formed. All previously sold stock is still valid for this 'new' corporation"};
+    private int index = 0;
 
-    protected Hint() {
+    /**
+     * Constructor for Hint
+     */
+    protected Hint() {}
+
+    /**
+     * Method to get the first hint, when the class is first initialized
+     * @return String  The first hint
+     */
+    public String getHint() {
+        return possibleHits[index];
     }
-    protected String getHint() {
-        return possibleHits[0];
+
+    /**
+     * Method to get the next hint from the current index
+     * @return String  The next possible hint
+     */
+    public String getNextHint() {
+        if ( (index + 1) > (possibleHits.length - 1) ) {
+            index = 0;
+        } else {
+            index++;
+        }
+        return possibleHits[index];
     }
-    protected String getHint(int index) {
+
+    /**
+     * Method to get the previous hint from the current index
+     * @return String  The previous possible hint
+     */
+    public String getPreviousHint() {
+        if ( (index - 1) < 0) {
+            index = possibleHits.length - 1;
+        } else {
+            index--;
+        }
         return possibleHits[index];
     }
 }
