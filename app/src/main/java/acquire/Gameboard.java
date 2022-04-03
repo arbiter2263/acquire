@@ -221,7 +221,7 @@ public class Gameboard {
             case 'K' :  row = 10; break;
             case 'L' :  row = 11; break;
         }
-        int column = (int)tile.getSpace().charAt(2);
+        int column = (int)tile.getSpace().charAt(1);
         int[] rowColumn = {row, column};
         return rowColumn;
 
