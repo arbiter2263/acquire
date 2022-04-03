@@ -1,8 +1,10 @@
 package acquire;
 
+import java.util.LinkedList;
+
 public interface CorporationInterface {
     public String getName();
-    public int getTileCount();
+    public LinkedList<Tile> getTileList();
     public boolean checkIfSafe();
     public int getStockCount();
     public boolean getStockCapMet();

@@ -28,11 +28,11 @@ public class Corporation implements CorporationInterface{
     }
 
     /**
-     * Method to get the number of tiles in this corporation
-     * @return int  The number of tiles
+     * Simple getter for tileList
+     * @return LinkedList<Tile>  The tile contained within this corporation
      */
-    public int getTileCount() {
-        return tileList.size();
+    public LinkedList<Tile> getTileList() {
+        return tileList;
     }
 
     /**
@@ -92,7 +92,7 @@ public class Corporation implements CorporationInterface{
      */
     @Override
     public String toString() {
-        return this.getName() + ": Size: " + this.getTileCount() + " Stocks: " + this.getStockCount();
+        return this.getName() + ": Size: " + this.tileList.size() + " Stocks: " + this.getStockCount();
     }
 
     /**
