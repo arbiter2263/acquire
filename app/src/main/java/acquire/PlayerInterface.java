@@ -5,6 +5,6 @@ import java.util.LinkedList;
 public interface PlayerInterface {
     public String getName();
     public int showMoney();
-    public LinkedList<Stock> showStocks();
+    public int[] showStocks();
     public void setName(String name);
 }
