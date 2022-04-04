@@ -1,5 +1,6 @@
 package acquire;
 
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
@@ -8,7 +9,8 @@ public class Player implements PlayerInterface{
     private String name;
     private int wallet;
     private LinkedList<Tile> hand;
-    private LinkedList<Stock> stocks;
+    private int[] stocks;
+    private Hashtable<Corporation, Integer> stockCounts;
 
     /**
      * Constructor for Player
@@ -18,7 +20,16 @@ public class Player implements PlayerInterface{
         this.name = name;
         this.wallet = 6000;
         hand = new LinkedList<Tile>();
-        stocks = new LinkedList<Stock>();
+        stocks = new int[]{0, 0, 0, 0, 0, 0, 0};
+        stockCounts = new Hashtable<>();
+        // Add inactive corporations
+        for (Corporation corp : CorporationList.getInstance().getInactiveCorps()) {
+            stockCounts.put(corp, 0);
+        }
+        // Add active corporations -- should be an empty list ; future proofing
+        for (Corporation corp : CorporationList.getInstance().getActiveCorps()) {
+            stockCounts.put(corp, 0);
+        }
     }
 
     /**
@@ -39,10 +50,10 @@ public class Player implements PlayerInterface{
 
     /**
      * Simple getter for stocks
-     * @return  LinkedList<Stock>  A copy of stocks
+     * @return  HashTable<Corporation, Integer>  A copy of stock counts for each company
      */
-    public LinkedList<Stock> showStocks() {
-        return stocks;
+    public Hashtable<Corporation, Integer> showStocks() {
+        return stockCounts;
     }
 
     /**
@@ -76,7 +87,8 @@ public class Player implements PlayerInterface{
                 if (this.wallet >= cost) {
                     wallet -= cost;
                     nextCorp.stockSold();
-                    this.stocks.add(new Stock(stockName, cost));
+                    int oldStockCount = this.stockCounts.get(nextCorp);
+                    this.stockCounts.replace(nextCorp, (oldStockCount + 1) );
                     return true;
                 } else {
                     return false;
@@ -87,8 +99,8 @@ public class Player implements PlayerInterface{
     }
 
     /**
-     * Method to remove an unplayable tile from a player's hand and call Pile to destroy the tile
-     * @param tile  The tile to be removed and destroyed
+     * Method to remove an unplayable tile from a player's hand
+     * @param tile  The tile to be removed from the player's hand
      * @throws NoSuchElementException  If the tile is not in the player's hand
      */
     protected void removeTile(Tile tile) throws NoSuchElementException{
@@ -97,7 +109,6 @@ public class Player implements PlayerInterface{
             Tile nextTile = tiles.next();
             if (tile == nextTile) {
                 tiles.remove();
-                Pile.destroyTile(nextTile);
                 return;
             }
         }
