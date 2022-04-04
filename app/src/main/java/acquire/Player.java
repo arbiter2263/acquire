@@ -50,10 +50,10 @@ public class Player implements PlayerInterface{
 
     /**
      * Simple getter for stocks
-     * @return  int[]  A copy of stock counts for each company
+     * @return  HashTable<Corporation, Integer>  A copy of stock counts for each company
      */
-    public int[] showStocks() {
-        return stocks;
+    public Hashtable<Corporation, Integer> showStocks() {
+        return stockCounts;
     }
 
     /**
