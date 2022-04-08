@@ -6,7 +6,8 @@ public class Hint implements HintInterface{
             "Stock in any corporation is always cheaper when the corporation is smaller. Buying at this time is a great way to maximize your profits",
             "No matter how much you paid for a stock, its price is always determined by how many tiles are in the corporation at the time of sale.",
             "In the event of a tie in a merger, the player who played the tile gets to decide which company survives",
-            "Once a corporation becomes defunct through a merger, it can be reestablished when another corporation is formed. All previously sold stock is still valid for this 'new' corporation"};
+            "Once a corporation becomes defunct through a merger, it can be reestablished when another corporation is formed. All previously sold stock is still valid for this 'new' corporation",
+            "Running out of money: Aggressively competing to become the majority stockholder in a corporation can be risky. Invest wisely in corporations that are small and close to bigger ones."};
     private int index = 0;
 
     /**
