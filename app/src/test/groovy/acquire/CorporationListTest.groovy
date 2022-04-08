@@ -2,7 +2,7 @@ package acquire;
 
 import spock.lang.Specification;
 
-public class CorporationListTest extends Specification {
+class CorporationListTest extends Specification {
     //getInstance()
     //getStockCost()
     //getActiveCorps()

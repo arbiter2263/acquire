@@ -2,7 +2,7 @@ package acquire;
 
 import spock.lang.Specification;
 
-public class CorporationTest extends Specification {
+class CorporationTest extends Specification {
     //getName()
     //getTileList()
     //checkIfSafe()

@@ -2,7 +2,7 @@ package acquire;
 
 import spock.lang.Specification;
 
-public class PlayerTest extends Specification {
+class PlayerTest extends Specification {
     //getName()
     //showMoney()
     //showStocks()

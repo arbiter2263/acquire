@@ -2,7 +2,7 @@ package acquire;
 
 import spock.lang.Specification;
 
-public class GameboardTest extends Specification {
+class GameboardTest extends Specification {
     //getInstance()
     //initializeGame()
     //getTilesPlayed()
