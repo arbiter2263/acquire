@@ -5,9 +5,6 @@ import spock.lang.Specification
 
 class PileTest extends Specification{
 
-    //returnTile()
-
-    //drawTile()
     def "Create pile of capacity size"(){
         given:
         def pile = new Pile()
@@ -54,5 +51,4 @@ class PileTest extends Specification{
         then:
         pile.size() == 109
     }
-
 }
