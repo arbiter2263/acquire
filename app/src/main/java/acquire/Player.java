@@ -99,6 +99,58 @@ public class Player implements PlayerInterface{
     }
 
     /**
+     * Method that allows a player to trade stock in a defunct corporation for stock in the surviving corporation;
+     * Rate of 2 defunct to 1 surviving
+     * @param defunctCorp  The corporation that is going defunct from the merger
+     * @param survivingCorp  The corporation that is surviving the merger
+     * @throws NoSuchElementException  If the player has no stock in the defunct corporation
+     */
+    protected void tradeInStock(Corporation defunctCorp, Corporation survivingCorp) throws NoSuchElementException {
+        int oldCount = this.stockCounts.get(defunctCorp);
+        if (oldCount == 0) {
+            throw new NoSuchElementException("Player " + this.name + " has no stock in company " + defunctCorp);
+        } else {
+            int newStockCount = (int) (oldCount / 2);
+            if (oldCount % 2 > 0) {
+                sellDefunctStock(defunctCorp, 1);
+            }
+            this.stockCounts.replace(defunctCorp, 0);
+            this.stockCounts.replace(survivingCorp, newStockCount);
+        }
+    }
+
+    /**
+     * Method that allows a player to sell stock from a corporation that has gone defunct
+     * @param defunctCorp  The corporation that has gone defunct from a merger
+     * @param stockCount  The amount of stock the player wants to sell
+     * @throws IndexOutOfBoundsException  If the number of stock to be sold is higher than the number of stock the
+     *          player currently has in the defunct corporation
+     */
+    protected void sellDefunctStock(Corporation defunctCorp, int stockCount) throws IndexOutOfBoundsException{
+        int currentCount = this.stockCounts.get(defunctCorp);
+        if (currentCount < stockCount) {
+            throw new IndexOutOfBoundsException("Player " + this.name + " has " + this.stockCounts.get(defunctCorp) +
+                    " stocks in corporation " + defunctCorp.getName() + " and can not sell " + stockCount + " stocks.");
+        }
+        int counter = stockCount;
+        while (counter > 0) {
+            int stockSellValue = CorporationList.getInstance().getStockCost(defunctCorp) / 2;
+            this.wallet += stockSellValue;
+            counter--;
+        }
+        this.stockCounts.replace(defunctCorp, (currentCount - stockCount) );
+    }
+
+    /**
+     * Method that adds the founders stock bonus to this player
+     * @param newCorp  The newly formed corporation
+     */
+    protected void addFoundersStock(Corporation newCorp) {
+        int oldStockCount = this.stockCounts.get(newCorp);
+        this.stockCounts.replace(newCorp, oldStockCount + 1);
+    }
+
+    /**
      * Method to remove an unplayable tile from a player's hand
      * @param tile  The tile to be removed from the player's hand
      * @throws NoSuchElementException  If the tile is not in the player's hand
