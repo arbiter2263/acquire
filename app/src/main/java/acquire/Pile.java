@@ -13,7 +13,7 @@ import java.util.Random;
 public class Pile {
     private static Pile instance = null;
     private final ArrayList<Tile> pile;
-
+    private static final int CAPACITY = 108;
     //Singleton design attempt
     public static Pile getInstance(){
         if (instance == null){
@@ -29,7 +29,7 @@ public class Pile {
      */
     private Pile(){
 
-        pile = new ArrayList<Tile>(108);
+        pile = new ArrayList<Tile>(CAPACITY);
 
         //char array for tile lettering
         char[] letters = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'};
