@@ -82,21 +82,19 @@ public class Pile {
     method for randomly choosing a tile drawn by the player, method
     removes tile from pile
     */
-    public Tile drawTile(){
+    public Tile drawTile() throws IllegalArgumentException{
 
         /* Randomly chooses number between 0 and size of pile
            To get a randomly chosen tile.
         */
         Random random = new Random();
         int randomInt = random.nextInt(pile.size());
-        if(pile.size() !=0){
-            return pile.remove(randomInt);
-            //Print out remaining number of tiles?
-        }else if(pile.size() < 1){
-            // TODO: 4/3/2022  add print statement?
-            //print out no tiles left in pile
-            System.out.println("No tiles left to draw");
+            if (pile.size() != 0) {
+                return pile.remove(randomInt);
+                //Print out remaining number of tiles?
+            } else if (pile.size() < 1) {
+                    throw new IllegalArgumentException("The pile is empty, cannot draw more tiles");
+            }
+            return null;
         }
-        return null;
-    }
 }

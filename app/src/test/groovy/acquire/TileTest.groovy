@@ -1,4 +1,47 @@
 package acquire
 
-class TileTest {
+import spock.lang.Specification
+
+class TileTest extends Specification{
+    def "create a tile"(){
+        given:
+        int num = 1
+        char ch = 'B'
+        def tile = new Tile(num, ch)
+
+        expect:
+        tile
+    }
+
+    def "Get tile's letter"(){
+        given:
+        int num = 1
+        char ch = 'B'
+        def tile = new Tile(num, ch)
+
+        expect:
+        tile.letter == 'B'
+
+    }
+
+    def "Get tile's number"(){
+        given:
+        int num = 1
+        char ch = 'B'
+        def tile = new Tile(num, ch)
+
+        expect:
+        tile.number == 1
+    }
+
+    def "Get tile's space"(){
+        given:
+        int num = 1
+        char ch = 'B'
+        def tile = new Tile(num, ch)
+
+        expect:
+        tile.space == "1B"
+    }
+
 }
