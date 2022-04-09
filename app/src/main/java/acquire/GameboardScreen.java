@@ -96,6 +96,13 @@ public class GameboardScreen extends Application {
         exit.setDefaultButton(false);
         gridPane.add(exit, 0, 4);
 
+        exit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                
+            }
+        });
+
         // Add View Other Players Button
         Button viewOthers = new Button("View Other Players");
         viewOthers.setPrefHeight(5);
@@ -103,6 +110,13 @@ public class GameboardScreen extends Application {
         viewOthers.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
         viewOthers.setDefaultButton(false);
         gridPane.add(viewOthers, 0, 5);
+
+        viewOthers.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
 
         // Create rectangle to make board cohesive
         Rectangle rect = new Rectangle(900, 410);
@@ -131,7 +145,7 @@ public class GameboardScreen extends Application {
         cash.setPrefWidth(120);
         gridPane.add(cash, 0, 10);
 
-        // Add View Other Players Button
+        // Add View Your Stocks Button
         Button viewStocks = new Button("Your Stocks");
         viewStocks.setPrefHeight(5);
         viewStocks.setPrefWidth(120);
@@ -139,43 +153,97 @@ public class GameboardScreen extends Application {
         viewStocks.setDefaultButton(false);
         gridPane.add(viewStocks, 0, 11);
 
+        viewStocks.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
 
         // get user tiles
-        LinkedList<Tile> userHand = user.getHand();
+        if (user.getHand().size() < 6) {
         for (int i=0; i<6; i++) {
-        user.addTile(Pile.getInstance().drawTile());}
+        user.addTile(Pile.getInstance().drawTile());}}
+
 
         // setup tile buttons
-        Button tile1 = new Button(userHand.remove().getSpace());
+        Button tile1 = new Button(user.getHand().get(0).getSpace());
         tile1.setPrefHeight(50);
         tile1.setPrefWidth(150);
         gridPane.add(tile1, 2, 12, 2, 1);
 
-        Button tile2 = new Button(userHand.remove().getSpace());
+        Button tile2 = new Button(user.getHand().get(1).getSpace());
         tile2.setPrefHeight(50);
         tile2.setPrefWidth(150);
         gridPane.add(tile2, 6, 12, 2, 1);
 
-        Button tile3 = new Button(userHand.remove().getSpace());
+        Button tile3 = new Button(user.getHand().get(2).getSpace());
         tile3.setPrefHeight(50);
         tile3.setPrefWidth(150);
         gridPane.add(tile3, 10, 12, 2, 1);
 
-        Button tile4 = new Button(userHand.remove().getSpace());
+        Button tile4 = new Button(user.getHand().get(3).getSpace());
         tile4.setPrefHeight(50);
         tile4.setPrefWidth(150);
         gridPane.add(tile4, 2, 13, 2, 1);
 
-        Button tile5 = new Button(userHand.remove().getSpace());
+        Button tile5 = new Button(user.getHand().get(4).getSpace());
         tile5.setPrefHeight(50);
         tile5.setPrefWidth(150);
         gridPane.add(tile5, 6, 13, 2, 1);
 
-        Button tile6 = new Button(userHand.remove().getSpace());
+        Button tile6 = new Button(user.getHand().get(5).getSpace());
         tile6.setPrefHeight(50);
         tile6.setPrefWidth(150);
         gridPane.add(tile6, 10, 13, 2, 1);
 
+        tile1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Gameboard.getInstance().placeTile(user, user.getHand().remove(0));
+                user.addTile(Pile.getInstance().drawTile());
+            }
+        });
+
+        tile2.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Gameboard.getInstance().placeTile(user, user.getHand().remove(1));
+                user.addTile(Pile.getInstance().drawTile());
+            }
+        });
+
+        tile3.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Gameboard.getInstance().placeTile(user, user.getHand().remove(2));
+                user.addTile(Pile.getInstance().drawTile());
+            }
+        });
+
+        tile4.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Gameboard.getInstance().placeTile(user, user.getHand().remove(3));
+                user.addTile(Pile.getInstance().drawTile());
+            }
+        });
+
+        tile5.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Gameboard.getInstance().placeTile(user, user.getHand().remove(4));
+                user.addTile(Pile.getInstance().drawTile());
+            }
+        });
+
+        tile6.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Gameboard.getInstance().placeTile(user, user.getHand().remove(5));
+                user.addTile(Pile.getInstance().drawTile());
+            }
+        });
     }
 
     protected void activateTile(int i, int e) {

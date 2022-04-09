@@ -206,7 +206,7 @@ public class Gameboard {
      * @return  int[]  The first entry = the row; the second entry = column
      */
     private int[] getRowColumnTile(Tile tile) {
-        char letter = tile.getSpace().charAt(0);
+        char letter = tile.getSpace().charAt(1);
         int row = -1;
         switch (letter) {
             case 'A' :  row = 0; break;
@@ -222,7 +222,7 @@ public class Gameboard {
             case 'K' :  row = 10; break;
             case 'L' :  row = 11; break;
         }
-        int column = (int)tile.getSpace().charAt(1);
+        int column = (int)tile.getSpace().charAt(0);
         int[] rowColumn = {row, column};
         return rowColumn;
 
