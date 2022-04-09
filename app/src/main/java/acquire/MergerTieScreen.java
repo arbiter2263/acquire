@@ -23,7 +23,7 @@ public class MergerTieScreen extends Application {
         primaryStage.setTitle("Merger");
         GridPane gridPane = gameSetup();
         addUIControls(gridPane);
-        Scene scene = new Scene(gridPane, 1200, 800);
+        Scene scene8 = new Scene(gridPane, 1200, 800);
         ColumnConstraints columnOneConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
         columnOneConstraints.setHalignment(HPos.CENTER);
         ColumnConstraints columnTwoConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
@@ -31,7 +31,7 @@ public class MergerTieScreen extends Application {
         ColumnConstraints columnThreeConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
         columnOneConstraints.setHalignment(HPos.CENTER);
         gridPane.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstraints, columnThreeConstraints);
-        primaryStage.setScene(scene);
+        primaryStage.setScene(scene8);
         primaryStage.show();
     }
 
@@ -58,7 +58,6 @@ public class MergerTieScreen extends Application {
         Image corpImage = new Image(inputstream);
         ImageView imageView = new ImageView(corpImage);
         gridPane.add(imageView, 0, 1);
-
         // Add image of second corporation
         FileInputStream inputstream2 = new FileInputStream("~/resources/filler.png");
         Image corpImage2 = new Image(inputstream2);

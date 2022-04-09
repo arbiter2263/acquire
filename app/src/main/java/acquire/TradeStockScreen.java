@@ -24,7 +24,7 @@ public class TradeStockScreen extends Application {
         primaryStage.setTitle("Trade Stock");
         GridPane gridPane = stockTrade();
         addUIControls(gridPane);
-        Scene scene = new Scene(gridPane, 1200, 800);
+        Scene scene10 = new Scene(gridPane, 1200, 800);
         ColumnConstraints columnOneConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
         columnOneConstraints.setHalignment(HPos.CENTER);
         ColumnConstraints columnTwoConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
@@ -32,7 +32,7 @@ public class TradeStockScreen extends Application {
         ColumnConstraints columnThreeConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
         columnOneConstraints.setHalignment(HPos.CENTER);
         gridPane.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstraints, columnThreeConstraints);
-        primaryStage.setScene(scene);
+        primaryStage.setScene(scene10);
         primaryStage.show();
     }
 

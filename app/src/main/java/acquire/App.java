@@ -3,12 +3,14 @@
  */
 package acquire;
 
+import java.lang.System;
+
 public class App {
-        public String getGreeting() {
+    public String getGreeting() {
         return "Hello World!";
     }
 
     public static void main(String[] args) {
-        BuyStockScreen.main(args);
+        System.out.println(new App().getGreeting());
     }
 }
