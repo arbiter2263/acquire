@@ -7,7 +7,7 @@ public class Corporation implements CorporationInterface{
     private String name;
     private LinkedList<Tile> tileList;
     private int stockCount;
-    private static final int STOCKCAP = 8;
+    private static final int STOCKCAP = 25;
     private boolean stockCapMet;
     private int stockPrice;
 
@@ -17,6 +17,9 @@ public class Corporation implements CorporationInterface{
      */
     protected Corporation(String name){
         this.name = name;
+        this.stockCount = 0;
+        this.tileList = new LinkedList<Tile>();
+        updateStockPrice();
     }
 
     /**
@@ -79,7 +82,7 @@ public class Corporation implements CorporationInterface{
     @Override
     public boolean equals(Object obj) {
         Corporation corp = (Corporation) obj;
-        if (this.getName() == corp.getName()) {
+        if (this.getName().equals(corp.getName())) {
             return true;
         } else {
             return false;
@@ -101,7 +104,9 @@ public class Corporation implements CorporationInterface{
      * @return bool  True if the tile was added successfully; False otherwise
      */
     protected boolean addTile(Tile tile) {
-        return tileList.add(tile);
+        boolean didItWork = this.tileList.add(tile);
+        updateStockPrice();
+        return didItWork;
     }
 
     /**
@@ -109,8 +114,7 @@ public class Corporation implements CorporationInterface{
      */
     protected void stockBought() {
         this.stockCount++;
-        this.updateStockPrice();
-        if (this.tileList.size() == this.STOCKCAP) {
+        if (this.stockCount == this.STOCKCAP) {
             this.stockCapMet = true;
         }
     }
@@ -120,7 +124,6 @@ public class Corporation implements CorporationInterface{
      */
     protected void stockSold() {
         this.stockCount--;
-        this.updateStockPrice();
         this.stockCapMet = false;
     }
 
@@ -130,7 +133,7 @@ public class Corporation implements CorporationInterface{
      */
     private void updateStockPrice() {
         int tiles = this.tileList.size();
-        if (this.name == "Sackson" || this.name == "Zeta") {
+        if (this.name.equals("Sackson") || this.name.equals("Zeta")) {
             //Low-priced corporations
             if (tiles == 2) {
                 this.stockPrice = 200;
@@ -151,7 +154,7 @@ public class Corporation implements CorporationInterface{
             } else if (tiles >= 41) {
                 this.stockPrice = 1000;
             }
-        } else if (this.name == "Hydra" || this.name == "Fusion" || this.name == "America") {
+        } else if (this.name.equals("Hydra") || this.name.equals("Fusion") || this.name.equals("America")) {
             //Mid-priced corporations
             if (tiles == 2) {
                 this.stockPrice = 300;
@@ -172,7 +175,7 @@ public class Corporation implements CorporationInterface{
             } else if (tiles >= 41) {
                 this.stockPrice = 1100;
             }
-        } else if (this.name == "Pheonix" || this.name == "Quantum") {
+        } else if (this.name.equals("Pheonix") || this.name.equals("Quantum")) {
             //High-priced corporations
             if (tiles == 2) {
                 this.stockPrice = 400;

@@ -54,6 +54,29 @@ public class CorporationList {
     }
 
     /**
+     * Method that returns a reference to a specific corporation
+     * @param name  The name of the wanted corporation
+     * @return  Corporation  The corporation with the same name; null if no corporation has the provided name
+     */
+    protected Corporation getCorporation(String name) {
+        Iterator<Corporation> iterator = this.activeCorps.iterator();
+        while(iterator.hasNext()) {
+            Corporation corp = iterator.next();
+            if (corp.getName().equals(name)) {
+                return corp;
+            }
+        }
+        iterator = this.inactiveCorps.iterator();
+        while(iterator.hasNext()) {
+            Corporation corp = iterator.next();
+            if (corp.getName().equals(name)) {
+                return corp;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Method that removes a corporation from inactiveCorps and adds it to activeCorps
      * @param corporation The corporation to be activated
      * @throws NoSuchElementException  If the corporation is not within the inactive list
