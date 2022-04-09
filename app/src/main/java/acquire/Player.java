@@ -5,11 +5,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
-public class Player implements PlayerInterface{
+public class Player {
     private String name;
     private int wallet;
     private LinkedList<Tile> hand;
-    private int[] stocks;
     private Hashtable<Corporation, Integer> stockCounts;
 
     /**
@@ -20,7 +19,6 @@ public class Player implements PlayerInterface{
         this.name = name;
         this.wallet = 6000;
         hand = new LinkedList<Tile>();
-        stocks = new int[]{0, 0, 0, 0, 0, 0, 0};
         stockCounts = new Hashtable<>();
         // Add inactive corporations
         for (Corporation corp : CorporationList.getInstance().getInactiveCorps()) {
@@ -44,26 +42,24 @@ public class Player implements PlayerInterface{
      * Simple getter for wallet
      * @return  int  The amount of money in this player's wallet
      */
-    public int showMoney(){
+    public int getMoney(){
         return wallet;
+    }
+
+    /**
+     * Simple getter for a list of Tiles this player has in their hand
+     * @return  LinkedList<Tile>  A list of tiles this player has currently
+     */
+    public LinkedList<Tile> getHand() {
+        return this.hand;
     }
 
     /**
      * Simple getter for stocks
      * @return  HashTable<Corporation, Integer>  A copy of stock counts for each company
      */
-    public Hashtable<Corporation, Integer> showStocks() {
+    public Hashtable<Corporation, Integer> getStocks() {
         return stockCounts;
-    }
-
-    /**
-     * Method to get count for a single corporation
-     * @param corp name of the corporation want stock count for
-     * @return int number of stocks held in corporation given
-     */
-    protected int getStockCount(String corp) {
-        Corporation temp = CorporationList.getInstance().getCorporation(corp);
-        return stockCounts.get(temp);
     }
 
     /**
@@ -193,11 +189,6 @@ public class Player implements PlayerInterface{
         }
         return false;
     }
-
-    /**
-     * Method to get hand
-     */
-    protected LinkedList<Tile> getHand() {return this.hand;}
 
     /**
      * Method to add a tile to this player's hand

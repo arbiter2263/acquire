@@ -62,7 +62,7 @@ public class SellStockScreen extends Application {
         gridPane.add(imageView, 0, 1);
 
         // Stock Count Prompt
-        Label stockCount = new Label("You have " + Integer.toString(user.showStocks().get(corporation)) + "stocks in this corporation. \nHow many would you like to sell?");
+        Label stockCount = new Label("You have " + Integer.toString(user.getStocks().get(corporation)) + "stocks in this corporation. \nHow many would you like to sell?");
         stockCount.setPrefHeight(100);
         gridPane.add(stockCount, 1,1);
 
