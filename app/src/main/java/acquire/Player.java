@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
-public class Player implements PlayerInterface{
+public class Player {
     private String name;
     private int wallet;
     private LinkedList<Tile> hand;
@@ -42,7 +42,7 @@ public class Player implements PlayerInterface{
      * Simple getter for wallet
      * @return  int  The amount of money in this player's wallet
      */
-    public int showMoney(){
+    public int getMoney(){
         return wallet;
     }
 
@@ -50,7 +50,7 @@ public class Player implements PlayerInterface{
      * Simple getter for a list of Tiles this player has in their hand
      * @return  LinkedList<Tile>  A list of tiles this player has currently
      */
-    public LinkedList<Tile> showHand() {
+    public LinkedList<Tile> getHand() {
         return this.hand;
     }
 
@@ -58,7 +58,7 @@ public class Player implements PlayerInterface{
      * Simple getter for stocks
      * @return  HashTable<Corporation, Integer>  A copy of stock counts for each company
      */
-    public Hashtable<Corporation, Integer> showStocks() {
+    public Hashtable<Corporation, Integer> getStocks() {
         return stockCounts;
     }
 
