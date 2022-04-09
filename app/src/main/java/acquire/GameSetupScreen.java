@@ -2,6 +2,8 @@ package acquire;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -39,7 +41,7 @@ public class GameSetupScreen extends Application {
     }
 
     private void addUIControls(GridPane gridPane) {
-        // Add Player Count Button
+        // Add Player Count Choicebox
         ChoiceBox<String> playerCount = new ChoiceBox<>();
         playerCount.getItems().addAll("2", "3", "4", "5", "6");
         playerCount.setValue("How many players?");
@@ -48,7 +50,7 @@ public class GameSetupScreen extends Application {
         gridPane.add(playerCount, 0, 0);
         GridPane.setMargin(playerCount, new Insets(20, 0,20,0));
 
-        // Add Advanced Mode Button
+        // Add Advanced Mode Checkbox
         CheckBox advanced = new CheckBox("Play in Advanced* mode?");
         advanced.setPrefHeight(50);
         advanced.setPrefWidth(200);
@@ -70,6 +72,13 @@ public class GameSetupScreen extends Application {
         startButton.setStyle("-fx-background-color:#90ee90; -fx-border-color:#000000");
         gridPane.add(startButton, 2, 3);
         GridPane.setMargin(startButton, new Insets(20, 0,20,0));
+
+        startButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Gameboard.getInstance().initializeGame(Integer.parseInt(playerCount.getValue()));
+            }
+        });
     }
     public static void main() {
         launch();

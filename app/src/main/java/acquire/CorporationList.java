@@ -1,12 +1,10 @@
 package acquire;
 
-import com.google.common.annotations.VisibleForTesting;
-
 import java.util.*;
 
 public class CorporationList {
     private static final String[] CORPORATIONS = {"Sackson", "Zeta", "Hydra", "Fusion", "America", "Pheonix", "Quantum"};
-    @VisibleForTesting private static CorporationList INSTANCE = null; // Field to hold singleton instance of class
+    private static final CorporationList INSTANCE = new CorporationList(); // Field to hold singleton instance of class
     private ArrayList<Corporation> activeCorps;
     private ArrayList<Corporation> inactiveCorps;
 
@@ -27,9 +25,6 @@ public class CorporationList {
      * @return CorporationList  The only instance of this class
      */
     protected static CorporationList getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new CorporationList();
-        }
         return INSTANCE;
     }
 
@@ -88,7 +83,7 @@ public class CorporationList {
      */
     protected void activateCorp(Corporation corporation) throws NoSuchElementException{
         if (isCorpInList(corporation, inactiveCorps) > -1) {
-            Iterator<Corporation> iterator = inactiveCorps.iterator();
+            Iterator<Corporation> iterator = activeCorps.iterator();
             while (iterator.hasNext()) {
                 if (corporation == iterator.next()) {
                     //Add corp to activeCorps
@@ -111,7 +106,7 @@ public class CorporationList {
      */
     protected void deactivateCorp(Corporation corporation) throws NoSuchElementException{
         if (isCorpInList(corporation, activeCorps) > -1) {
-            Iterator<Corporation> iterator = activeCorps.iterator();
+            Iterator<Corporation> iterator = inactiveCorps.iterator();
             while (iterator.hasNext()) {
                 if (corporation == iterator.next()) {
                     //Add corp to inactiveCorps
@@ -142,5 +137,19 @@ public class CorporationList {
             }
         }
         return -1;
+    }
+
+    /**
+     * Method to check the status of a corporation given. Returns true if active and false if inactive
+     * @param corp name of company that's status needs checked
+     * @return boolean true or false to indicate status
+     */
+    protected boolean checkStatus(String corp) {
+        Corporation check = this.getCorporation(corp);
+        ArrayList<Corporation> inactives = this.getInactiveCorps();
+        for (Corporation inactive : inactives) {
+            if (check.equals(inactive)) return false;
+        }
+        return true;
     }
 }

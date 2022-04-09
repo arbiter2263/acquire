@@ -119,7 +119,7 @@ public class BuyStockScreen extends Application {
         GridPane.setMargin(quantum, new Insets(20, 0,20,0));
 
         // Add Cash Text Box
-        TextArea cash = new TextArea(Integer.toString(user.getMoney()));
+        TextArea cash = new TextArea(Integer.toString(user.showMoney()));
         cash.setEditable(false);
         cash.setPrefHeight(5);
         cash.setPrefWidth(120);
@@ -136,11 +136,19 @@ public class BuyStockScreen extends Application {
         gridPane.add(postCash, 1, 4);
 
         // Add Cash After purchase Text Box
-        TextArea cashAfter = new TextArea(Integer.toString(user.getMoney()));
+        TextArea cashAfter = new TextArea(Integer.toString(user.showMoney()));
         cashAfter.setEditable(false);
         cashAfter.setPrefHeight(5);
         cashAfter.setPrefWidth(120);
         gridPane.add(cashAfter, 0, 4);
+
+/* Increment functionality not working how envisioned, work on later
+        // Add total stocks selected text
+        int selected = 0;
+        Text selectCount = new Text("            "+Integer.toString(selected) + "/3");
+        selectCount.setStyle("-fx-control-inner-background:#CBC3E3; -fx-font-size: 2em;");
+        gridPane.add(selectCount, 3, 4);
+*/
 
         // Submit Button
         Button submit = new Button("Submit Purchase");

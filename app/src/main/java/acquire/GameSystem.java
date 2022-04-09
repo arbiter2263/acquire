@@ -33,7 +33,7 @@ public class GameSystem {
         } else {initializeGame(saveFile); //use to instantiate a loadGame()but has the game file values
         }
 
-            //start method should start the game loop which will cycle through turns until someone decides to end game
+        //start method should start the game loop which will cycle through turns until someone decides to end game
         //start(); // endGameCriteria will be what kicks the game out of the player turn loops, and move to tally up and print winner
 
 
@@ -121,7 +121,7 @@ public class GameSystem {
      */
     private boolean tradeStock(Player player, Corporation corp1, Corporation corp2, int tradeInAmount) {
         player.tradeInStock(corp1, corp2); //we may want to add a parameter here that takes in the amount
-                                           //since the player does not have to trade in all the defunct corp stocks
+        //since the player does not have to trade in all the defunct corp stocks
         return true;
     }
 
@@ -185,7 +185,7 @@ public class GameSystem {
      * if it is less than 6, then it will draw a tile and add it to the players hand
      * and check again if there are less than 6 tiles. This will also
      * remove the tile from the pile.
-      * @param player  The player drawing to end their turn
+     * @param player  The player drawing to end their turn
      * @return
      * UI handler will call this method after user has selected to draw tile
      */
@@ -193,7 +193,7 @@ public class GameSystem {
         while(player.getHand().size() < 6) { //Players should always have 6 tiles at the end of their turn
             player.addTile(Pile.getInstance().drawTile());
             //end go next player turn
-            }
+        }
         return true;
     }
 
@@ -216,10 +216,10 @@ public class GameSystem {
             if (corp.getTileList().size() >= 41) {
                 return true; //game can end since there is at least 1 corp 41+ in size present end game option
             }
-         }
-            if (CorporationList.getInstance().getActiveCorps().size() == safeCounter) {
-                //if all active corporations are safe game can end
-                return true; //Present end game option
+        }
+        if (CorporationList.getInstance().getActiveCorps().size() == safeCounter) {
+            //if all active corporations are safe game can end
+            return true; //Present end game option
         }
         return false; //Game cannot be ended yet do not present option to end
     }
@@ -251,7 +251,7 @@ public class GameSystem {
             }
             majorityPayout(tableOfStockScores.lastEntry().getKey(), tableOfStockScores.lastEntry().getValue());  //first param stock total, second is the player
             tableOfStockScores.remove(tableOfStockScores.lastEntry().getKey());
-            minorityPayout(tableOfStockScores.lastEntry().getKey(), tableOfStockScores.lastEntry().getValue());  
+            minorityPayout(tableOfStockScores.lastEntry().getKey(), tableOfStockScores.lastEntry().getValue());
         }
     }
 

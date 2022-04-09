@@ -1,13 +1,15 @@
 package acquire;
 
-import java.io.File;
+import com.google.common.annotations.VisibleForTesting;
+
 import java.util.LinkedList;
 
 public class Gameboard {
-    static private LinkedList<Player> players;
+    private LinkedList<Player> players;
     private LinkedList<Tile> tilesPlayed;
     private Tile[][] board;
-    private static final Gameboard INSTANCE = new Gameboard(); // Field to hold singleton instance of class
+    @VisibleForTesting
+    private static Gameboard INSTANCE = null; // Field to hold singleton instance of class
 
     /**
      * Private constructor to enforce only one instance
@@ -38,6 +40,9 @@ public class Gameboard {
      * @return  Gameboard  The only instance of this class
      */
     protected static Gameboard getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new Gameboard();
+        }
         return INSTANCE;
     }
 
@@ -46,9 +51,17 @@ public class Gameboard {
      * @param numOfPlayers  The number of players
      */
     protected void initializeGame(int numOfPlayers){
-        for (int i = 0; i <= numOfPlayers; i++) {
+        for (int i = 0; i < numOfPlayers; i++) {
             getInstance().players.add(new Player("Player " + i));
         }
+    }
+
+    /**
+     * Simple getter for players
+     * @return  LinkedList<Players>  A list of the players in this game
+     */
+    protected LinkedList<Player> getPlayers() {
+        return this.players;
     }
 
     /**
@@ -102,10 +115,15 @@ public class Gameboard {
      */
     protected boolean placeTile(Player player, Tile tile) {
         if(isValidTilePlay(tile)) {
+            if (!player.playTile(tile)) {
+                return false;
+            }
             LinkedList<Integer> indexes = new LinkedList<Integer>();
-            for (int i = 0; i < CorporationList.getInstance().getActiveCorps().size(); i++) {
-                if (doesTileTouchCorp(tile, CorporationList.getInstance().getActiveCorps().get(i))) {
-                    indexes.add(i);
+            if (CorporationList.getInstance().getActiveCorps().size() > 0) {
+                for (int i = 0; i < CorporationList.getInstance().getActiveCorps().size(); i++) {
+                    if (doesTileTouchCorp(tile, CorporationList.getInstance().getActiveCorps().get(i))) {
+                        indexes.add(i);
+                    }
                 }
             }
             if (indexes.size() > 1) {
@@ -118,7 +136,6 @@ public class Gameboard {
                 //just place tile
             }
             addTileToBoard(tile);
-            player.playTile(tile);
             return true;
         } else {
             return false;
@@ -168,21 +185,123 @@ public class Gameboard {
     private int[] isTouchingPlacedTile(Tile tile) {
         int[] rowColumn = getRowColumnTile(tile);
 
-        if (board[rowColumn[0]][rowColumn[1]+1] != null) {
-            int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]+1};
-            return touchingTileRowColumn;
-        } else if (board[rowColumn[0]][rowColumn[1]-1] != null) {
-            int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]-1};
-            return touchingTileRowColumn;
-        } else if (board[rowColumn[1]][rowColumn[0]+1] != null) {
-            int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]+1};
-            return touchingTileRowColumn;
-        } else if (board[rowColumn[1]][rowColumn[0]-1] != null) {
-            int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]-1};
-            return touchingTileRowColumn;
-        } else {
-            int [] badArray = {-1, -1};
-            return badArray;
+        if (rowColumn[0] == 0 && rowColumn[1] == 0) { //top-left corner
+            if (board[rowColumn[0]][rowColumn[1]+1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]+1};
+                return touchingTileRowColumn;
+            } else if (board[rowColumn[1]][rowColumn[0]+1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]+1};
+                return touchingTileRowColumn;
+            } else {
+                int [] badArray = {-1, -1};
+                return badArray;
+            }
+        } else if (rowColumn[0] == 11 && rowColumn[1] == 8) { //bottom-right corner
+            if (board[rowColumn[0]][rowColumn[1]-1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]-1};
+                return touchingTileRowColumn;
+            } else if (board[rowColumn[1]][rowColumn[0]-1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]-1};
+                return touchingTileRowColumn;
+            } else {
+                int [] badArray = {-1, -1};
+                return badArray;
+            }
+        } else if (rowColumn[0] == 0 && rowColumn[1] == 8) { //top-right corner
+            if (board[rowColumn[0]][rowColumn[1]-1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]-1};
+                return touchingTileRowColumn;
+            } else if (board[rowColumn[1]][rowColumn[0]+1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]+1};
+                return touchingTileRowColumn;
+            } else {
+                int [] badArray = {-1, -1};
+                return badArray;
+            }
+        } else if (rowColumn[0] == 11 && rowColumn[1] == 0) { //bottom-left corner
+            if (board[rowColumn[0]][rowColumn[1]+1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]+1};
+                return touchingTileRowColumn;
+            } else if (board[rowColumn[1]][rowColumn[0]-1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]-1};
+                return touchingTileRowColumn;
+            } else {
+                int [] badArray = {-1, -1};
+                return badArray;
+            }
+        } else if (rowColumn[0] == 0) { //top edge
+            if (board[rowColumn[0]][rowColumn[1]+1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]+1};
+                return touchingTileRowColumn;
+            } else if (board[rowColumn[0]][rowColumn[1]-1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]-1};
+                return touchingTileRowColumn;
+            } else if (board[rowColumn[1]][rowColumn[0]+1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]+1};
+                return touchingTileRowColumn;
+            } else {
+                int [] badArray = {-1, -1};
+                return badArray;
+            }
+        } else if (rowColumn[0] == 11) { //bottom edge
+            if (board[rowColumn[0]][rowColumn[1]+1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]+1};
+                return touchingTileRowColumn;
+            } else if (board[rowColumn[0]][rowColumn[1]-1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]-1};
+                return touchingTileRowColumn;
+            } else if (board[rowColumn[1]][rowColumn[0]-1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]-1};
+                return touchingTileRowColumn;
+            } else {
+                int [] badArray = {-1, -1};
+                return badArray;
+            }
+        } else if (rowColumn[1] == 0) { //left edge
+            if (board[rowColumn[0]][rowColumn[1]+1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]+1};
+                return touchingTileRowColumn;
+            } else if (board[rowColumn[1]][rowColumn[0]+1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]+1};
+                return touchingTileRowColumn;
+            } else if (board[rowColumn[1]][rowColumn[0]-1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]-1};
+                return touchingTileRowColumn;
+            } else {
+                int [] badArray = {-1, -1};
+                return badArray;
+            }
+        } else if (rowColumn[1] == 8) { //right edge
+            if (board[rowColumn[0]][rowColumn[1]-1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]-1};
+                return touchingTileRowColumn;
+            } else if (board[rowColumn[1]][rowColumn[0]+1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]+1};
+                return touchingTileRowColumn;
+            } else if (board[rowColumn[1]][rowColumn[0]-1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]-1};
+                return touchingTileRowColumn;
+            } else {
+                int [] badArray = {-1, -1};
+                return badArray;
+            }
+        } else { //not on an edge
+            if (board[rowColumn[0]][rowColumn[1]+1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]+1};
+                return touchingTileRowColumn;
+            } else if (board[rowColumn[0]][rowColumn[1]-1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]-1};
+                return touchingTileRowColumn;
+            } else if (board[rowColumn[1]][rowColumn[0]+1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]+1};
+                return touchingTileRowColumn;
+            } else if (board[rowColumn[1]][rowColumn[0]-1] != null) {
+                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]-1};
+                return touchingTileRowColumn;
+            } else {
+                int [] badArray = {-1, -1};
+                return badArray;
+            }
         }
     }
 
@@ -198,6 +317,7 @@ public class Gameboard {
     private void addTileToBoard(Tile tile) {
         int[] rowColumn = getRowColumnTile(tile);
         board[rowColumn[0]][rowColumn[1]] = tile;
+        tilesPlayed.add(tile);
     }
 
     /**
@@ -222,7 +342,7 @@ public class Gameboard {
             case 'K' :  row = 10; break;
             case 'L' :  row = 11; break;
         }
-        int column = Character.getNumericValue(tile.getSpace().charAt(0));
+        int column = Character.getNumericValue(tile.getSpace().charAt(0)) - 1;
         int[] rowColumn = {row, column};
         return rowColumn;
 
@@ -243,9 +363,8 @@ public class Gameboard {
     }
 
     public static void main(String[] args) {
-        Player steve = new Player("Steve");
-        players.add(steve);
-        Player player = players.getFirst();
-        DefunctStockOptionsScreen.main(player, "America");
+        Player player = new Player("steve");
+        Corporation corp = new Corporation("Sackson");
+        BuyStockScreen.main(player);
     }
 }

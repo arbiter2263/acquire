@@ -58,6 +58,7 @@ public class MergerTieScreen extends Application {
         Image corpImage = new Image(inputstream);
         ImageView imageView = new ImageView(corpImage);
         gridPane.add(imageView, 0, 1);
+
         // Add image of second corporation
         FileInputStream inputstream2 = new FileInputStream("~/resources/filler.png");
         Image corpImage2 = new Image(inputstream2);
