@@ -67,7 +67,7 @@ public class GameSystem {
      * this method, which then requests the names of the players
      * and loops through creating the player objects for the game
      * @param isHardMode if true, hid players stocks etc.
-     * @param playerCount
+     * @param playerCount Number of players
      */
     private void newGame(boolean isHardMode, int playerCount){
         initializeGame(isHardMode, playerCount);
@@ -85,35 +85,13 @@ public class GameSystem {
 
 
 
-//    /**
-//     * An idea for how the game will play out
-//     * I think a majority of this would be done through the UI
-//     */
-//    private void start(){
-//        boolean playGame = true;
-//        while(playGame){ //while endGameCriteria has not been met and selected
-//            gamePlays:
-//                if(!endGameCheck()){//checks for end game
-//                    //play game like normal
-//                }else if(endGameCheck()){
-//                    //add in end game option
-//                            if(user hits button){
-//                                playGame = false;
-//                                break gamePlays; //should break out to recheck while condition, which should return false
-//                    }                            //this would allow for endGame() to kick in
-//                    //keep playing game but
-//                }
-//
-//        }
-//        endGame();
-//    }
 
 
     /**
      * At the beginning of a players turn they play a tile
      * this method should check that the tile the player chose can be played
-     * @param player
-     * @param tile
+     * @param player  The player who has the current turn
+     * @param tile    The tile chosen to be played
      * @return
      */
     private boolean playATile(Player player, Tile tile){
@@ -128,8 +106,6 @@ public class GameSystem {
             //placeTile should also check for expansion, merger etc.
             Gameboard.getInstance().placeTile(player, tile);
 
-            //call appropriate screen, founding/merger etc.
-
             return true;
         }
         return false;
@@ -143,44 +119,27 @@ public class GameSystem {
      * @param corp2   This is the remaining super corporation, the player will get 1 stock in this corp
      * @return
      */
-    private boolean tradeStock(Player player, Corporation corp1, Corporation corp2, int tradeInAmount){
-        if(player.getStockAmount(corp1) >= tradeInAmount){//This condition would need to return true
-                                                         //checks that player has enough stocks
-                                                         //tradeInAmount should be limited to %2 by UI
-
-            player.tradeIn(corp1, corp2); //would manipulate the 2 different stock amounts for this player -2 and +1
-
-            //May be better to actually have trade-in method that takes in
-            //both corps and increments larger corp stock count by 1 and
-            //decrements defunct corp by 2
-            corp2.stockBought();
-            corp1.stockSold();
-            corp1.stockSold();
-            return true;
-        }
-
+    private boolean tradeStock(Player player, Corporation corp1, Corporation corp2, int tradeInAmount) {
+        player.tradeInStock(corp1, corp2); //we may want to add a parameter here that takes in the amount
+                                           //since the player does not have to trade in all the defunct corp stocks
+        return true;
     }
 
 
     /**
      * Method used during the sell/trade/hold section of a merger
-     * Method should accurately check that the player has stock to sell
      * @param player The player who is currently in their turn
      * @param corp   The defunct corporation from the merger
+     * @param sellAmount the amount the user requests to sell
      * @return
      * UI event handler calls this method feeding it the params
      */
-    private boolean sellStock(Player player, Corporation corp, int sellAmount){
-        if(player.getStockCount(corp.getName()) > 0) { //if player has stock in the corp
-            player.sellStock(corp.getName());
-            for(int i = 0; i < sellAmount; i++){
-                corp.stockSold();
-                player.sellStock(); //Should update wallet and stock amount for defunct corp
-            }
-            return true;
-        } else{
-            return false;
+    private boolean sellDefunctStock(Player player, Corporation corp, int sellAmount){
+        player.sellDefunctStock(corp, sellAmount);
+        for(int i = 0; i < sellAmount; i++){
+            corp.stockSold();
         }
+        return true;
     }
 
     /**
@@ -193,19 +152,11 @@ public class GameSystem {
      * UI event handler calls this method feeding it the params
      */
     private boolean purchaseStock(Player player, Corporation corp, int amount){
-        int count =0;
-        for(int i = 0; i < amount; i++) {
-            if (!corp.getStockCapMet()) { //if cap has not been met they can buy some
-                player.buyStock(corp.getName());
-                corp.stockBought();
-                return true;
-            } else {
-                count++; // a Player can buy up to 3 stocks, so return this the amount left they can buy on their turn
-                //send message not enough stocks to be purchased
-
-                return false;
-            }
+        for(int i = 0; i < amount; i++){
+            player.buyStock(corp.getName());
+            corp.stockBought();
         }
+        return true;
     }
 
     /**
@@ -219,7 +170,7 @@ public class GameSystem {
      * This method should be checked after every players turn
      */
     private boolean removeUnplayableTile(Player player){
-        for(var tile : player.getTiles()){
+        for(var tile : player.getHand()){
             if(!Gameboard.getInstance().isValidTilePlay(tile)){ //if is not a valid play
                 player.removeTile(tile);
             }
@@ -239,12 +190,11 @@ public class GameSystem {
      * UI handler will call this method after user has selected to draw tile
      */
     private boolean drawTile(Player player) {
-        while(player.getTiles().size() < 6) { //Players should always have 6 tiles at the end of their turn
+        while(player.getHand().size() < 6) { //Players should always have 6 tiles at the end of their turn
             player.addTile(Pile.getInstance().drawTile());
             //end go next player turn
-            return true;
-        }
-        return false;
+            }
+        return true;
     }
 
     /**
@@ -297,7 +247,7 @@ public class GameSystem {
         for(var corp : CorporationList.getInstance().getActiveCorps()){
             for (var player : Gameboard.getInstance().getPlayerList()){
                 tableOfStockScores.put(player.getStock(corp), player);
-                player.sellStock(player.getStock(corp)); //get the player's stock amount for the corporation and sell it all.
+                player.sellDefunctStock(corp, player.getStock(corp)); //get the player's stock amount for the corporation and sell it all.
             }
             majorityPayout(tableOfStockScores.lastEntry().getKey(), tableOfStockScores.lastEntry().getValue());  //first param stock total, second is the player
             tableOfStockScores.remove(tableOfStockScores.lastEntry().getKey());
