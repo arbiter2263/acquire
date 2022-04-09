@@ -1,9 +1,6 @@
 package acquire;
 
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -18,26 +15,23 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.LinkedList;
 
 public class GameboardScreen extends Application {
-    static Player user;
     static GridPane gridPane = new GridPane();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Acquire");
-        gridPane.setAlignment(Pos.TOP_CENTER);
+        gridPane.setAlignment(Pos.CENTER);
         gridPane.setBackground(new Background(new BackgroundFill(Color.web("#CBC3E3"), CornerRadii.EMPTY, Insets.EMPTY)));
         gridPane.setPadding(new Insets(10, 10, 10, 10));
         gridPane.setHgap(10);
         gridPane.setVgap(10);
         addUIControls(gridPane);
-        Scene scene3 = new Scene(gridPane, 1200, 800);
+        Scene scene = new Scene(gridPane, 1200, 800);
         ColumnConstraints col1 = new ColumnConstraints();
         col1.setHalignment(HPos.CENTER);
         col1.setPercentWidth(16);
@@ -47,7 +41,7 @@ public class GameboardScreen extends Application {
             column.setPercentWidth(6);
             gridPane.getColumnConstraints().add(column);
         }
-        primaryStage.setScene(scene3);
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
@@ -63,14 +57,6 @@ public class GameboardScreen extends Application {
         newGameButton.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
         newGameButton.setDefaultButton(false);
         gridPane.add(newGameButton, 0, 1);
-
-        //New Game event handler
-        newGameButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-
-            }
-        });
 
         // Add Save Game Button
         Button saveGame = new Button("Save Game");
@@ -104,11 +90,6 @@ public class GameboardScreen extends Application {
         viewOthers.setDefaultButton(false);
         gridPane.add(viewOthers, 0, 5);
 
-        // Create rectangle to make board cohesive
-        Rectangle rect = new Rectangle(900, 410);
-        gridPane.add(rect, 1, 1, 12, 9);
-
-        // Creates visual representation of Gameboard
         for (int i=1; i<13; i++) {
             for (int e=1; e<10; e++) {
                 TextArea spot = new TextArea(i+Character.toString(e+64));
@@ -116,16 +97,11 @@ public class GameboardScreen extends Application {
                 spot.setPrefWidth(120);
                 spot.setEditable(false);
                 spot.setStyle("-fx-control-inner-background:#000000");
-                LinkedList<Tile> f = Gameboard.getInstance().getTilesPlayed();
-                int y=0;
-                while (y < f.size()) {
-                    y++;
-                    if (spot.getText().equals(f.remove().getSpace())) {spot.setStyle("-fx-control-inner-background:#808080");}}
                 gridPane.add(spot, i, e);
             }
         }
 
-        TextArea cash = new TextArea(Integer.toString(user.showMoney()));
+        TextArea cash = new TextArea("$3000");
         cash.setEditable(false);
         cash.setPrefHeight(5);
         cash.setPrefWidth(120);
@@ -138,44 +114,6 @@ public class GameboardScreen extends Application {
         viewStocks.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
         viewStocks.setDefaultButton(false);
         gridPane.add(viewStocks, 0, 11);
-
-
-        // get user tiles
-        LinkedList<Tile> userHand = user.getHand();
-        for (int i=0; i<6; i++) {
-        user.addTile(Pile.getInstance().drawTile());}
-
-        // setup tile buttons
-        Button tile1 = new Button(userHand.remove().getSpace());
-        tile1.setPrefHeight(50);
-        tile1.setPrefWidth(150);
-        gridPane.add(tile1, 2, 12, 2, 1);
-
-        Button tile2 = new Button(userHand.remove().getSpace());
-        tile2.setPrefHeight(50);
-        tile2.setPrefWidth(150);
-        gridPane.add(tile2, 6, 12, 2, 1);
-
-        Button tile3 = new Button(userHand.remove().getSpace());
-        tile3.setPrefHeight(50);
-        tile3.setPrefWidth(150);
-        gridPane.add(tile3, 10, 12, 2, 1);
-
-        Button tile4 = new Button(userHand.remove().getSpace());
-        tile4.setPrefHeight(50);
-        tile4.setPrefWidth(150);
-        gridPane.add(tile4, 2, 13, 2, 1);
-
-        Button tile5 = new Button(userHand.remove().getSpace());
-        tile5.setPrefHeight(50);
-        tile5.setPrefWidth(150);
-        gridPane.add(tile5, 6, 13, 2, 1);
-
-        Button tile6 = new Button(userHand.remove().getSpace());
-        tile6.setPrefHeight(50);
-        tile6.setPrefWidth(150);
-        gridPane.add(tile6, 10, 13, 2, 1);
-
     }
 
     protected void activateTile(int i, int e) {
@@ -187,8 +125,7 @@ public class GameboardScreen extends Application {
         gridPane.add(spot, i, e);
     }
 
-    public static void main(Player e) {
-        user = e;
-        Application.launch();
+    public static void main(String[] args) {
+        launch();
     }
 }

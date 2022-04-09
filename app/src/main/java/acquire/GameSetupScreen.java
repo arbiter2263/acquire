@@ -1,7 +1,6 @@
 package acquire;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -17,7 +16,7 @@ public class GameSetupScreen extends Application {
         primaryStage.setTitle("New Game Setup");
         GridPane gridPane = gameSetup();
         addUIControls(gridPane);
-        Scene scene2 = new Scene(gridPane, 1200, 800);
+        Scene scene = new Scene(gridPane, 1200, 800);
         ColumnConstraints columnOneConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
         columnOneConstraints.setHalignment(HPos.CENTER);
         ColumnConstraints columnTwoConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
@@ -25,7 +24,7 @@ public class GameSetupScreen extends Application {
         ColumnConstraints columnThreeConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
         columnOneConstraints.setHalignment(HPos.CENTER);
         gridPane.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstraints, columnThreeConstraints);
-        primaryStage.setScene(scene2);
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
@@ -71,7 +70,7 @@ public class GameSetupScreen extends Application {
         gridPane.add(startButton, 2, 3);
         GridPane.setMargin(startButton, new Insets(20, 0,20,0));
     }
-    public static void main() {
+    public static void main(String[] args) {
         launch();
     }
 }
