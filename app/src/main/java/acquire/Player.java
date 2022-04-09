@@ -57,6 +57,16 @@ public class Player implements PlayerInterface{
     }
 
     /**
+     * Method to get count for a single corporation
+     * @param corp name of the corporation want stock count for
+     * @return int number of stocks held in corporation given
+     */
+    protected int getStockCount(String corp) {
+        Corporation temp = CorporationList.getInstance().getCorporation(corp);
+        return stockCounts.get(temp);
+    }
+
+    /**
      * Method to set the name of this player to a custom name
      * @param name  The new name of this player
      */
@@ -183,6 +193,11 @@ public class Player implements PlayerInterface{
         }
         return false;
     }
+
+    /**
+     * Method to get hand
+     */
+    protected LinkedList<Tile> getHand() {return this.hand;}
 
     /**
      * Method to add a tile to this player's hand

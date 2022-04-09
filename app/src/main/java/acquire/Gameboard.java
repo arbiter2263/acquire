@@ -1,9 +1,10 @@
 package acquire;
 
+import java.io.File;
 import java.util.LinkedList;
 
 public class Gameboard {
-    private LinkedList<Player> players;
+    static private LinkedList<Player> players;
     private LinkedList<Tile> tilesPlayed;
     private Tile[][] board;
     private static final Gameboard INSTANCE = new Gameboard(); // Field to hold singleton instance of class
@@ -241,8 +242,10 @@ public class Gameboard {
          */
     }
 
-
-
-
-
+    public static void main(String[] args) {
+        Player steve = new Player("Steve");
+        players.add(steve);
+        Player player = players.getFirst();
+        GameboardScreen.main(player);
+    }
 }

@@ -49,7 +49,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'acquire.App'
+    mainClass = 'Gameboard.app'
 }
 
 tasks.named('test') {

@@ -138,4 +138,18 @@ public class CorporationList {
         }
         return -1;
     }
+
+    /**
+     * Method to check the status of a corporation given. Returns true if active and false if inactive
+     * @param corp name of company that's status needs checked
+     * @return boolean true or false to indicate status
+     */
+    protected boolean checkStatus(String corp) {
+        Corporation check = this.getCorporation(corp);
+        ArrayList<Corporation> inactives = this.getInactiveCorps();
+        for (Corporation inactive : inactives) {
+            if (check.equals(inactive)) return false;
+        }
+        return true;
+    }
 }
