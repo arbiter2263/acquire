@@ -1,10 +1,12 @@
 package acquire;
 
+import com.google.common.annotations.VisibleForTesting;
+
 import java.util.*;
 
 public class CorporationList {
     private static final String[] CORPORATIONS = {"Sackson", "Zeta", "Hydra", "Fusion", "America", "Pheonix", "Quantum"};
-    private static final CorporationList INSTANCE = new CorporationList(); // Field to hold singleton instance of class
+    @VisibleForTesting private static CorporationList INSTANCE = null; // Field to hold singleton instance of class
     private ArrayList<Corporation> activeCorps;
     private ArrayList<Corporation> inactiveCorps;
 
@@ -25,6 +27,9 @@ public class CorporationList {
      * @return CorporationList  The only instance of this class
      */
     protected static CorporationList getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new CorporationList();
+        }
         return INSTANCE;
     }
 
@@ -54,13 +59,36 @@ public class CorporationList {
     }
 
     /**
+     * Method that returns a reference to a specific corporation
+     * @param name  The name of the wanted corporation
+     * @return  Corporation  The corporation with the same name; null if no corporation has the provided name
+     */
+    protected Corporation getCorporation(String name) {
+        Iterator<Corporation> iterator = this.activeCorps.iterator();
+        while(iterator.hasNext()) {
+            Corporation corp = iterator.next();
+            if (corp.getName().equals(name)) {
+                return corp;
+            }
+        }
+        iterator = this.inactiveCorps.iterator();
+        while(iterator.hasNext()) {
+            Corporation corp = iterator.next();
+            if (corp.getName().equals(name)) {
+                return corp;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Method that removes a corporation from inactiveCorps and adds it to activeCorps
      * @param corporation The corporation to be activated
      * @throws NoSuchElementException  If the corporation is not within the inactive list
      */
     protected void activateCorp(Corporation corporation) throws NoSuchElementException{
         if (isCorpInList(corporation, inactiveCorps) > -1) {
-            Iterator<Corporation> iterator = activeCorps.iterator();
+            Iterator<Corporation> iterator = inactiveCorps.iterator();
             while (iterator.hasNext()) {
                 if (corporation == iterator.next()) {
                     //Add corp to activeCorps
@@ -83,7 +111,7 @@ public class CorporationList {
      */
     protected void deactivateCorp(Corporation corporation) throws NoSuchElementException{
         if (isCorpInList(corporation, activeCorps) > -1) {
-            Iterator<Corporation> iterator = inactiveCorps.iterator();
+            Iterator<Corporation> iterator = activeCorps.iterator();
             while (iterator.hasNext()) {
                 if (corporation == iterator.next()) {
                     //Add corp to inactiveCorps
