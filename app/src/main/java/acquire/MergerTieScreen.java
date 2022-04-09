@@ -17,13 +17,13 @@ import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-public class MergerScreen extends Application {
+public class MergerTieScreen extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Merger");
         GridPane gridPane = gameSetup();
         addUIControls(gridPane);
-        Scene scene7 = new Scene(gridPane, 1200, 800);
+        Scene scene8 = new Scene(gridPane, 1200, 800);
         ColumnConstraints columnOneConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
         columnOneConstraints.setHalignment(HPos.CENTER);
         ColumnConstraints columnTwoConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
@@ -31,7 +31,7 @@ public class MergerScreen extends Application {
         ColumnConstraints columnThreeConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
         columnOneConstraints.setHalignment(HPos.CENTER);
         gridPane.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstraints, columnThreeConstraints);
-        primaryStage.setScene(scene7);
+        primaryStage.setScene(scene8);
         primaryStage.show();
     }
 
@@ -45,39 +45,25 @@ public class MergerScreen extends Application {
     }
 
     private void addUIControls(GridPane gridPane) {
-        TextArea merger = new TextArea("A merger has occurred between these 2 corporations: REPLACE ME 1 and REPLACE ME 2. What would you like to do with your stocks for REPLACE ME 3 corporation which is now defunct?");
+        TextArea merger = new TextArea("A merger has occurred between these 2 corporations: REPLACE ME 1 and REPLACE ME 2. The Corporations are the same size, select a corporation you would like to merge and take over. ");
         merger.setWrapText(true);
         merger.setPrefHeight(100);
         merger.setEditable(false);
         merger.setStyle("-fx-control-inner-background:#CBC3E3; -fx-font-size: 2em;");
         gridPane.add(merger, 0, 0, 3, 1);
 
-        // Add Sell Button
-        Button sellButton = new Button("Sell");
-        sellButton.setPrefHeight(100);
-        sellButton.setDefaultButton(true);
-        sellButton.setPrefWidth(300);
-        sellButton.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
-        gridPane.add(sellButton, 0, 3, 1, 1);
-        GridPane.setMargin(sellButton, new Insets(20, 0,20,0));
-
-        // Add Trade Button
-        Button tradeButton = new Button("Trade");
-        tradeButton.setPrefHeight(100);
-        tradeButton.setDefaultButton(false);
-        tradeButton.setPrefWidth(300);
-        tradeButton.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
-        gridPane.add(tradeButton, 1, 3, 1, 1);
-        GridPane.setMargin(tradeButton, new Insets(20, 0,20,0));
-
-        // Add Hold Button
-        Button holdButton = new Button("Hold");
-        holdButton.setPrefHeight(100);
-        holdButton.setDefaultButton(false);
-        holdButton.setPrefWidth(300);
-        holdButton.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
-        gridPane.add(holdButton, 2, 3, 1, 1);
-        GridPane.setMargin(holdButton, new Insets(20, 0,20,0));
+/* UNABLE TO FIND IMAGES
+        // Add image of first corporation
+        FileInputStream inputstream = new FileInputStream("~/resources/filler.png");
+        Image corpImage = new Image(inputstream);
+        ImageView imageView = new ImageView(corpImage);
+        gridPane.add(imageView, 0, 1);
+        // Add image of second corporation
+        FileInputStream inputstream2 = new FileInputStream("~/resources/filler.png");
+        Image corpImage2 = new Image(inputstream2);
+        ImageView imageView2 = new ImageView(corpImage2);
+        gridPane.add(imageView2, 2, 1);
+*/
     }
 
     public static void main(String[] args) {

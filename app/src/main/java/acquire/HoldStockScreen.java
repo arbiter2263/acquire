@@ -1,4 +1,5 @@
 package acquire;
+
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -9,21 +10,22 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.css.converter.PaintConverter;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-public class MergerScreen extends Application {
+
+public class HoldStockScreen extends Application {
+
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Merger");
-        GridPane gridPane = gameSetup();
+        primaryStage.setTitle("Hold Stock");
+        GridPane gridPane = stockHold();
         addUIControls(gridPane);
-        Scene scene7 = new Scene(gridPane, 1200, 800);
+        Scene scene5 = new Scene(gridPane, 1200, 800);
         ColumnConstraints columnOneConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
         columnOneConstraints.setHalignment(HPos.CENTER);
         ColumnConstraints columnTwoConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
@@ -31,34 +33,56 @@ public class MergerScreen extends Application {
         ColumnConstraints columnThreeConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
         columnOneConstraints.setHalignment(HPos.CENTER);
         gridPane.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstraints, columnThreeConstraints);
-        primaryStage.setScene(scene7);
+        primaryStage.setScene(scene5);
         primaryStage.show();
     }
 
-    private GridPane gameSetup() {
+    private GridPane stockHold() {
         GridPane gridPane = new GridPane();
-        gridPane.setAlignment(Pos.TOP_CENTER);
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setBackground(new Background(new BackgroundFill(Color.web("#CBC3E3"), CornerRadii.EMPTY, Insets.EMPTY)));
         gridPane.setHgap(10);
         gridPane.setVgap(10);
-        gridPane.setBackground(new Background(new BackgroundFill(Color.web("#CBC3E3"), CornerRadii.EMPTY, Insets.EMPTY)));
         return gridPane;
     }
 
-    private void addUIControls(GridPane gridPane) {
-        TextArea merger = new TextArea("A merger has occurred between these 2 corporations: REPLACE ME 1 and REPLACE ME 2. What would you like to do with your stocks for REPLACE ME 3 corporation which is now defunct?");
-        merger.setWrapText(true);
-        merger.setPrefHeight(100);
-        merger.setEditable(false);
-        merger.setStyle("-fx-control-inner-background:#CBC3E3; -fx-font-size: 2em;");
-        gridPane.add(merger, 0, 0, 3, 1);
+    private void addUIControls(GridPane gridPane) throws FileNotFoundException {
+        // Add Header
+        Label headerLabel = new Label("Holding stocks was selected. This will end your opportunity to sell or trade stocks.");
+        headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        gridPane.add(headerLabel, 0,0,3,1);
+        GridPane.setHalignment(headerLabel, HPos.CENTER);
+        GridPane.setMargin(headerLabel, new Insets(20, 0,20,0));
+
+        // Add Confirmation Prompt
+        Label stockCount = new Label("Are you sure you want to hold onto your stocks?");
+        gridPane.add(stockCount, 0,1);
+
+        // Add Confirmation Button
+        Button confirmButton = new Button("Yes");
+        confirmButton.setPrefHeight(100);
+        confirmButton.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
+        confirmButton.setDefaultButton(true);
+        confirmButton.setPrefWidth(300);
+        gridPane.add(confirmButton, 1, 1, 1, 1);
+        GridPane.setMargin(confirmButton, new Insets(20, 0,20,0));
+
+        // Add Deny Button
+        Button noButton = new Button("No");
+        noButton.setPrefHeight(100);
+        noButton.setDefaultButton(false);
+        noButton.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
+        noButton.setPrefWidth(300);
+        gridPane.add(noButton, 2, 1, 1, 1);
+        GridPane.setMargin(noButton, new Insets(20, 0,20,0));
 
         // Add Sell Button
         Button sellButton = new Button("Sell");
         sellButton.setPrefHeight(100);
-        sellButton.setDefaultButton(true);
+        sellButton.setDefaultButton(false);
         sellButton.setPrefWidth(300);
         sellButton.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
-        gridPane.add(sellButton, 0, 3, 1, 1);
+        gridPane.add(sellButton, 0, 2, 1, 1);
         GridPane.setMargin(sellButton, new Insets(20, 0,20,0));
 
         // Add Trade Button
@@ -67,16 +91,16 @@ public class MergerScreen extends Application {
         tradeButton.setDefaultButton(false);
         tradeButton.setPrefWidth(300);
         tradeButton.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
-        gridPane.add(tradeButton, 1, 3, 1, 1);
+        gridPane.add(tradeButton, 1, 2, 1, 1);
         GridPane.setMargin(tradeButton, new Insets(20, 0,20,0));
 
         // Add Hold Button
         Button holdButton = new Button("Hold");
         holdButton.setPrefHeight(100);
-        holdButton.setDefaultButton(false);
+        holdButton.setDefaultButton(true);
         holdButton.setPrefWidth(300);
         holdButton.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
-        gridPane.add(holdButton, 2, 3, 1, 1);
+        gridPane.add(holdButton, 2, 2, 1, 1);
         GridPane.setMargin(holdButton, new Insets(20, 0,20,0));
     }
 
