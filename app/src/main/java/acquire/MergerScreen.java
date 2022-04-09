@@ -23,7 +23,7 @@ public class MergerScreen extends Application {
         primaryStage.setTitle("Merger");
         GridPane gridPane = gameSetup();
         addUIControls(gridPane);
-        Scene scene7 = new Scene(gridPane, 1200, 800);
+        Scene scene = new Scene(gridPane, 1200, 800);
         ColumnConstraints columnOneConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
         columnOneConstraints.setHalignment(HPos.CENTER);
         ColumnConstraints columnTwoConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
@@ -31,7 +31,7 @@ public class MergerScreen extends Application {
         ColumnConstraints columnThreeConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
         columnOneConstraints.setHalignment(HPos.CENTER);
         gridPane.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstraints, columnThreeConstraints);
-        primaryStage.setScene(scene7);
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 

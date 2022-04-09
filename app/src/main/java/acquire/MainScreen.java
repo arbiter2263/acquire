@@ -16,22 +16,23 @@ public class MainScreen extends Application {
         primaryStage.setTitle("Acquire");
         GridPane gridPane = mainScreen();
         addUIControls(gridPane);
-        Scene scene6 = new Scene(gridPane, 1200, 800);
+        Scene scene = new Scene(gridPane, 1200, 800);
         ColumnConstraints columnOneConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
         columnOneConstraints.setHalignment(HPos.CENTER);
         ColumnConstraints columnTwoConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
         columnOneConstraints.setHalignment(HPos.CENTER);
         ColumnConstraints columnThreeConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
         columnOneConstraints.setHalignment(HPos.CENTER);
+        scene.setFill(Color.PURPLE);
         gridPane.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstraints, columnThreeConstraints);
-        primaryStage.setScene(scene6);
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
     private GridPane mainScreen() {
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
-        gridPane.setBackground(new Background(new BackgroundFill(Color.web("#CBC3E3"), CornerRadii.EMPTY, Insets.EMPTY)));
+        gridPane.setPadding(new Insets(40, 40, 40, 40));
         gridPane.setHgap(10);
         gridPane.setVgap(10);
         return gridPane;
