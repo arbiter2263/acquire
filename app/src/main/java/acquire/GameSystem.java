@@ -52,7 +52,7 @@ public class GameSystem {
 
             Gameboard.getInstance().initializeGame(numberOfPlayers);
             //instantiate a pile of tiles
-            Pile pile = new Pile();
+            Pile.getInstance();
 
             //instantiate the corporations
             CorporationList.getInstance();
@@ -244,6 +244,7 @@ public class GameSystem {
             //end go next player turn
             return true;
         }
+        return false;
     }
 
     /**
@@ -266,9 +267,9 @@ public class GameSystem {
                 return true; //game can end since there is at least 1 corp 41+ in size present end game option
             }
          }
-        if (CorporationList.getInstance().getActiveCorps().size() == safeCounter) {
-            //if all active corporations are safe game can end
-            return true; //Present end game option
+            if (CorporationList.getInstance().getActiveCorps().size() == safeCounter) {
+                //if all active corporations are safe game can end
+                return true; //Present end game option
         }
         return false; //Game cannot be ended yet do not present option to end
     }
