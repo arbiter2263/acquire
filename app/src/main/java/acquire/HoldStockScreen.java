@@ -25,7 +25,7 @@ public class HoldStockScreen extends Application {
         primaryStage.setTitle("Hold Stock");
         GridPane gridPane = stockHold();
         addUIControls(gridPane);
-        Scene scene = new Scene(gridPane, 1200, 800);
+        Scene scene5 = new Scene(gridPane, 1200, 800);
         ColumnConstraints columnOneConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
         columnOneConstraints.setHalignment(HPos.CENTER);
         ColumnConstraints columnTwoConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
@@ -33,7 +33,7 @@ public class HoldStockScreen extends Application {
         ColumnConstraints columnThreeConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
         columnOneConstraints.setHalignment(HPos.CENTER);
         gridPane.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstraints, columnThreeConstraints);
-        primaryStage.setScene(scene);
+        primaryStage.setScene(scene5);
         primaryStage.show();
     }
 

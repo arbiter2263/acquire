@@ -18,28 +18,29 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class SellStockScreen extends Application {
-
+    static String corporation;
+    static Player user;
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Sell Stock");
         GridPane gridPane = stockSell();
         addUIControls(gridPane);
-        Scene scene = new Scene(gridPane, 1200, 800);
+        Scene scene9 = new Scene(gridPane, 1200, 800);
         ColumnConstraints columnOneConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
         columnOneConstraints.setHalignment(HPos.CENTER);
         ColumnConstraints columnTwoConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
         columnOneConstraints.setHalignment(HPos.CENTER);
         ColumnConstraints columnThreeConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
         columnOneConstraints.setHalignment(HPos.CENTER);
-        scene.setFill(Color.PURPLE);
         gridPane.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstraints, columnThreeConstraints);
-        primaryStage.setScene(scene);
+        primaryStage.setScene(scene9);
         primaryStage.show();
     }
 
     private GridPane stockSell() {
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
+        gridPane.setBackground(new Background(new BackgroundFill(Color.web("#CBC3E3"), CornerRadii.EMPTY, Insets.EMPTY)));
         gridPane.setPadding(new Insets(10, 10, 10, 10));
         gridPane.setHgap(10);
         gridPane.setVgap(10);
@@ -54,15 +55,14 @@ public class SellStockScreen extends Application {
         GridPane.setHalignment(headerLabel, HPos.CENTER);
         GridPane.setMargin(headerLabel, new Insets(20, 0,20,0));
 
-/* UNABLE TO FIND IMAGES
         //Corporation Image
-        FileInputStream inputstream = new FileInputStream("~/resources/filler.png");
+        FileInputStream inputstream = new FileInputStream("filler.png");
         Image corpImage = new Image(inputstream);
         ImageView imageView = new ImageView(corpImage);
         gridPane.add(imageView, 0, 1);
-*/
+
         // Stock Count Prompt
-        Label stockCount = new Label("You have blank stocks in this corporation. \nHow many would you like to sell?");
+        Label stockCount = new Label("You have " + Integer.toString(user.showStocks().get(corporation)) + "stocks in this corporation. \nHow many would you like to sell?");
         stockCount.setPrefHeight(100);
         gridPane.add(stockCount, 1,1);
 
@@ -99,7 +99,9 @@ public class SellStockScreen extends Application {
         GridPane.setMargin(holdButton, new Insets(20, 0,20,0));
     }
 
-    public static void main(String[] args) {
+    public static void main(Player e, String name) {
+        user = e;
+        corporation = name;
         launch();
     }
 }
