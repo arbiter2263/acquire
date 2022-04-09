@@ -9,7 +9,6 @@ public class Player implements PlayerInterface{
     private String name;
     private int wallet;
     private LinkedList<Tile> hand;
-    private int[] stocks;
     private Hashtable<Corporation, Integer> stockCounts;
 
     /**
@@ -20,7 +19,6 @@ public class Player implements PlayerInterface{
         this.name = name;
         this.wallet = 6000;
         hand = new LinkedList<Tile>();
-        stocks = new int[]{0, 0, 0, 0, 0, 0, 0};
         stockCounts = new Hashtable<>();
         // Add inactive corporations
         for (Corporation corp : CorporationList.getInstance().getInactiveCorps()) {
@@ -46,6 +44,14 @@ public class Player implements PlayerInterface{
      */
     public int showMoney(){
         return wallet;
+    }
+
+    /**
+     * Simple getter for a list of Tiles this player has in their hand
+     * @return  LinkedList<Tile>  A list of tiles this player has currently
+     */
+    public LinkedList<Tile> showHand() {
+        return this.hand;
     }
 
     /**
