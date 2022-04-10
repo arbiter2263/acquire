@@ -1,9 +1,14 @@
+/*
+ * Copyright (c) arbiter2263 and contributors. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for details.
+ */
+
 package acquire;
 
 import java.util.LinkedList;
 import java.util.Objects;
 
-public class Corporation implements CorporationInterface{
+public class Corporation {
     private String name;
     private LinkedList<Tile> tileList;
     private int stockCount;
@@ -26,7 +31,7 @@ public class Corporation implements CorporationInterface{
      * Simple getter for name
      * @return string  The name of this corporation
      */
-    public String getName() {
+    protected String getName() {
         return name;
     }
 
@@ -34,7 +39,7 @@ public class Corporation implements CorporationInterface{
      * Simple getter for tileList
      * @return LinkedList<Tile>  The tile contained within this corporation
      */
-    public LinkedList<Tile> getTileList() {
+    protected LinkedList<Tile> getTileList() {
         return tileList;
     }
 
@@ -42,7 +47,7 @@ public class Corporation implements CorporationInterface{
      * Method that checks if this corporation has enough tiles to be considered safe
      * @return bool  True if it is safe; False if it is not
      */
-    public boolean checkIfSafe() {
+    protected boolean checkIfSafe() {
         //Needs to be implemented
         if (this.tileList.size() >= 11) {
             return true;
@@ -54,7 +59,7 @@ public class Corporation implements CorporationInterface{
      * Simple getter for stockCount
      * @return int  The number of stock issued for this corporation
      */
-    public int getStockCount() {
+    protected int getStockCount() {
         return stockCount;
     }
 
@@ -62,7 +67,7 @@ public class Corporation implements CorporationInterface{
      * Simple getter for stockCapMet
      * @return bool  True if the maximum number of stocks has been sold; False otherwise
      */
-    public boolean getStockCapMet() {
+    protected boolean getStockCapMet() {
         return this.stockCapMet;
     }
 
@@ -70,7 +75,7 @@ public class Corporation implements CorporationInterface{
      * Simple getter for stockPrice
      * @return int  The current price of stock in this corporation
      */
-    public int getStockPrice() {
+    protected int getStockPrice() {
         return stockPrice;
     }
 

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) arbiter2263 and contributors. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for details.
+ */
+
 package acquire;
 /**
 Tile class holds the pertinent information related to
@@ -7,7 +12,7 @@ take on the game board
  */
 
 
-public class Tile implements TileInterface{
+public class Tile {
     private final String space;
     private final int number;
     private final char letter;

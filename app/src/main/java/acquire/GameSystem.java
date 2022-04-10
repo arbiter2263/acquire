@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) arbiter2263 and contributors. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for details.
+ */
+
 package acquire;
 
 import org.json.JSONObject;
@@ -6,6 +11,10 @@ import java.util.*;
 
 public class GameSystem {
     private static GameSystem INSTANCE = new GameSystem();
+    private static ArrayList<Player> playerList = new ArrayList<>();
+    private static ArrayList<Player> mergerPlayerOrder;
+    private static int turnCounter= 0;
+    private static final int lastPlayer = 0;
 
 
     public static GameSystem getInstance(){
@@ -14,6 +23,40 @@ public class GameSystem {
         }
         return INSTANCE;
     }
+
+    /**
+     * Method to set up order for game play
+     * @param player A player object
+     */
+    protected void playOrder(Player player){
+        playerList.add(player);
+    }
+
+    /**
+     * Method starts at first spot in the list of players
+     * returns them, increments the counter. Once the counter
+     * is equal to the number of players (lastPlayer) then it
+     * returns the finalPlayer and resets counter to 0 to start
+     * at the beginning again.
+     * @return returns a player
+     */
+    protected Player playerTurn(){
+        int lastPlayer = playerList.size()-1;
+        int currentPlayer = turnCounter;
+
+        if(turnCounter < lastPlayer) {
+            playerList.get(turnCounter);
+            turnCounter++;
+            return playerList.get(currentPlayer);
+
+        }else if(turnCounter == lastPlayer){
+            turnCounter = 0;
+            return playerList.get(lastPlayer);
+
+        }
+        return null;
+    }
+
 
     /**
      * GameSystem When called should start the first scene which prompts the user for difficulty and number of players through the UI
@@ -89,6 +132,7 @@ public class GameSystem {
 
 
 
+
     /**
      * At the beginning of a players turn they play a tile
      * this method should check that the tile the player chose can be played
@@ -96,7 +140,7 @@ public class GameSystem {
      * @param tile    The tile chosen to be played
      * @return
      */
-    boolean playATile(Player player, Tile tile){
+    protected boolean playATile(Player player, Tile tile){
 
         //checks if placement is valid
         if(Gameboard.getInstance().isValidTilePlay(tile)){
@@ -121,7 +165,7 @@ public class GameSystem {
      * @param corp2   This is the remaining super corporation, the player will get 1 stock in this corp
      * @return
      */
-    boolean tradeStock(Player player, Corporation corp1, Corporation corp2) {
+    protected boolean tradeStock(Player player, Corporation corp1, Corporation corp2) {
         player.tradeInStock(corp1, corp2); //we may want to add a parameter here that takes in the amount
                                            //since the player does not have to trade in all the defunct corp stocks
         return true;
@@ -153,10 +197,10 @@ public class GameSystem {
      * @return
      * UI event handler calls this method feeding it the params
      */
-     boolean purchaseStock(Player player, Corporation corp, int amount){
+    protected boolean purchaseStock(Player player, Corporation corp, int amount){
         for(int i = 0; i < amount; i++){
+
             player.buyStock(corp.getName());
-            corp.stockBought();
         }
         return true;
     }
@@ -191,7 +235,7 @@ public class GameSystem {
      * @return
      * UI handler will call this method after user has selected to draw tile
      */
-    boolean drawTile(Player player) {
+    protected boolean drawTile(Player player) {
         while(player.getHand().size() < 6) { //Players should always have 6 tiles at the end of their turn
             player.addTile(Pile.getInstance().drawTile());
             //end go next player turn
@@ -227,36 +271,68 @@ public class GameSystem {
     }
 
     /**
-     * Method provides end of game steps: Majority and minority
-     * shareholders' bonuses are paid out for all active corporations,
-     * and all stocks are sold back to the stock market bank at current prices
-     *
+     * Method that ends the game by selling all players' stocks and ordering them according to who has the most money
+     * @return  LinkedList<Player>  The ordered list of players
      */
 
-
-    private void endGame(){
-        TreeMap<Integer, Player> tableOfStockScores = new TreeMap<>();
-
-
-        //this was what I came up with for as a way to pay out the minority/majority stockholders per
-        //corporation.  This grabs a corp from the corplist, then cycles through all of the players,
-        //getting their stock value for said corp. the method then adds the stock amount and the player
-        //that owns it to a treemap which is sorted by the value of the stock from lowest to highest
-        //after it adds each player, it will sell all of their stock in the current corp.
-        //after it gets all players and their stock amount added, it pays out the majority owner
-        //which should be the last entry in the treemap.  It removes the last entry and then pays out the minority
-        //stockholder bonus.  THIS DOES NOT YET TAKE INTO ACCOUNT ANY TIES YET
-        for(var corp : CorporationList.getInstance().getActiveCorps()){
-            for (var player : Gameboard.getInstance().getPlayers()){
-                tableOfStockScores.put(player.getStocks().get(corp), player); //getStocks may need a parameter to get a specific stock
-                player.sellDefunctStock(corp, player.getStocks().get(corp)); //get the player's stock amount for the corporation and sell it all.
+    /**
+     * Method that ends the game by selling all players' stocks and ordering them according to who has the most money
+     * @return  LinkedList<Player>  The ordered list of players
+     */
+    private LinkedList<Player> endGame(){
+        for (Corporation activeCorp : CorporationList.getInstance().getActiveCorps()) {
+            HashMap<Player, Integer> stockCounts = new HashMap<>();
+            for (Player player : Gameboard.getInstance().getPlayers()) {
+                stockCounts.put(player, player.getStocks().get(activeCorp));
+                player.sellFullPricedStock(activeCorp, player.getStocks().get(activeCorp));
             }
-
-            //probable methods in corporation
-//            majorityPayout(tableOfStockScores.lastEntry().getKey(), tableOfStockScores.lastEntry().getValue());  //first param stock total, second is the player
-//            tableOfStockScores.remove(tableOfStockScores.lastEntry().getKey());
-//            minorityPayout(tableOfStockScores.lastEntry().getKey(), tableOfStockScores.lastEntry().getValue());
+            giveMajorityMinorityStockHolder(stockCounts, activeCorp);
         }
+        for (Corporation inactiveCorp : CorporationList.getInstance().getInactiveCorps()) {
+            HashMap<Player, Integer> stockCounts = new HashMap<>();
+            for (Player player : Gameboard.getInstance().getPlayers()) {
+                stockCounts.put(player, player.getStocks().get(inactiveCorp));
+                player.sellFullPricedStock(inactiveCorp, player.getStocks().get(inactiveCorp));
+            }
+            giveMajorityMinorityStockHolder(stockCounts, inactiveCorp);
+        }
+        //Player winningOrder[] = new Player[Gameboard.getInstance().getPlayers().size()];
+        LinkedList<Player> winningOrder = new LinkedList<>();
+        for (Player player : Gameboard.getInstance().getPlayers()) {
+            winningOrder.add(player);
+        }
+        winningOrder.sort(new Comparator<Player>() {
+            @Override
+            public int compare(Player o1, Player o2) {
+                if ( o1.getMoney() > o2.getMoney() ) {
+                    return 1;
+                } else if (o1.getMoney() == o2.getMoney()) {
+                    return 0;
+                } else {
+                    return -1;
+                }
+            }
+        });
+        return winningOrder;
+    }
+
+    /**
+     * Method that determines the majority and minority stockholders in a corporation and gives them their bonuses
+     * @param stockCounts  The hashmap of players and their stock counts in a corporation
+     * @param corp  The corporation that the stock belongs to
+     */
+    private void giveMajorityMinorityStockHolder(HashMap<Player, Integer> stockCounts, Corporation corp) {
+        Player majorityHolder = null;
+        Player minorityHolder = null;
+        for (Player player : Gameboard.getInstance().getPlayers()) {
+            if ( (majorityHolder == null) || stockCounts.get(majorityHolder) < stockCounts.get(player) ) {
+                majorityHolder = player;
+            } else if ( (minorityHolder == null) || stockCounts.get(minorityHolder) < stockCounts.get(player) ) {
+                minorityHolder = player;
+            }
+        }
+        majorityHolder.giveBonusMoney(corp.getStockPrice() * 10);
+        minorityHolder.giveBonusMoney(corp.getStockPrice() * 5);
     }
 
 

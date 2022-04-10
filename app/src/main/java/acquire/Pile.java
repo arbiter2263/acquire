@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) arbiter2263 and contributors. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for details.
+ */
+
 package acquire;
 
 /**
@@ -13,12 +18,9 @@ import java.util.Random;
 public class Pile {
     private static Pile instance = null;
     private final ArrayList<Tile> pile;
-<<<<<<< HEAD
 
-
-=======
     private static final int CAPACITY = 108;
->>>>>>> feature/tilepile
+
     //Singleton design attempt
     public static Pile getInstance(){
         if (instance == null){
@@ -88,10 +90,8 @@ public class Pile {
                     throw new IllegalArgumentException("The pile is empty, cannot draw more tiles");
             }
             return null;
-        }
-<<<<<<< HEAD
-        return null;
-    }
+       }
+
 
     /**
      Pile size check method
@@ -114,6 +114,4 @@ public class Pile {
         }
         return ofTile.toString();
     }
-=======
->>>>>>> feature/tilepile
 }
