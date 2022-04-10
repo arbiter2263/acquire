@@ -1,6 +1,5 @@
 package acquire;
 
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,36 +7,44 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.LinkedList;
 
-public class GameboardScreen extends Application {
-    static Player user;
-    static GridPane gridPane = new GridPane();
+public class GameBoardScreen {
+    static private Player user;
+/*
+    protected void loadScene(Player e) {
+        user = e;
+        Scene scene = new Scene(gridPane, 1200, 800);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        setup();
+        addUIControls(stage);
+        stage.show();
+    }
+*/
+    protected Scene getScene(Stage primaryStage, Player e) {
+        GridPane gridPane = new GridPane();
+        user = e;
+        Scene scene = new Scene(gridPane, 1200, 800);
+        setup(gridPane);
+        addUIControls(primaryStage, gridPane);
+        return scene;
+    }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Acquire");
+    private void setup(GridPane gridPane) {
         gridPane.setAlignment(Pos.TOP_CENTER);
         gridPane.setBackground(new Background(new BackgroundFill(Color.web("#CBC3E3"), CornerRadii.EMPTY, Insets.EMPTY)));
         gridPane.setPadding(new Insets(10, 10, 10, 10));
         gridPane.setHgap(10);
         gridPane.setVgap(10);
-        addUIControls(gridPane);
-        Scene scene3 = new Scene(gridPane, 1200, 800);
         ColumnConstraints col1 = new ColumnConstraints();
         col1.setHalignment(HPos.CENTER);
         col1.setPercentWidth(16);
@@ -47,11 +54,9 @@ public class GameboardScreen extends Application {
             column.setPercentWidth(6);
             gridPane.getColumnConstraints().add(column);
         }
-        primaryStage.setScene(scene3);
-        primaryStage.show();
     }
 
-    private void addUIControls(GridPane gridPane) {
+    private void addUIControls(Stage primaryStage, GridPane gridPane) {
         // Settings Label
         Label settings = new Label("Settings");
         gridPane.add(settings, 0, 0);
@@ -68,7 +73,8 @@ public class GameboardScreen extends Application {
         newGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
+                GameSetupScreen newGame = new GameSetupScreen();
+                primaryStage.setScene(newGame.getScene(primaryStage));
             }
         });
 
@@ -89,7 +95,7 @@ public class GameboardScreen extends Application {
         gridPane.add(loadGame, 0, 3);
 
         // Add Exit Button
-        Button exit = new Button("Exit Game");
+        Button exit = new Button("Exit");
         exit.setPrefHeight(5);
         exit.setPrefWidth(120);
         exit.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
@@ -99,7 +105,7 @@ public class GameboardScreen extends Application {
         exit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                
+                Platform.exit();
             }
         });
 
@@ -156,14 +162,15 @@ public class GameboardScreen extends Application {
         viewStocks.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
+                UserStocks stocks = new UserStocks();
+                primaryStage.setScene(stocks.getScene(primaryStage, user));
             }
         });
 
         // get user tiles
         if (user.getHand().size() < 6) {
-        for (int i=0; i<6; i++) {
-        user.addTile(Pile.getInstance().drawTile());}}
+            for (int i=0; i<6; i++) {
+                user.addTile(Pile.getInstance().drawTile());}}
 
 
         // setup tile buttons
@@ -200,15 +207,16 @@ public class GameboardScreen extends Application {
         tile1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Gameboard.getInstance().placeTile(user, user.getHand().remove(0));
+                Gameboard.getInstance().placeTile(user, user.getHand().remove(0), primaryStage);
                 user.addTile(Pile.getInstance().drawTile());
+
             }
         });
 
         tile2.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Gameboard.getInstance().placeTile(user, user.getHand().remove(1));
+                Gameboard.getInstance().placeTile(user, user.getHand().remove(1), primaryStage);
                 user.addTile(Pile.getInstance().drawTile());
             }
         });
@@ -216,7 +224,7 @@ public class GameboardScreen extends Application {
         tile3.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Gameboard.getInstance().placeTile(user, user.getHand().remove(2));
+                Gameboard.getInstance().placeTile(user, user.getHand().remove(2), primaryStage);
                 user.addTile(Pile.getInstance().drawTile());
             }
         });
@@ -224,7 +232,7 @@ public class GameboardScreen extends Application {
         tile4.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Gameboard.getInstance().placeTile(user, user.getHand().remove(3));
+                Gameboard.getInstance().placeTile(user, user.getHand().remove(3), primaryStage);
                 user.addTile(Pile.getInstance().drawTile());
             }
         });
@@ -232,7 +240,7 @@ public class GameboardScreen extends Application {
         tile5.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Gameboard.getInstance().placeTile(user, user.getHand().remove(4));
+                Gameboard.getInstance().placeTile(user, user.getHand().remove(4), primaryStage);
                 user.addTile(Pile.getInstance().drawTile());
             }
         });
@@ -240,12 +248,12 @@ public class GameboardScreen extends Application {
         tile6.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Gameboard.getInstance().placeTile(user, user.getHand().remove(5));
+                Gameboard.getInstance().placeTile(user, user.getHand().remove(5), primaryStage);
                 user.addTile(Pile.getInstance().drawTile());
             }
         });
     }
-
+/*
     protected void activateTile(int i, int e) {
         TextArea spot = new TextArea(i+Character.toString(e+64));
         spot.setPrefHeight(5);
@@ -254,9 +262,5 @@ public class GameboardScreen extends Application {
         spot.setStyle("-fx-control-inner-background:#808080");
         gridPane.add(spot, i, e);
     }
-
-    public static void main(Player e) {
-        user = e;
-        Application.launch();
-    }
+*/
 }

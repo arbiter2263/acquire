@@ -1,6 +1,7 @@
 package acquire;
 
 import com.google.common.annotations.VisibleForTesting;
+import javafx.stage.Stage;
 
 import java.util.LinkedList;
 
@@ -113,7 +114,7 @@ public class Gameboard {
      * @param tile  The tile being played
      * @return  bool  True if the tile is played successfully; False if it can't be played
      */
-    protected boolean placeTile(Player player, Tile tile) {
+    protected boolean placeTile(Player player, Tile tile, Stage primaryStage) {
         if(isValidTilePlay(tile)) {
             if (!player.playTile(tile)) {
                 return false;
@@ -364,6 +365,6 @@ public class Gameboard {
 
     public static void main(String[] args) {
         Player e = new Player("Ssteve");
-        MakeCorporationScreen.main(e);
+        MainScreen.main(args);
     }
 }

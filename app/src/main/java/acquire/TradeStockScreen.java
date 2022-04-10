@@ -21,27 +21,10 @@ import javax.management.Notification;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class TradeStockScreen extends Application {
+public class TradeStockScreen {
     static Player user;
     static String corpSurviving;
     static String corpDefunct;
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Trade Stock");
-        GridPane gridPane = stockTrade();
-        addUIControls(gridPane);
-        Scene scene10 = new Scene(gridPane, 1200, 800);
-        ColumnConstraints columnOneConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        ColumnConstraints columnTwoConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        ColumnConstraints columnThreeConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        gridPane.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstraints, columnThreeConstraints);
-        primaryStage.setScene(scene10);
-        primaryStage.show();
-    }
 
     private GridPane stockTrade() {
         GridPane gridPane = new GridPane();
@@ -129,10 +112,9 @@ public class TradeStockScreen extends Application {
         });
     }
 
-    public static void main(Player e, String f, String k) {
+    protected void loadScene(Stage primary, Player e, String f, String k) {
         user = e;
         corpSurviving = f;
         corpDefunct = k;
-        launch();
     }
 }

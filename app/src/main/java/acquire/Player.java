@@ -78,9 +78,14 @@ public class Player {
         return new Hint();
     }
 
+    /**
+     * Method to get number of stocks in a corporation a player has
+     * @param corp corporation to check stock count of
+     * @return int of corporations held
+     */
     protected int getStockCount(String corp) {
         int count;
-        count = stockCounts.get(corp);
+        count = stockCounts.get(CorporationList.getInstance().getCorporation(corp));
         return count;
     }
 

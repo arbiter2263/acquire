@@ -13,24 +13,11 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import java.util.LinkedList;
 
-public class BuyStockScreen extends Application {
+public class BuyStockScreen {
     static Player user;
     static GridPane gridPane = new GridPane();
     static LinkedList<String> tempStock= new LinkedList<>();
 
-    /**
-     * Required by JavaFX, sets up the scene
-     * @param primaryStage Stage the scene will play on
-     */
-    @Override
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("Purchase Stock");
-        gameSetup();
-        addUIControls(gridPane);
-        Scene scene4 = new Scene(gridPane, 1200, 800);
-        primaryStage.setScene(scene4);
-        primaryStage.show();
-    }
 
     /**
      * Method to setup gridPane
@@ -245,9 +232,12 @@ public class BuyStockScreen extends Application {
         alert.show();
     }
 
-
-    public static void main(Player e) {
+    protected void loadScene(Stage primary, Player e) {
+        primary.setTitle("Buy Stock");
+        gameSetup();
+        Scene scene11 = new Scene(gridPane, 1200, 800);
+        addUIControls(gridPane);
         user = e;
-        launch();
+        primary.setScene(scene11);
     }
 }

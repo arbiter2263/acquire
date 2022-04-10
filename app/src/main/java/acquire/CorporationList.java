@@ -3,7 +3,7 @@ package acquire;
 import java.util.*;
 
 public class CorporationList {
-    private static final String[] CORPORATIONS = {"Sackson", "Zeta", "Hydra", "Fusion", "America", "Pheonix", "Quantum"};
+    private static final String[] CORPORATIONS = {"Sackson", "Zeta", "Hydra", "Fusion", "America", "Phoenix", "Quantum"};
     private static final CorporationList INSTANCE = new CorporationList(); // Field to hold singleton instance of class
     private ArrayList<Corporation> activeCorps;
     private ArrayList<Corporation> inactiveCorps;
@@ -145,11 +145,12 @@ public class CorporationList {
      * @return boolean true or false to indicate status
      */
     protected boolean checkStatus(String corp) {
+        boolean status = false;
         Corporation check = this.getCorporation(corp);
         ArrayList<Corporation> inactives = this.getInactiveCorps();
         for (Corporation inactive : inactives) {
-            if (check.equals(inactive)) return false;
+            status = !check.equals(inactive);
         }
-        return true;
+        return status;
     }
 }

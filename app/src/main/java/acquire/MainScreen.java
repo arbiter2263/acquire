@@ -1,9 +1,14 @@
 package acquire;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -11,20 +16,14 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class MainScreen extends Application {
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Acquire");
         GridPane gridPane = mainScreen();
-        addUIControls(gridPane);
-        Scene scene6 = new Scene(gridPane, 1200, 800);
-        ColumnConstraints columnOneConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        ColumnConstraints columnTwoConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        ColumnConstraints columnThreeConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        gridPane.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstraints, columnThreeConstraints);
-        primaryStage.setScene(scene6);
+        Scene scene = new Scene(gridPane, 1200, 800);
+        addUIControls(primaryStage, gridPane);
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
@@ -37,7 +36,7 @@ public class MainScreen extends Application {
         return gridPane;
     }
 
-    private void addUIControls(GridPane gridPane) {
+    private void addUIControls(Stage primaryStage, GridPane gridPane) {
         // Add New Game Button
         Button newGameButton = new Button("New Game");
         newGameButton.setPrefHeight(200);
@@ -45,6 +44,14 @@ public class MainScreen extends Application {
         newGameButton.setPrefWidth(600);
         gridPane.add(newGameButton, 0, 0, 3, 1);
         GridPane.setMargin(newGameButton, new Insets(20, 0,20,0));
+
+        newGameButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                GameSetupScreen setup = new GameSetupScreen();
+                primaryStage.setScene(setup.getScene(primaryStage));
+            }
+        });
 
         // Add Load Game Button
         Button loadGameButton = new Button("Load Game");
@@ -61,6 +68,13 @@ public class MainScreen extends Application {
         exitButton.setPrefWidth(600);
         gridPane.add(exitButton, 0, 2, 3, 1);
         GridPane.setMargin(exitButton, new Insets(20, 0,20,0));
+
+        exitButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Platform.exit();
+            }
+        });
     }
     public static void main(String[] args) {
         launch();

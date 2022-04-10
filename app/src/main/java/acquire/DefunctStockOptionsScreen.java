@@ -19,28 +19,22 @@ import javafx.stage.Stage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class DefunctStockOptionsScreen extends Application {
+public class DefunctStockOptionsScreen {
+    static GridPane gridPane = new GridPane();
     static String corporation;
     static Player user;
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Corporation Defunct");
-        GridPane gridPane = stockSell();
+
+    protected void loadScene(Stage primary, Player e, String corp) throws FileNotFoundException {
+        user = e;
+        corporation = corp;
+        primary.setTitle("Buy Stock");
+        stockSell(gridPane);
+        Scene scene13 = new Scene(gridPane, 1200, 800);
         addUIControls(gridPane);
-        Scene scene9 = new Scene(gridPane, 1200, 800);
-        ColumnConstraints columnOneConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        ColumnConstraints columnTwoConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        ColumnConstraints columnThreeConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        gridPane.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstraints, columnThreeConstraints);
-        primaryStage.setScene(scene9);
-        primaryStage.show();
+        primary.setScene(scene13);
     }
 
-    private GridPane stockSell() {
-        GridPane gridPane = new GridPane();
+    private GridPane stockSell(GridPane gridPane) {
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setBackground(new Background(new BackgroundFill(Color.web("#CBC3E3"), CornerRadii.EMPTY, Insets.EMPTY)));
         gridPane.setPadding(new Insets(10, 10, 10, 10));
@@ -107,9 +101,4 @@ public class DefunctStockOptionsScreen extends Application {
         });
     }
 
-    public static void main(Player e, String name) {
-        user = e;
-        corporation = name;
-        launch();
-    }
 }
