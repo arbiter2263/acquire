@@ -107,12 +107,15 @@ class gameSystemTest extends Specification {
     // check that players stocks and the corps stocks are updated
     def "Trading in stock 2 for 1"() {
         setup:
+        GameSystem.INSTANCE = null
         CorporationList.INSTANCE = null
+        Gameboard.INSTANCE = null
+        Pile.instance = null
         def player = new Player("name")
         def corp1 = CorporationList.getInstance().getCorporation("America")
         CorporationList.getInstance().activateCorp(corp1)
-        def corp2 = CorporationList.getInstance().getCorporation("Pheonix")
-        CorporationList.getInstance().activateCorp(corp2)
+        def corp2 = CorporationList.getInstance().getCorporation("Phoenix")
+        //CorporationList.getInstance().activateCorp(corp2)
 //        int amount = 2
 
         player.buyStock(corp1.getName())
