@@ -342,7 +342,7 @@ public class Gameboard {
     private void makeNewCorp(Tile tile, int[] rowColumnTile2) {
         //Will need to cooperate with the make new corporation screen
         // needs user input
-        String corpName = "Pheonix"; // Needs to ask user for name selection from inactiveCorps
+        String corpName = "Phoenix"; // Needs to ask user for name selection from inactiveCorps
         Corporation corp = CorporationList.getInstance().getCorporation(corpName);
         CorporationList.getInstance().activateCorp(corp);
         corp.addTile(tile);

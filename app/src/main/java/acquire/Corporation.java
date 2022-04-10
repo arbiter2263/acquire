@@ -180,7 +180,7 @@ public class Corporation {
             } else if (tiles >= 41) {
                 this.stockPrice = 1100;
             }
-        } else if (this.name.equals("Pheonix") || this.name.equals("Quantum")) {
+        } else if (this.name.equals("Phoenix") || this.name.equals("Quantum")) {
             //High-priced corporations
             if (tiles == 2) {
                 this.stockPrice = 400;
