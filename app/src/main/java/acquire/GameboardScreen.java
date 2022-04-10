@@ -139,7 +139,7 @@ public class GameboardScreen extends Application {
             }
         }
 
-        TextArea cash = new TextArea(Integer.toString(user.showMoney()));
+        TextArea cash = new TextArea(Integer.toString(user.getMoney()));
         cash.setEditable(false);
         cash.setPrefHeight(5);
         cash.setPrefWidth(120);

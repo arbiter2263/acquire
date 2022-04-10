@@ -119,7 +119,7 @@ public class BuyStockScreen extends Application {
         GridPane.setMargin(quantum, new Insets(20, 0,20,0));
 
         // Add Cash Text Box
-        TextArea cash = new TextArea(Integer.toString(user.showMoney()));
+        TextArea cash = new TextArea(Integer.toString(user.getMoney()));
         cash.setEditable(false);
         cash.setPrefHeight(5);
         cash.setPrefWidth(120);
@@ -136,7 +136,7 @@ public class BuyStockScreen extends Application {
         gridPane.add(postCash, 1, 4);
 
         // Add Cash After purchase Text Box
-        TextArea cashAfter = new TextArea(Integer.toString(user.showMoney()));
+        TextArea cashAfter = new TextArea(Integer.toString(user.getMoney()));
         cashAfter.setEditable(false);
         cashAfter.setPrefHeight(5);
         cashAfter.setPrefWidth(120);

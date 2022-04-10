@@ -363,8 +363,7 @@ public class Gameboard {
     }
 
     public static void main(String[] args) {
-        Player player = new Player("steve");
-        Corporation corp = new Corporation("Sackson");
-        BuyStockScreen.main(player);
+        Player e = new Player("Ssteve");
+        MakeCorporationScreen.main(e);
     }
 }

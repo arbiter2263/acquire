@@ -78,6 +78,12 @@ public class Player {
         return new Hint();
     }
 
+    protected int getStockCount(String corp) {
+        int count;
+        count = stockCounts.get(corp);
+        return count;
+    }
+
     /**
      * Method to have this player buy a stock in a corporation
      * @param stockName  The name of the stock/corporation to buy from
