@@ -92,7 +92,7 @@ public class Player {
                 int cost = nextCorp.getStockPrice();
                 if (this.wallet >= cost) {
                     wallet -= cost;
-                    nextCorp.stockSold();
+                    nextCorp.stockBought();
                     int oldStockCount = this.stockCounts.get(nextCorp);
                     this.stockCounts.replace(nextCorp, (oldStockCount + 1) );
                     return true;
@@ -220,6 +220,10 @@ public class Player {
         hand.add(tile);
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1bd2c7abee37b7103f26cc1b0e7a66df7f1b4cc4
     /**
      * Method that gives bonus money to this player
      * @param bonus  The amount of the bonus

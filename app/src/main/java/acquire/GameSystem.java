@@ -6,6 +6,10 @@ import java.util.*;
 
 public class GameSystem {
     private static GameSystem INSTANCE = new GameSystem();
+    private static ArrayList<Player> playerList = new ArrayList<>();
+    private static ArrayList<Player> mergerPlayerOrder;
+    private static int turnCounter= 0;
+    private static final int lastPlayer = 0;
 
 
     public static GameSystem getInstance(){
@@ -14,6 +18,41 @@ public class GameSystem {
         }
         return INSTANCE;
     }
+
+    /**
+     * Method to set up order for game play
+     * @param player A player object
+     */
+    protected void playOrder(Player player){
+        playerList.add(player);
+    }
+
+    /**
+     * Method starts at first spot in the list of players
+     * returns them, increments the counter. Once the counter
+     * is equal to the number of players (lastPlayer) then it
+     * returns the finalPlayer and resets counter to 0 to start
+     * at the beginning again.
+     * @return returns a player
+     */
+
+    protected Player playerTurn(){
+        int lastPlayer = playerList.size()-1;
+        int currentPlayer = turnCounter;
+
+        if(turnCounter < lastPlayer) {
+            playerList.get(turnCounter);
+            turnCounter++;
+            return playerList.get(currentPlayer);
+
+        }else if(turnCounter == lastPlayer){
+            turnCounter = 0;
+            return playerList.get(lastPlayer);
+
+        }
+        return null;
+    }
+
 
     /**
      * GameSystem When called should start the first scene which prompts the user for difficulty and number of players through the UI
@@ -89,6 +128,7 @@ public class GameSystem {
 
 
 
+
     /**
      * At the beginning of a players turn they play a tile
      * this method should check that the tile the player chose can be played
@@ -155,8 +195,8 @@ public class GameSystem {
      */
      boolean purchaseStock(Player player, Corporation corp, int amount){
         for(int i = 0; i < amount; i++){
+
             player.buyStock(corp.getName());
-            corp.stockBought();
         }
         return true;
     }
@@ -227,16 +267,17 @@ public class GameSystem {
     }
 
     /**
-     * Method provides end of game steps: Majority and minority
-     * shareholders' bonuses are paid out for all active corporations,
-     * and all stocks are sold back to the stock market bank at current prices
-     *
+     * Method that ends the game by selling all players' stocks and ordering them according to who has the most money
+     * @return  LinkedList<Player>  The ordered list of players
      */
+<<<<<<< HEAD
 
     /**
      * Method that ends the game by selling all players' stocks and ordering them according to who has the most money
      * @return  LinkedList<Player>  The ordered list of players
      */
+=======
+>>>>>>> 1bd2c7abee37b7103f26cc1b0e7a66df7f1b4cc4
     private LinkedList<Player> endGame(){
         for (Corporation activeCorp : CorporationList.getInstance().getActiveCorps()) {
             HashMap<Player, Integer> stockCounts = new HashMap<>();
