@@ -92,7 +92,7 @@ public class Player {
                 int cost = nextCorp.getStockPrice();
                 if (this.wallet >= cost) {
                     wallet -= cost;
-                    nextCorp.stockSold();
+                    nextCorp.stockBought();
                     int oldStockCount = this.stockCounts.get(nextCorp);
                     this.stockCounts.replace(nextCorp, (oldStockCount + 1) );
                     return true;
