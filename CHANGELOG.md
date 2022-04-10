@@ -8,6 +8,14 @@ This document contains a summary of changes for this project
 
 ### Removed
 
+## [0.1.1] 04-10-2022
+### Added
+- License headers to all files
+### Changed
+- Public methods to protected that did not need to be public
+### Removed
+- All unneeded interfaces and their implementations
+
 ## [0.1.0] 04-09-2022
 ### Added
 - Fully implemented classes
