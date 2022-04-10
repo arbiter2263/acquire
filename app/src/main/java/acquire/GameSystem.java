@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) arbiter2263 and contributors. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for details.
+ */
+
 package acquire;
 
 import org.json.JSONObject;
@@ -135,7 +140,7 @@ public class GameSystem {
      * @param tile    The tile chosen to be played
      * @return
      */
-    boolean playATile(Player player, Tile tile){
+    protected boolean playATile(Player player, Tile tile){
 
         //checks if placement is valid
         if(Gameboard.getInstance().isValidTilePlay(tile)){
@@ -160,7 +165,7 @@ public class GameSystem {
      * @param corp2   This is the remaining super corporation, the player will get 1 stock in this corp
      * @return
      */
-    boolean tradeStock(Player player, Corporation corp1, Corporation corp2) {
+    protected boolean tradeStock(Player player, Corporation corp1, Corporation corp2) {
         player.tradeInStock(corp1, corp2); //we may want to add a parameter here that takes in the amount
                                            //since the player does not have to trade in all the defunct corp stocks
         return true;
@@ -192,7 +197,7 @@ public class GameSystem {
      * @return
      * UI event handler calls this method feeding it the params
      */
-     boolean purchaseStock(Player player, Corporation corp, int amount){
+    protected boolean purchaseStock(Player player, Corporation corp, int amount){
         for(int i = 0; i < amount; i++){
 
             player.buyStock(corp.getName());
@@ -230,7 +235,7 @@ public class GameSystem {
      * @return
      * UI handler will call this method after user has selected to draw tile
      */
-    boolean drawTile(Player player) {
+    protected boolean drawTile(Player player) {
         while(player.getHand().size() < 6) { //Players should always have 6 tiles at the end of their turn
             player.addTile(Pile.getInstance().drawTile());
             //end go next player turn

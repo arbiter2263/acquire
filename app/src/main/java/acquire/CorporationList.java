@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) arbiter2263 and contributors. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for details.
+ */
+
 package acquire;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -5,7 +10,7 @@ import com.google.common.annotations.VisibleForTesting;
 import java.util.*;
 
 public class CorporationList {
-    private static final String[] CORPORATIONS = {"Sackson", "Zeta", "Hydra", "Fusion", "America", "Pheonix", "Quantum"};
+    private static final String[] CORPORATIONS = {"Sackson", "Zeta", "Hydra", "Fusion", "America", "Phoenix", "Quantum"};
     @VisibleForTesting private static CorporationList INSTANCE = null; // Field to hold singleton instance of class
     private ArrayList<Corporation> activeCorps;
     private ArrayList<Corporation> inactiveCorps;
