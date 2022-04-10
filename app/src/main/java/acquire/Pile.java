@@ -13,8 +13,12 @@ import java.util.Random;
 public class Pile {
     private static Pile instance = null;
     private final ArrayList<Tile> pile;
+<<<<<<< HEAD
 
 
+=======
+    private static final int CAPACITY = 108;
+>>>>>>> feature/tilepile
     //Singleton design attempt
     public static Pile getInstance(){
         if (instance == null){
@@ -30,7 +34,7 @@ public class Pile {
      */
     private Pile(){
 
-        pile = new ArrayList<Tile>(108);
+        pile = new ArrayList<Tile>(CAPACITY);
 
         //char array for tile lettering
         char[] letters = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'};
@@ -70,21 +74,22 @@ public class Pile {
     removes tile from pile
     @return returns the Tile drawn so it can be placed in players hand
     */
-    public Tile drawTile(){
+    public Tile drawTile() throws IllegalArgumentException{
 
         /** Randomly chooses number between 0 and size of pile
            To get a randomly chosen tile.
         */
         Random random = new Random();
         int randomInt = random.nextInt(pile.size());
-        if(pile.size() !=0){
-            return pile.remove(randomInt);
-            //Print out remaining number of tiles?
-        }else if(pile.size() < 1){
-            // TODO: 4/3/2022  add print statement?
-            //print out no tiles left in pile
-            System.out.println("No tiles left to draw");
+            if (pile.size() != 0) {
+                return pile.remove(randomInt);
+                //Print out remaining number of tiles?
+            } else if (pile.size() < 1) {
+                    throw new IllegalArgumentException("The pile is empty, cannot draw more tiles");
+            }
+            return null;
         }
+<<<<<<< HEAD
         return null;
     }
 
@@ -109,4 +114,6 @@ public class Pile {
         }
         return ofTile.toString();
     }
+=======
+>>>>>>> feature/tilepile
 }

@@ -2,6 +2,7 @@ package acquire
 
 import spock.lang.Specification
 
+<<<<<<< HEAD
 class gameSystemTest extends Specification {
 
     // initializeGame()
@@ -143,5 +144,11 @@ class gameSystemTest extends Specification {
 
     // endGame()
 
+=======
+class gameSystemTest extends Specification{
+
+
+
+>>>>>>> feature/tilepile
 
 }
