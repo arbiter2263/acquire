@@ -197,4 +197,13 @@ public class Player {
     protected void addTile(Tile tile){
         hand.add(tile);
     }
+
+
+    /**
+     * Method that gives bonus money to this player
+     * @param bonus  The amount of the bonus
+     */
+    protected void giveBonusMoney(int bonus) {
+        this.wallet += bonus;
+    }
 }

@@ -98,7 +98,7 @@ class gameSystemTest extends Specification {
 
 
     // tradeStock(Player player, Corporation corp1, Corporation corp2, int tradeInAmount)
-    //TODO check that trading is done correctly:
+    // check that trading is done correctly:
     // check that players stocks and the corps stocks are updated
     def "Trading in stock 2 for 1"() {
         setup:
@@ -121,7 +121,7 @@ class gameSystemTest extends Specification {
     }
 
     // sellDefunctStock(Player player, Corporation corp, int sellAmount)
-    //TODO check that defunct corporations stocks are updated
+    // check that defunct corporations stocks are updated
     // and that the players stock in each corp is updated
     def "Selling defunct Corporations stock"() {
         setup:
@@ -142,6 +142,7 @@ class gameSystemTest extends Specification {
 
         then:
         player.getStocks().get(corp) == 2
+        corp.getStockCount() == 2
 
     }
 
@@ -162,8 +163,9 @@ class gameSystemTest extends Specification {
 
 
     // drawTile(Player player)
-    //TODO draw tile should appropriately take a tile from
-    // the pile and add it to the player's hand
+    // draw tile should appropriately take a tile from
+    // the pile and add it to the player's hand, players
+    // should have 6 in hand at end of turn
     def "Drawing tile to end turn"() {
         GameSystem.INSTANCE = null
 
@@ -183,7 +185,9 @@ class gameSystemTest extends Specification {
 
     // endGame()
 
-    //playerTurn()
+    //playerOrder()
+    // Checking that playerOrder() correctly adds
+    // players to the playerList
     def "Player turn selection"(){
         setup:
         GameSystem.INSTANCE = null
@@ -201,6 +205,8 @@ class gameSystemTest extends Specification {
         result == 3
     }
     //playerTurn()
+    // Checks that playerTurn() returns the correct
+    // Player after x amount of turns. 2 in this case
     def "Player turn selection check players being added"(){
         setup:
         GameSystem.INSTANCE = null
@@ -218,6 +224,11 @@ class gameSystemTest extends Specification {
         then:
         result == "name"
     }
+
+    //playerTurn()
+    // Check that playerTurn() correctly cycles back to
+    // the beginning of the list after reaching the last
+    // player in the list
     def "Player turn selection cycle to front of list"() {
         setup:
         GameSystem.INSTANCE = null
