@@ -12,7 +12,7 @@ take on the game board
  */
 
 
-public class Tile implements TileInterface{
+public class Tile {
     private final String space;
     private final int number;
     private final char letter;

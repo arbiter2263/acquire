@@ -5,5 +5,5 @@
 
 package acquire;
 
-public class MakeCorporationScreen implements ScreenInterface{
+public class MakeCorporationScreen {
 }

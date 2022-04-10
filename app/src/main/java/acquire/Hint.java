@@ -5,7 +5,7 @@
 
 package acquire;
 
-public class Hint implements HintInterface{
+public class Hint {
     private static String[] possibleHits = {
             "Until a corporation contains at least 11 tiles, it can be merged into another corporation.",
             "Stock in any corporation is always cheaper when the corporation is smaller. Buying at this time is a great way to maximize your profits",

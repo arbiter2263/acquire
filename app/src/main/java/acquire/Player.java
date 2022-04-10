@@ -39,7 +39,7 @@ public class Player {
      * Simple getter for name
      * @return  String  The name of this player
      */
-    public String getName() {
+    protected String getName() {
         return this.name;
     }
 
@@ -47,7 +47,7 @@ public class Player {
      * Simple getter for wallet
      * @return  int  The amount of money in this player's wallet
      */
-    public int getMoney(){
+    protected int getMoney(){
         return wallet;
     }
 
@@ -55,7 +55,7 @@ public class Player {
      * Simple getter for a list of Tiles this player has in their hand
      * @return  LinkedList<Tile>  A list of tiles this player has currently
      */
-    public LinkedList<Tile> getHand() {
+    protected LinkedList<Tile> getHand() {
         return this.hand;
     }
 
@@ -63,7 +63,7 @@ public class Player {
      * Simple getter for stocks
      * @return  HashTable<Corporation, Integer>  A copy of stock counts for each company
      */
-    public Hashtable<Corporation, Integer> getStocks() {
+    protected Hashtable<Corporation, Integer> getStocks() {
         return stockCounts;
     }
 
@@ -71,7 +71,7 @@ public class Player {
      * Method to set the name of this player to a custom name
      * @param name  The new name of this player
      */
-    public void setName(String name) {
+    protected void setName(String name) {
         this.name = name;
     }
 

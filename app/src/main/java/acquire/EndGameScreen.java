@@ -5,5 +5,5 @@
 
 package acquire;
 
-public class EndGameScreen implements ScreenInterface{
+public class EndGameScreen {
 }
