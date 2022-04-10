@@ -234,7 +234,7 @@ class gameSystemTest extends Specification {
         GameSystem.INSTANCE = null
         def player1 = new Player("Chris")
         def player2 = new Player("Randy")
-        def player3 = new Player("name")
+        def player3 = new Player("Susan")
         GameSystem.getInstance().playOrder(player1)
         GameSystem.getInstance().playOrder(player2)
         GameSystem.getInstance().playOrder(player3)
@@ -249,4 +249,129 @@ class gameSystemTest extends Specification {
         then:
         result == "Chris"
     }
+
+    //endGame()
+    // End game method, should properly adjust wallets of players and
+    // pay out the minority/majority stocks
+    def "Majority minority pay method"(){
+        setup:
+        GameSystem.INSTANCE = null
+        CorporationList.INSTANCE = null
+        Gameboard.INSTANCE = null
+        Pile.instance = null
+        Gameboard.getInstance().initializeGame(3)
+        def corp = CorporationList.getInstance().getCorporation("America")
+        def player1 = Gameboard.getInstance().getPlayers().get(0)
+        def player2 = Gameboard.getInstance().getPlayers().get(1)
+        CorporationList.getInstance().activateCorp(corp)
+        //CorporationList.getInstance().activateCorp(corp1)
+        corp.addTile(new Tile(1, 'A' as char))
+        corp.addTile(new Tile(1, 'A' as char))
+        corp.addTile(new Tile(1, 'A' as char))
+        corp.addTile(new Tile(1, 'A' as char))
+        corp.addTile(new Tile(1, 'A' as char))
+
+
+        corp.updateStockPrice()
+
+        for(int i = 0; i < 10; i++){
+            player1.buyStock(corp.getName())
+           // player2.buyStock(corp1.getName())
+        }
+        for(int i = 0; i < 3; i++){
+           player2.buyStock(corp.getName())
+            //player1.buyStock(corp1.getName())
+        }
+
+        when:
+        GameSystem.getInstance().endGame()
+
+        //issue: stock wallets not being updated for
+        then:
+        player2.getMoney() == 9000 //6000 - 1800 + 1800 + 3000
+        player1.getMoney() == 12000   //6000 - 6000 + 6000 +6000 +3000
+
+    }
+
+    //Checking a more in depth game 2 corps of different value
+    //3 players wallets
+    /**
+     * Testing a tie between player 1 and player 2 with corp
+     * player 1 should have 23700 after everything on this setup
+     * and player 2 should have
+     */
+    def "Majority minority pay method for 3 players/2 corporations"(){
+        setup:
+        GameSystem.INSTANCE = null
+        CorporationList.INSTANCE = null
+        Gameboard.INSTANCE = null
+        Pile.instance = null
+        Gameboard.getInstance().initializeGame(3)
+        def corp = CorporationList.getInstance().getCorporation("America")
+        def corp1 = CorporationList.getInstance().getCorporation("Quantum")
+        def player1 = Gameboard.getInstance().getPlayers().get(0)
+        def player2 = Gameboard.getInstance().getPlayers().get(1)
+        def player3 = Gameboard.getInstance().getPlayers().get(2)
+        CorporationList.getInstance().activateCorp(corp)
+        CorporationList.getInstance().activateCorp(corp1)
+
+        //setup corp sizes with tiles
+        for(int i = 0; i < 5; i++){
+            corp.addTile(new Tile(i, 'A' as char))
+        }
+        //set up full sized quantum corp for max payout
+        for(int i = 0; i < 41; i++){
+            corp1.addTile(new Tile(i, 'B' as char))
+        }
+        corp.updateStockPrice()
+        corp1.updateStockPrice()
+        player1.wallet = 1000000  //enough to buy all the stock
+        player2.wallet = 1000000
+        player3.wallet = 1000000
+
+
+        for(int i = 0; i < 12; i++){
+            player1.buyStock(corp.getName())
+        }
+        for(int i = 0; i <5; i++){
+            player1.buyStock(corp1.getName())
+        }
+
+
+        for(int i = 0; i < 12; i++){
+            player2.buyStock(corp.getName())
+        }
+        for(int i = 0; i < 7; i++){
+            player2.buyStock(corp1.getName())
+        }
+
+
+
+        for(int i = 0; i < 2; i++){
+            player3.buyStock(corp.getName())
+        }
+        for(int i = 0; i < 2; i++){
+            player3.buyStock(corp1.getName())
+        }
+
+        player1.wallet = 0 //for easy math check
+        player2.wallet = 0
+        player3.wallet = 0
+
+
+        when:
+        GameSystem.getInstance().endGame()
+
+
+
+        then:
+                                            //corp tied bonus    corp1 minority bonus
+        player1.getMoney() == 23700  // 0 + (12 * 600 + 4500) + (5 * 1200 + 6000)
+                                            //corp tied bonus     corp1 majority bonus
+        player2.getMoney() == 32100  // 0 + (12 * 600 + 4500)  +  (7 * 1200 + 12000)
+
+        player3.getMoney() == 3600      // 0 + (2 * 600 + 0) + (2 * 1200 + 0)
+
+    }
+
 }

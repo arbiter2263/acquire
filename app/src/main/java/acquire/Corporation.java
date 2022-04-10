@@ -131,7 +131,7 @@ public class Corporation implements CorporationInterface{
      * Method that updates the price of stock for this corporation, based on a set of rules
      * Should be called whenever stockCount is incremented or decremented
      */
-    private void updateStockPrice() {
+    void updateStockPrice() {
         int tiles = this.tileList.size();
         if (this.name.equals("Sackson") || this.name.equals("Zeta")) {
             //Low-priced corporations

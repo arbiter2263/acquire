@@ -274,7 +274,7 @@ public class GameSystem {
      * Method that ends the game by selling all players' stocks and ordering them according to who has the most money
      * @return  LinkedList<Player>  The ordered list of players
      */
-    private LinkedList<Player> endGame(){
+    protected LinkedList<Player> endGame(){
         for (Corporation activeCorp : CorporationList.getInstance().getActiveCorps()) {
             HashMap<Player, Integer> stockCounts = new HashMap<>();
             for (Player player : Gameboard.getInstance().getPlayers()) {
@@ -319,15 +319,24 @@ public class GameSystem {
     private void giveMajorityMinorityStockHolder(HashMap<Player, Integer> stockCounts, Corporation corp) {
         Player majorityHolder = null;
         Player minorityHolder = null;
+        boolean tie = false;
         for (Player player : Gameboard.getInstance().getPlayers()) {
             if ( (majorityHolder == null) || stockCounts.get(majorityHolder) < stockCounts.get(player) ) {
+                minorityHolder = majorityHolder;
+
                 majorityHolder = player;
-            } else if ( (minorityHolder == null) || stockCounts.get(minorityHolder) < stockCounts.get(player) ) {
+            }else if (minorityHolder == null || stockCounts.get(minorityHolder) < stockCounts.get(player) ) {
                 minorityHolder = player;
             }
         }
-        majorityHolder.giveBonusMoney(corp.getStockPrice() * 10);
-        minorityHolder.giveBonusMoney(corp.getStockPrice() * 5);
+        //tie pays out half of the combined payouts
+        if(stockCounts.get(minorityHolder) == stockCounts.get(majorityHolder)){
+            majorityHolder.giveBonusMoney( ( (corp.getStockPrice()* 10 + corp.getStockPrice() * 5) ) /2 );
+            minorityHolder.giveBonusMoney( ( (corp.getStockPrice()* 10 + corp.getStockPrice() * 5) ) /2 );
+        }else {
+            majorityHolder.giveBonusMoney(corp.getStockPrice() * 10);
+            minorityHolder.giveBonusMoney(corp.getStockPrice() * 5);
+        }
     }
 
 
