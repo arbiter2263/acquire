@@ -148,6 +148,28 @@ public class Player {
     }
 
     /**
+     * Method that allows a player to sell stock from a corporation at full price
+     * @param corp  The corporation that has gone defunct from a merger
+     * @param stockCount  The amount of stock the player wants to sell
+     * @throws IndexOutOfBoundsException  If the number of stock to be sold is higher than the number of stock the
+     *          player currently has in the corporation
+     */
+    protected void sellFullPricedStock(Corporation corp, int stockCount) throws IndexOutOfBoundsException{
+        int currentCount = this.stockCounts.get(corp);
+        if (currentCount < stockCount) {
+            throw new IndexOutOfBoundsException("Player " + this.name + " has " + this.stockCounts.get(corp) +
+                    " stocks in corporation " + corp.getName() + " and can not sell " + stockCount + " stocks.");
+        }
+        int counter = stockCount;
+        while (counter > 0) {
+            int stockSellValue = CorporationList.getInstance().getStockCost(corp);
+            this.wallet += stockSellValue;
+            counter--;
+        }
+        this.stockCounts.replace(corp, (currentCount - stockCount) );
+    }
+
+    /**
      * Method that adds the founders stock bonus to this player
      * @param newCorp  The newly formed corporation
      */
@@ -196,5 +218,13 @@ public class Player {
      */
     protected void addTile(Tile tile){
         hand.add(tile);
+    }
+
+    /**
+     * Method that gives bonus money to this player
+     * @param bonus  The amount of the bonus
+     */
+    protected void giveBonusMoney(int bonus) {
+        this.wallet += bonus;
     }
 }
