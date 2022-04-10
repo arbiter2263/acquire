@@ -220,10 +220,6 @@ public class Player {
         hand.add(tile);
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 1bd2c7abee37b7103f26cc1b0e7a66df7f1b4cc4
     /**
      * Method that gives bonus money to this player
      * @param bonus  The amount of the bonus

@@ -35,7 +35,6 @@ public class GameSystem {
      * at the beginning again.
      * @return returns a player
      */
-
     protected Player playerTurn(){
         int lastPlayer = playerList.size()-1;
         int currentPlayer = turnCounter;
@@ -270,14 +269,11 @@ public class GameSystem {
      * Method that ends the game by selling all players' stocks and ordering them according to who has the most money
      * @return  LinkedList<Player>  The ordered list of players
      */
-<<<<<<< HEAD
 
     /**
      * Method that ends the game by selling all players' stocks and ordering them according to who has the most money
      * @return  LinkedList<Player>  The ordered list of players
      */
-=======
->>>>>>> 1bd2c7abee37b7103f26cc1b0e7a66df7f1b4cc4
     private LinkedList<Player> endGame(){
         for (Corporation activeCorp : CorporationList.getInstance().getActiveCorps()) {
             HashMap<Player, Integer> stockCounts = new HashMap<>();
