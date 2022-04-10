@@ -125,12 +125,12 @@ public class GameBoardScreen {
         });
 
         // Create rectangle to make board cohesive
-        Rectangle rect = new Rectangle(900, 410);
-        gridPane.add(rect, 1, 1, 12, 9);
+        Rectangle rect = new Rectangle(900, 460);
+        gridPane.add(rect, 1, 1, 12, 10);
 
         // Creates visual representation of Gameboard
         for (int i=1; i<13; i++) {
-            for (int e=1; e<10; e++) {
+            for (int e=1; e<11; e++) {
                 TextArea spot = new TextArea(i+Character.toString(e+64));
                 spot.setPrefHeight(5);
                 spot.setPrefWidth(120);
@@ -209,7 +209,8 @@ public class GameBoardScreen {
             public void handle(ActionEvent event) {
                 Gameboard.getInstance().placeTile(user, user.getHand().remove(0), primaryStage);
                 user.addTile(Pile.getInstance().drawTile());
-
+                BuyStockScreen purchase = new BuyStockScreen();
+                primaryStage.setScene(purchase.getScene(primaryStage, user));
             }
         });
 
@@ -218,7 +219,8 @@ public class GameBoardScreen {
             public void handle(ActionEvent event) {
                 Gameboard.getInstance().placeTile(user, user.getHand().remove(1), primaryStage);
                 user.addTile(Pile.getInstance().drawTile());
-            }
+                BuyStockScreen purchase = new BuyStockScreen();
+                primaryStage.setScene(purchase.getScene(primaryStage, user));            }
         });
 
         tile3.setOnAction(new EventHandler<ActionEvent>() {
@@ -226,6 +228,8 @@ public class GameBoardScreen {
             public void handle(ActionEvent event) {
                 Gameboard.getInstance().placeTile(user, user.getHand().remove(2), primaryStage);
                 user.addTile(Pile.getInstance().drawTile());
+                BuyStockScreen purchase = new BuyStockScreen();
+                primaryStage.setScene(purchase.getScene(primaryStage, user));
             }
         });
 
@@ -234,6 +238,8 @@ public class GameBoardScreen {
             public void handle(ActionEvent event) {
                 Gameboard.getInstance().placeTile(user, user.getHand().remove(3), primaryStage);
                 user.addTile(Pile.getInstance().drawTile());
+                BuyStockScreen purchase = new BuyStockScreen();
+                primaryStage.setScene(purchase.getScene(primaryStage, user));
             }
         });
 
@@ -242,6 +248,8 @@ public class GameBoardScreen {
             public void handle(ActionEvent event) {
                 Gameboard.getInstance().placeTile(user, user.getHand().remove(4), primaryStage);
                 user.addTile(Pile.getInstance().drawTile());
+                BuyStockScreen purchase = new BuyStockScreen();
+                primaryStage.setScene(purchase.getScene(primaryStage, user));
             }
         });
 
@@ -250,6 +258,8 @@ public class GameBoardScreen {
             public void handle(ActionEvent event) {
                 Gameboard.getInstance().placeTile(user, user.getHand().remove(5), primaryStage);
                 user.addTile(Pile.getInstance().drawTile());
+                BuyStockScreen purchase = new BuyStockScreen();
+                primaryStage.setScene(purchase.getScene(primaryStage, user));
             }
         });
     }

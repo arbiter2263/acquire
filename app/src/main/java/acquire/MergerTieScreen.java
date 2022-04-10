@@ -15,14 +15,23 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 public class MergerTieScreen {
-    static GridPane gridPane = new GridPane();
     static Player user;
     static String corporation1;
     static String corporation2;
 
+    protected Scene getScene(Player e, String k, String f) throws FileNotFoundException {
+        GridPane gridPane = new GridPane();
+        user = e;
+        Scene scene = new Scene(gridPane, 1200, 800);
+        gameSetup(gridPane);
+        addUIControls(gridPane);
+        return scene;
+    }
+/*
     protected void loadScene(Stage primary, Player e, String k, String f) throws FileNotFoundException {
         primary.setTitle("Merger Tie");
         gameSetup();
@@ -33,8 +42,8 @@ public class MergerTieScreen {
         Scene scene14 = new Scene(gridPane, 1200, 800);
         primary.setScene(scene14);
     }
-
-    private GridPane gameSetup() {
+*/
+    private GridPane gameSetup(GridPane gridPane) {
         gridPane.setAlignment(Pos.TOP_CENTER);
         gridPane.setHgap(10);
         gridPane.setVgap(10);

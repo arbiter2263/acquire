@@ -15,14 +15,21 @@ import java.util.LinkedList;
 
 public class BuyStockScreen {
     static Player user;
-    static GridPane gridPane = new GridPane();
     static LinkedList<String> tempStock= new LinkedList<>();
 
+    protected Scene getScene(Stage primaryStage, Player e) {
+        GridPane gridPane = new GridPane();
+        user = e;
+        Scene scene = new Scene(gridPane, 1200, 800);
+        gameSetup(gridPane);
+        addUIControls(primaryStage, gridPane);
+        return scene;
+    }
 
     /**
      * Method to setup gridPane
      */
-    private void gameSetup() {
+    private void gameSetup(GridPane gridPane) {
         gridPane.setAlignment(Pos.TOP_CENTER);
         gridPane.setHgap(10);
         gridPane.setVgap(10);
@@ -34,7 +41,7 @@ public class BuyStockScreen {
      * Method to setup the user interface the scene uses
      * @param gridPane allows for organization of user interface
      */
-    private void addUIControls(GridPane gridPane) {
+    private void addUIControls(Stage primaryStage, GridPane gridPane) {
         Text merger = new Text();
         merger.setText("Select up to 3\nstocks to purchase");
         merger.setTextAlignment(TextAlignment.CENTER);
@@ -169,41 +176,38 @@ public class BuyStockScreen {
                 user.buyStock(tempStock.remove());
             }
             user.addTile(Pile.getInstance().drawTile());
-            Platform.exit();
-            /*
-            GameboardScreen.main();
-            NEED A METHOD IN GAMEBOARD OR SOMETHING THAT GETS THE NEXT PLAYER
-             */
+            GameBoardScreen nextPlayer = new GameBoardScreen();
+            primaryStage.setScene(nextPlayer.getScene(primaryStage, GameSystem.getInstance().playerTurn()));
         });
 
         // Sackson event handler
         sackson.setOnAction(event -> {
             tempStock.add("Sackson");
-            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Sackson"))));});
+            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Sackson")), gridPane));});
         // Zeta event handler
         sackson.setOnAction(event -> {
             tempStock.add("Zeta");
-            cashAfter.setText(calculateBalance((Integer.parseInt(cashAfter.getText())), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Zeta"))));});
+            cashAfter.setText(calculateBalance((Integer.parseInt(cashAfter.getText())), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Zeta")), gridPane));});
         // Hydra event handler
         sackson.setOnAction(event -> {
             tempStock.add("Hydra");
-            cashAfter.setText(calculateBalance((Integer.parseInt(cashAfter.getText())), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Hydra"))));});
+            cashAfter.setText(calculateBalance((Integer.parseInt(cashAfter.getText())), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Hydra")), gridPane));});
         // Fusion event handler
         sackson.setOnAction(event -> {
             tempStock.add("Fusion");
-            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Fusion"))));});
+            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Fusion")), gridPane));});
         // America event handler
         sackson.setOnAction(event -> {
             tempStock.add("America");
-            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("America"))));});
+            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("America")), gridPane));});
         // Phoenix event handler
         sackson.setOnAction(event -> {
             tempStock.add("Phoenix");
-            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Phoenix"))));});
+            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Phoenix")), gridPane));});
         // Quantum event handler
         sackson.setOnAction(event -> {
             tempStock.add("Quantum");
-            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Quantum"))));});
+            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Quantum")), gridPane));});
     }
 
     /**
@@ -212,7 +216,7 @@ public class BuyStockScreen {
      * @param cost cost of the stock selected
      * @return balance user would have after pressing submit
      */
-    private String calculateBalance(int balance, int cost) {
+    private String calculateBalance(int balance, int cost, GridPane gridPane) {
         if (cost > balance) {
             showAlert(gridPane.getScene().getWindow(), "The attempted purchase is more expensive than you can afford." + cost);
             return Integer.toString(balance);
@@ -231,7 +235,7 @@ public class BuyStockScreen {
         alert.initOwner(owner);
         alert.show();
     }
-
+/*
     protected void loadScene(Stage primary, Player e) {
         primary.setTitle("Buy Stock");
         gameSetup();
@@ -240,4 +244,5 @@ public class BuyStockScreen {
         user = e;
         primary.setScene(scene11);
     }
+    */
 }

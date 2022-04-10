@@ -1,7 +1,11 @@
+/*
+ * Copyright (c) arbiter2263 and contributors. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for details.
+ */
+
 package acquire;
 
 import com.google.common.annotations.VisibleForTesting;
-import javafx.stage.Stage;
 
 import java.util.LinkedList;
 
@@ -114,7 +118,7 @@ public class Gameboard {
      * @param tile  The tile being played
      * @return  bool  True if the tile is played successfully; False if it can't be played
      */
-    protected boolean placeTile(Player player, Tile tile, Stage primaryStage) {
+    protected boolean placeTile(Player player, Tile tile) {
         if(isValidTilePlay(tile)) {
             if (!player.playTile(tile)) {
                 return false;
@@ -164,9 +168,33 @@ public class Gameboard {
         return false;
     }
 
+    /**
+     * Method to merger corporations together
+     * @param tile  The tile that started the merger
+     * @param indexes  The indexes for the corporations involved
+     */
     private void merger(Tile tile, LinkedList<Integer> indexes){
         //Will need to cooperate with the merger screen
         // needs user input
+        Corporation biggestCorp = new Corporation("fakeCorp");
+        for (int index : indexes) {
+            Corporation corp = CorporationList.getInstance().getActiveCorps().get(index);
+            if (corp.getTileList().size() > biggestCorp.getTileList().size()) {
+                biggestCorp = corp;
+            }
+        }
+        for (int index : indexes) {
+            if (CorporationList.getInstance().getActiveCorps().get(index) != biggestCorp) {
+                for (Tile t : CorporationList.getInstance().getActiveCorps().get(index).getTileList()) {
+                    biggestCorp.addTile(t);
+                }
+            }
+        }
+        biggestCorp.addTile(tile);
+        for (int index : indexes) {
+            Corporation c = CorporationList.getInstance().getActiveCorps().get(index);
+            CorporationList.getInstance().deactivateCorp(c);
+        }
     }
 
     /**
@@ -306,9 +334,19 @@ public class Gameboard {
         }
     }
 
+    /**
+     * Method to make a new corporation
+     * @param tile  The tile that started the merger
+     * @param rowColumnTile2  The row and column location of the previously placed tile
+     */
     private void makeNewCorp(Tile tile, int[] rowColumnTile2) {
         //Will need to cooperate with the make new corporation screen
         // needs user input
+        String corpName = "Phoenix"; // Needs to ask user for name selection from inactiveCorps
+        Corporation corp = CorporationList.getInstance().getCorporation(corpName);
+        CorporationList.getInstance().activateCorp(corp);
+        corp.addTile(tile);
+        corp.addTile(Gameboard.getInstance().board[rowColumnTile2[0]][rowColumnTile2[1]]);
     }
 
     /**
@@ -361,10 +399,5 @@ public class Gameboard {
         K1 K2 K3 ... K9
         L1 L2 L3 ... L9
          */
-    }
-
-    public static void main(String[] args) {
-        Player e = new Player("Ssteve");
-        MainScreen.main(args);
     }
 }
