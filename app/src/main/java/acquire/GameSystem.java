@@ -15,6 +15,20 @@ public class GameSystem {
     private static ArrayList<Player> mergerPlayerOrder;
     private static int turnCounter= 0;
     private static final int lastPlayer = 0;
+    private static boolean isHardMode = false;
+    private static int numOfPlayers = 0;
+
+    protected int getNumOfPlayers(){
+        return numOfPlayers;
+    }
+
+    protected void setNumOfPlayers(int numOfPlayers){
+        this.numOfPlayers = numOfPlayers;
+    }
+
+    protected boolean setIsHardMode(boolean settings){
+        return isHardMode = settings;
+    }
 
 
     public static GameSystem getInstance(){
@@ -69,17 +83,7 @@ public class GameSystem {
         //UI();
         //TODO
 
-        initializeGame(false, 1);
-
-//        if (!ui.getload()) { //if UI return that this is not a loaded game
-//
-//            newGame(ui.getIsHardMode, ui.getPlayerCount); //should set up gameboard, the corporations, the players, and the pile of tiles
-//
-//        } else {initializeGame(saveFile); //use to instantiate a loadGame()but has the game file values
-//        }
-
-            //start method should start the game loop which will cycle through turns until someone decides to end game
-        //start(); // endGameCriteria will be what kicks the game out of the player turn loops, and move to tally up and print winner
+        initializeGame(isHardMode, numOfPlayers);
 
 
     }
@@ -132,7 +136,6 @@ public class GameSystem {
 
 
 
-
     /**
      * At the beginning of a players turn they play a tile
      * this method should check that the tile the player chose can be played
@@ -150,8 +153,6 @@ public class GameSystem {
             //remove tile from player hand
             player.playTile(tile);
 
-
-
             return true;
         }
         return false;
@@ -160,14 +161,27 @@ public class GameSystem {
     /**
      * This method for when a merger happens, stocks are traded
      * at a ratio of 2:1
+     * USER WILL CURRENTLY ONLY BE ABLE TO TRADE IN ALL STOCKS
      * @param player  The current player wanting to trade
      * @param corp1   This is the defunct corp, the player can trade in stocks for corp2
      * @param corp2   This is the remaining super corporation, the player will get 1 stock in this corp
      * @return
      */
     protected boolean tradeStock(Player player, Corporation corp1, Corporation corp2) {
-        player.tradeInStock(corp1, corp2); //we may want to add a parameter here that takes in the amount
-                                           //since the player does not have to trade in all the defunct corp stocks
+        player.tradeInStock(corp1, corp2);          //we may want to add a parameter here that takes in the amount
+        int count = 0;
+        while(corp1.getStockCount() > 0){
+
+            //using stockSold, this will not update any player stockCounts
+            corp1.stockSold();
+            count++;
+
+            if(count % 2 ==0){
+                //using stockBought, this will not update and player stockCounts
+                corp2.stockBought();
+            }
+        }
+        //since the player does not have to trade in all the defunct corp stocks
         return true;
     }
 
@@ -216,10 +230,17 @@ public class GameSystem {
      * This method should be checked after every players turn
      */
     private boolean removeUnplayableTile(Player player){
-        for(var tile : player.getHand()){
+        ArrayList<Tile> tilesToRemove = new ArrayList<>();
+        for(Tile tile : player.getHand()){
             if(!Gameboard.getInstance().isValidTilePlay(tile)){ //if is not a valid play
-                player.removeTile(tile);
+                tilesToRemove.add(tile);
             }
+        }
+
+
+        while(tilesToRemove.size() !=0){
+            player.removeTile(tilesToRemove.get(0));
+            tilesToRemove.remove(0);
         }
         return true;
     }
@@ -237,9 +258,14 @@ public class GameSystem {
      */
     protected boolean drawTile(Player player) {
         while(player.getHand().size() < 6) { //Players should always have 6 tiles at the end of their turn
-            player.addTile(Pile.getInstance().drawTile());
-            //end go next player turn
+            if(Pile.getInstance().size() > 0){
+                player.addTile(Pile.getInstance().drawTile());
+
+            }else if(Pile.getInstance().size()==0){
+                //no more tiles left to pull, probably close to the end of the game
+                break;
             }
+        }
         return true;
     }
 
@@ -252,20 +278,24 @@ public class GameSystem {
      * the end game procedure
      * @return
      */
-    private boolean endGameCheck(){
-        int safeCounter = 0;
+    protected boolean endGameCheck(){
 
-        for(var corp : CorporationList.getInstance().getActiveCorps()) { //cycle through list of active corporations
-            if (corp.checkIfSafe()) {
-                safeCounter++;
+        if(CorporationList.getInstance().getActiveCorps().size() < 1) {
+            return false;
+        }else {
+            int safeCounter = 0;
+            for (var corp : CorporationList.getInstance().getActiveCorps()) { //cycle through list of active corporations
+                if (corp.checkIfSafe()) {
+                    safeCounter++;
+                }
+                if (corp.getTileList().size() >= 41) {
+                    return true; //game can end since there is at least 1 corp 41+ in size present end game option
+                }
             }
-            if (corp.getTileList().size() >= 41) {
-                return true; //game can end since there is at least 1 corp 41+ in size present end game option
-            }
-         }
-            if (CorporationList.getInstance().getActiveCorps().size() == safeCounter) {
+            if ((safeCounter >= 2) && (CorporationList.getInstance().getActiveCorps().size() == safeCounter)) {
                 //if all active corporations are safe game can end
                 return true; //Present end game option
+            }
         }
         return false; //Game cannot be ended yet do not present option to end
     }
