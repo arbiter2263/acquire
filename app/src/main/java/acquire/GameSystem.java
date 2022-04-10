@@ -26,12 +26,14 @@ public class GameSystem {
         //UI();
         //TODO
 
-        if (!ui.getload()) { //if UI return that this is not a loaded game
+        initializeGame(false, 1);
 
-            newGame(ui.getIsHardMode, ui.getPlayerCount); //should set up gameboard, the corporations, the players, and the pile of tiles
-
-        } else {initializeGame(saveFile); //use to instantiate a loadGame()but has the game file values
-        }
+//        if (!ui.getload()) { //if UI return that this is not a loaded game
+//
+//            newGame(ui.getIsHardMode, ui.getPlayerCount); //should set up gameboard, the corporations, the players, and the pile of tiles
+//
+//        } else {initializeGame(saveFile); //use to instantiate a loadGame()but has the game file values
+//        }
 
             //start method should start the game loop which will cycle through turns until someone decides to end game
         //start(); // endGameCriteria will be what kicks the game out of the player turn loops, and move to tally up and print winner
@@ -79,9 +81,9 @@ public class GameSystem {
      * @param saveFile
      */
     //TODO
-    private void initializeGame(JSONObject saveFile){
-        loadGame(saveFile);
-    }
+//    private void initializeGame(JSONObject saveFile){
+//        loadGame(saveFile);
+//    }
 
 
 
@@ -94,17 +96,17 @@ public class GameSystem {
      * @param tile    The tile chosen to be played
      * @return
      */
-    private boolean playATile(Player player, Tile tile){
+    boolean playATile(Player player, Tile tile){
 
         //checks if placement is valid
         if(Gameboard.getInstance().isValidTilePlay(tile)){
-
-            //remove tile from player hand
-            player.playTile(tile);
-
             //places tile on board
             //placeTile should also check for expansion, merger etc.
             Gameboard.getInstance().placeTile(player, tile);
+            //remove tile from player hand
+            player.playTile(tile);
+
+
 
             return true;
         }
@@ -119,7 +121,7 @@ public class GameSystem {
      * @param corp2   This is the remaining super corporation, the player will get 1 stock in this corp
      * @return
      */
-    private boolean tradeStock(Player player, Corporation corp1, Corporation corp2, int tradeInAmount) {
+    boolean tradeStock(Player player, Corporation corp1, Corporation corp2) {
         player.tradeInStock(corp1, corp2); //we may want to add a parameter here that takes in the amount
                                            //since the player does not have to trade in all the defunct corp stocks
         return true;
@@ -151,7 +153,7 @@ public class GameSystem {
      * @return
      * UI event handler calls this method feeding it the params
      */
-    private boolean purchaseStock(Player player, Corporation corp, int amount){
+     boolean purchaseStock(Player player, Corporation corp, int amount){
         for(int i = 0; i < amount; i++){
             player.buyStock(corp.getName());
             corp.stockBought();
@@ -189,7 +191,7 @@ public class GameSystem {
      * @return
      * UI handler will call this method after user has selected to draw tile
      */
-    private boolean drawTile(Player player) {
+    boolean drawTile(Player player) {
         while(player.getHand().size() < 6) { //Players should always have 6 tiles at the end of their turn
             player.addTile(Pile.getInstance().drawTile());
             //end go next player turn
@@ -245,24 +247,26 @@ public class GameSystem {
         //which should be the last entry in the treemap.  It removes the last entry and then pays out the minority
         //stockholder bonus.  THIS DOES NOT YET TAKE INTO ACCOUNT ANY TIES YET
         for(var corp : CorporationList.getInstance().getActiveCorps()){
-            for (var player : Gameboard.getInstance().getPlayerList()){
-                tableOfStockScores.put(player.getStock(corp), player);
-                player.sellDefunctStock(corp, player.getStock(corp)); //get the player's stock amount for the corporation and sell it all.
+            for (var player : Gameboard.getInstance().getPlayers()){
+                tableOfStockScores.put(player.getStocks().get(corp), player); //getStocks may need a parameter to get a specific stock
+                player.sellDefunctStock(corp, player.getStocks().get(corp)); //get the player's stock amount for the corporation and sell it all.
             }
-            majorityPayout(tableOfStockScores.lastEntry().getKey(), tableOfStockScores.lastEntry().getValue());  //first param stock total, second is the player
-            tableOfStockScores.remove(tableOfStockScores.lastEntry().getKey());
-            minorityPayout(tableOfStockScores.lastEntry().getKey(), tableOfStockScores.lastEntry().getValue());  
+
+            //probable methods in corporation
+//            majorityPayout(tableOfStockScores.lastEntry().getKey(), tableOfStockScores.lastEntry().getValue());  //first param stock total, second is the player
+//            tableOfStockScores.remove(tableOfStockScores.lastEntry().getKey());
+//            minorityPayout(tableOfStockScores.lastEntry().getKey(), tableOfStockScores.lastEntry().getValue());
         }
     }
 
 
     //TODO SAVE AND LOAD GAME
     //not sure we need a pause game as I'm not sure what would qualify as a paused game in this instance
-    private void pauseGame(){}
-
-    private void saveGame(){}
-
-    private void loadGame(){}
+//    private void pauseGame(){}
+//
+//    private void saveGame(){}
+//
+//    private void loadGame(){}
 
 
 }

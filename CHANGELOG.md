@@ -8,6 +8,16 @@ This document contains a summary of changes for this project
 
 ### Removed
 
+## [0.1.0] 04-09-2022
+### Added
+- Fully implemented classes
+- Tests for non-UI classes
+- JavaFX dependency
+### Changed
+- Nothing changed
+### Removed
+- Nothing removed
+
 ## [0.0.1] 03-29-2022
 ### Added
 - Skeleton classes
