@@ -99,6 +99,7 @@ class gameSystemTest extends Specification {
 
         then:
         board.getInstance().getTilesPlayed().size() == 1
+        board.getInstance().getTilesPlayed().get(0) == tile
     }
 
 
@@ -344,7 +345,7 @@ class gameSystemTest extends Specification {
         result == true
     }
 
-    
+
     //endGame()
     // End game method, should properly adjust wallets of players and
     // pay out the minority/majority stocks
