@@ -1,8 +1,6 @@
 package acquire;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -14,23 +12,11 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-
-import java.util.Iterator;
 import java.util.LinkedList;
 
 public class GameBoardScreen {
     static private Player user;
-/*
-    protected void loadScene(Player e) {
-        user = e;
-        Scene scene = new Scene(gridPane, 1200, 800);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        setup();
-        addUIControls(stage);
-        stage.show();
-    }
-*/
+
     protected Scene getScene(Stage primaryStage, Player e) {
         GridPane gridPane = new GridPane();
         user = e;
@@ -71,12 +57,9 @@ public class GameBoardScreen {
         gridPane.add(newGameButton, 0, 1);
 
         //New Game event handler
-        newGameButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                GameSetupScreen newGame = new GameSetupScreen();
-                primaryStage.setScene(newGame.getScene(primaryStage));
-            }
+        newGameButton.setOnAction(event -> {
+            GameSetupScreen newGame = new GameSetupScreen();
+            primaryStage.setScene(newGame.getScene(primaryStage));
         });
 
         // Add Save Game Button
@@ -103,12 +86,7 @@ public class GameBoardScreen {
         exit.setDefaultButton(false);
         gridPane.add(exit, 0, 4);
 
-        exit.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Platform.exit();
-            }
-        });
+        exit.setOnAction(event -> Platform.exit());
 
         // Add View Other Players Button
         Button viewOthers = new Button("View Other Players");
@@ -118,15 +96,12 @@ public class GameBoardScreen {
         viewOthers.setDefaultButton(false);
         gridPane.add(viewOthers, 0, 5);
 
-        viewOthers.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+        viewOthers.setOnAction(event -> {
 
-            }
         });
 
         // Create rectangle to make board cohesive
-        Rectangle rect = new Rectangle(680, 570);
+        Rectangle rect = new Rectangle(650, 570);
         gridPane.add(rect, 1, 1, 10, 12);
 
         // Creates visual representation of Gameboard
@@ -138,9 +113,7 @@ public class GameBoardScreen {
                 spot.setEditable(false);
                 spot.setStyle("-fx-control-inner-background:#000000");
                 LinkedList<Tile> f = Gameboard.getInstance().getTilesPlayed();
-                Iterator<Tile> iterator = f.iterator();
-                while (iterator.hasNext()) {
-                    Tile t = iterator.next();
+                for (Tile t : f) {
                     if (spot.getText().equals(t.getSpace())) {
                         spot.setStyle("-fx-control-inner-background:#808080");
                     }
@@ -163,12 +136,9 @@ public class GameBoardScreen {
         viewStocks.setDefaultButton(false);
         gridPane.add(viewStocks, 0, 11);
 
-        viewStocks.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                UserStocks stocks = new UserStocks();
-                primaryStage.setScene(stocks.getScene(primaryStage, user));
-            }
+        viewStocks.setOnAction(event -> {
+            UserStocks stocks = new UserStocks();
+            primaryStage.setScene(stocks.getScene(primaryStage, user));
         });
 
         // Displays the end game button if game can be ended
@@ -208,73 +178,48 @@ public class GameBoardScreen {
         tile6.setPrefWidth(150);
         gridPane.add(tile6, 11, 15, 2, 1);
 
-        tile1.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                GameSystem.getInstance().playATile(user, user.getHand().remove(0), primaryStage);
-                user.addTile(Pile.getInstance().drawTile());
-                BuyStockScreen purchase = new BuyStockScreen();
-                primaryStage.setScene(purchase.getScene(primaryStage, user));
-            }
+        TextArea test = new TextArea(user.getName());
+        gridPane.add(test, 11, 16);
+
+        tile1.setOnAction(event -> {
+            GameSystem.getInstance().playATile(user, user.getHand().remove(0), primaryStage);
+            user.addTile(Pile.getInstance().drawTile());
+            BuyStockScreen purchase = new BuyStockScreen();
+            primaryStage.setScene(purchase.getScene(primaryStage, user));
         });
 
-        tile2.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                GameSystem.getInstance().playATile(user, user.getHand().remove(1), primaryStage);
-                user.addTile(Pile.getInstance().drawTile());
-                BuyStockScreen purchase = new BuyStockScreen();
-                primaryStage.setScene(purchase.getScene(primaryStage, user));            }
+        tile2.setOnAction(event -> {
+            GameSystem.getInstance().playATile(user, user.getHand().remove(1), primaryStage);
+            user.addTile(Pile.getInstance().drawTile());
+            BuyStockScreen purchase = new BuyStockScreen();
+            primaryStage.setScene(purchase.getScene(primaryStage, user));            });
+
+        tile3.setOnAction(event -> {
+            GameSystem.getInstance().playATile(user, user.getHand().remove(2), primaryStage);
+            user.addTile(Pile.getInstance().drawTile());
+            BuyStockScreen purchase = new BuyStockScreen();
+            primaryStage.setScene(purchase.getScene(primaryStage, user));
         });
 
-        tile3.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                GameSystem.getInstance().playATile(user, user.getHand().remove(2), primaryStage);
-                user.addTile(Pile.getInstance().drawTile());
-                BuyStockScreen purchase = new BuyStockScreen();
-                primaryStage.setScene(purchase.getScene(primaryStage, user));
-            }
+        tile4.setOnAction(event -> {
+            GameSystem.getInstance().playATile(user, user.getHand().remove(3), primaryStage);
+            user.addTile(Pile.getInstance().drawTile());
+            BuyStockScreen purchase = new BuyStockScreen();
+            primaryStage.setScene(purchase.getScene(primaryStage, user));
         });
 
-        tile4.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                GameSystem.getInstance().playATile(user, user.getHand().remove(3), primaryStage);
-                user.addTile(Pile.getInstance().drawTile());
-                BuyStockScreen purchase = new BuyStockScreen();
-                primaryStage.setScene(purchase.getScene(primaryStage, user));
-            }
+        tile5.setOnAction(event -> {
+            GameSystem.getInstance().playATile(user, user.getHand().remove(4), primaryStage);
+            user.addTile(Pile.getInstance().drawTile());
+            BuyStockScreen purchase = new BuyStockScreen();
+            primaryStage.setScene(purchase.getScene(primaryStage, user));
         });
 
-        tile5.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                GameSystem.getInstance().playATile(user, user.getHand().remove(4), primaryStage);
-                user.addTile(Pile.getInstance().drawTile());
-                BuyStockScreen purchase = new BuyStockScreen();
-                primaryStage.setScene(purchase.getScene(primaryStage, user));
-            }
-        });
-
-        tile6.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                GameSystem.getInstance().playATile(user, user.getHand().remove(5), primaryStage);
-                user.addTile(Pile.getInstance().drawTile());
-                BuyStockScreen purchase = new BuyStockScreen();
-                primaryStage.setScene(purchase.getScene(primaryStage, user));
-            }
+        tile6.setOnAction(event -> {
+            GameSystem.getInstance().playATile(user, user.getHand().remove(5), primaryStage);
+            user.addTile(Pile.getInstance().drawTile());
+            BuyStockScreen purchase = new BuyStockScreen();
+            primaryStage.setScene(purchase.getScene(primaryStage, user));
         });
     }
-/*
-    protected void activateTile(int i, int e) {
-        TextArea spot = new TextArea(i+Character.toString(e+64));
-        spot.setPrefHeight(5);
-        spot.setPrefWidth(120);
-        spot.setEditable(false);
-        spot.setStyle("-fx-control-inner-background:#808080");
-        gridPane.add(spot, i, e);
-    }
-*/
 }

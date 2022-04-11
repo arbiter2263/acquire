@@ -46,8 +46,8 @@ public class MakeCorporationScreen {
         //Add choicebox
         ChoiceBox<String> corps = new ChoiceBox<>();
         ArrayList<Corporation> inactive = CorporationList.getInstance().getInactiveCorps();
-        for (int i=0; i<inactive.size();) {
-            String f = inactive.remove(i).getName();
+        for (int i=0; i<inactive.size(); i++) {
+            String f = inactive.get(i).getName();
             corps.getItems().add(f);
         }
         gridPane.add(corps, 0, 1);
@@ -60,8 +60,7 @@ public class MakeCorporationScreen {
             @Override
             public void handle(ActionEvent event) {
                 Gameboard.getInstance().setCorpName(corps.getValue());
-                BuyStockScreen jumpTo = new BuyStockScreen();
-                primaryStage.setScene(jumpTo.getScene(primaryStage, user));
+                primaryStage.close();
             }
         });
     }

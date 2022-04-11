@@ -17,7 +17,7 @@ public class Gameboard {
     private Tile[][] board;
     @VisibleForTesting
     private static Gameboard INSTANCE = null; // Field to hold singleton instance of class
-    private static String corpName = null;
+    private static String corpName;
 
     /**
      * Private constructor to enforce only one instance
@@ -191,8 +191,9 @@ public class Gameboard {
                 //We have a tie
                 MergerTieScreen tieScreen = new MergerTieScreen();
                 try {
-                    primaryStage.setScene(tieScreen.getScene(primaryStage, player, biggestCorp.getName(), corp.getName()));
-                    primaryStage.showAndWait();
+                    Stage test = new Stage();
+                    primaryStage.setScene(tieScreen.getScene(test, player, biggestCorp.getName(), corp.getName()));
+                    test.showAndWait();
                 } catch (FileNotFoundException e) {
                     //it didn't work
                 }
@@ -237,8 +238,8 @@ public class Gameboard {
             if (board[rowColumn[0]][rowColumn[1]+1] != null) {
                 int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]+1};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]+1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]+1};
+            } else if (board[rowColumn[0]+1][rowColumn[0]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]+1, rowColumn[1]};
                 return touchingTileRowColumn;
             } else {
                 int [] badArray = {-1, -1};
@@ -248,8 +249,8 @@ public class Gameboard {
             if (board[rowColumn[0]][rowColumn[1]-1] != null) {
                 int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]-1};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]-1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]-1};
+            } else if (board[rowColumn[0]-1][rowColumn[1]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]-1, rowColumn[1]};
                 return touchingTileRowColumn;
             } else {
                 int [] badArray = {-1, -1};
@@ -259,8 +260,8 @@ public class Gameboard {
             if (board[rowColumn[0]][rowColumn[1]-1] != null) {
                 int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]-1};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]+1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]+1};
+            } else if (board[rowColumn[0]+1][rowColumn[1]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]+1, rowColumn[1]};
                 return touchingTileRowColumn;
             } else {
                 int [] badArray = {-1, -1};
@@ -270,8 +271,8 @@ public class Gameboard {
             if (board[rowColumn[0]][rowColumn[1]+1] != null) {
                 int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]+1};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]-1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]-1};
+            } else if (board[rowColumn[0]-1][rowColumn[1]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]-1, rowColumn[1]};
                 return touchingTileRowColumn;
             } else {
                 int [] badArray = {-1, -1};
@@ -284,8 +285,8 @@ public class Gameboard {
             } else if (board[rowColumn[0]][rowColumn[1]-1] != null) {
                 int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]-1};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]+1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]+1};
+            } else if (board[rowColumn[0]+1][rowColumn[1]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]+1, rowColumn[1]};
                 return touchingTileRowColumn;
             } else {
                 int [] badArray = {-1, -1};
@@ -298,8 +299,8 @@ public class Gameboard {
             } else if (board[rowColumn[0]][rowColumn[1]-1] != null) {
                 int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]-1};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]-1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]-1};
+            } else if (board[rowColumn[0]-1][rowColumn[1]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]-1, rowColumn[1]};
                 return touchingTileRowColumn;
             } else {
                 int [] badArray = {-1, -1};
@@ -309,11 +310,11 @@ public class Gameboard {
             if (board[rowColumn[0]][rowColumn[1]+1] != null) {
                 int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]+1};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]+1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]+1};
+            } else if (board[rowColumn[0]+1][rowColumn[1]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]+1, rowColumn[1]};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]-1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]-1};
+            } else if (board[rowColumn[0]-1][rowColumn[1]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]-1, rowColumn[1]};
                 return touchingTileRowColumn;
             } else {
                 int [] badArray = {-1, -1};
@@ -323,11 +324,11 @@ public class Gameboard {
             if (board[rowColumn[0]][rowColumn[1]-1] != null) {
                 int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]-1};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]+1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]+1};
+            } else if (board[rowColumn[0]+1][rowColumn[1]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]+1, rowColumn[1]};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]-1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]-1};
+            } else if (board[rowColumn[0]-1][rowColumn[1]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]-1, rowColumn[1]};
                 return touchingTileRowColumn;
             } else {
                 int [] badArray = {-1, -1};
@@ -340,11 +341,11 @@ public class Gameboard {
             } else if (board[rowColumn[0]][rowColumn[1]-1] != null) {
                 int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]-1};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]+1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]+1};
+            } else if (board[rowColumn[0]+1][rowColumn[1]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]+1, rowColumn[1]};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]-1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]-1};
+            } else if (board[rowColumn[0]-1][rowColumn[1]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]-1, rowColumn[1]};
                 return touchingTileRowColumn;
             } else {
                 int [] badArray = {-1, -1};
@@ -358,14 +359,14 @@ public class Gameboard {
      * @param tile  The tile that started the merger
      * @param rowColumnTile2  The row and column location of the previously placed tile
      */
+
     private void makeNewCorp(Player player, Tile tile, int[] rowColumnTile2, Stage primaryStage) {
         //Will need to cooperate with the make new corporation screen
         // needs user input
         MakeCorporationScreen makeCorpScreen = new MakeCorporationScreen();
-        primaryStage.setScene(makeCorpScreen.getScene(primaryStage, player));
-        primaryStage.showAndWait();
-        String name = corpName; // Needs to ask user for name selection from inactiveCorps
-        corpName = null;
+        Stage test = new Stage();
+        test.setScene(makeCorpScreen.getScene(test, player));
+        test.showAndWait();
         Corporation corp = CorporationList.getInstance().getCorporation(corpName);
         CorporationList.getInstance().activateCorp(corp);
         corp.addTile(tile);

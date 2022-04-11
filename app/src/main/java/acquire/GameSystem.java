@@ -87,7 +87,7 @@ public class GameSystem {
      * upon initializing game, system should initialize all require objects
      * to get started: Player objects, Pile object etc.
      */
-    private void initializeGame(boolean isHardMode, int numberOfPlayers){ //numberOfPlayers should come in from UI
+    protected void initializeGame(boolean isHardMode, int numberOfPlayers){ //numberOfPlayers should come in from UI
 
         //instantiate gameboard and fill it with players
         if (!isHardMode) {
@@ -100,6 +100,12 @@ public class GameSystem {
             CorporationList.getInstance();
         }else{
             //same initialization but without hints and hide player's stocks
+            Gameboard.getInstance().initializeGame(numberOfPlayers);
+            //instantiate a pile of tiles
+            Pile.getInstance();
+
+            //instantiate the corporations
+            CorporationList.getInstance();
         }
     }
 

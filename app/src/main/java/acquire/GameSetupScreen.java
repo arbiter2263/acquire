@@ -1,5 +1,6 @@
 package acquire;
 
+import com.sun.jdi.InterfaceType;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -57,7 +58,7 @@ public class GameSetupScreen {
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Gameboard.getInstance().initializeGame(Integer.parseInt(playerCount.getValue()));
+                GameSystem.getInstance().initializeGame(advanced.isSelected(), Integer.parseInt(playerCount.getValue()));
                 LinkedList<Player> players = Gameboard.getInstance().getPlayers();
                 for (int i=0; i<players.size();) {
                     GameSystem.getInstance().playOrder(players.remove(i));
