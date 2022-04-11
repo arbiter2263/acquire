@@ -1,12 +1,15 @@
 # Changelog
 This document contains a summary of changes for this project
 
-## [Unreleased]
+## [1.0.0] 04-10-2022
 ### Added
-
+- User interface
+- additional testing 
 ### Changed
-
+- adjusted some class method logic
+- some testing adjusted for better coverage
 ### Removed
+- Nothing removed 
 
 ## [0.1.1] 04-10-2022
 ### Added
