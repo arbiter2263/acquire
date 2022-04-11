@@ -49,7 +49,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'Gameboard.app'
+    mainClass = 'UIHandler.app'
 }
 
 tasks.named('test') {
