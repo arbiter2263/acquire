@@ -67,8 +67,10 @@ public class Pile {
     In case a tile needs to be returned to the pile
     @param tile The chosen tile to add back to the pile of tiles
      */
-    protected void returnTile(Tile tile){
+    protected boolean returnTile(Tile tile){
+
         pile.add(tile);
+        return true;
     }
 
    /**

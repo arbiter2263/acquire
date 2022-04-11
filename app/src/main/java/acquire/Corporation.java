@@ -136,7 +136,7 @@ public class Corporation {
      * Method that updates the price of stock for this corporation, based on a set of rules
      * Should be called whenever stockCount is incremented or decremented
      */
-    private void updateStockPrice() {
+    void updateStockPrice() {
         int tiles = this.tileList.size();
         if (this.name.equals("Sackson") || this.name.equals("Zeta")) {
             //Low-priced corporations
@@ -180,7 +180,7 @@ public class Corporation {
             } else if (tiles >= 41) {
                 this.stockPrice = 1100;
             }
-        } else if (this.name.equals("Pheonix") || this.name.equals("Quantum")) {
+        } else if (this.name.equals("Phoenix") || this.name.equals("Quantum")) {
             //High-priced corporations
             if (tiles == 2) {
                 this.stockPrice = 400;

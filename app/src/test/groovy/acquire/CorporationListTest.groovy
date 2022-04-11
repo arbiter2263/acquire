@@ -5,8 +5,8 @@
 
 package acquire
 
-import org.codehaus.groovy.runtime.InvokerHelper;
-import spock.lang.Specification;
+
+import spock.lang.Specification
 
 class CorporationListTest extends Specification {
     //test for getInstance()
@@ -35,6 +35,18 @@ class CorporationListTest extends Specification {
         then:
         result == 200
     }
+
+    //test for getCorporation()
+    def "getCorporation"(){
+        setup:
+        CorporationList.INSTANCE = null
+
+        assert CorporationList.getInstance().getCorporation("America").getClass() == Corporation
+        def corp = CorporationList.getInstance().getCorporation("America")
+        assert corp.getName() == "America"
+    }
+
+
     //test for getActiveCorps()
     def "get the active corporations"() {
         setup:
@@ -66,7 +78,7 @@ class CorporationListTest extends Specification {
         def list = CorporationList.getInstance()
 
         when:
-        def corp = list.getCorporation("Pheonix")
+        def corp = list.getCorporation("Phoenix")
         list.activateCorp(corp)
 
         then:
@@ -79,7 +91,7 @@ class CorporationListTest extends Specification {
         def list = CorporationList.getInstance()
 
         when:
-        def corp = list.getCorporation("Pheonix")
+        def corp = list.getCorporation("Phoenix")
         list.activateCorp(corp)
         list.deactivateCorp(corp)
 

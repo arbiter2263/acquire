@@ -10,8 +10,8 @@ import com.google.common.annotations.VisibleForTesting;
 import java.util.*;
 
 public class CorporationList {
-    private static final String[] CORPORATIONS = {"Sackson", "Zeta", "Hydra", "Fusion", "America", "Pheonix", "Quantum"};
-    @VisibleForTesting private static CorporationList INSTANCE = null; // Field to hold singleton instance of class
+    private static final String[] CORPORATIONS = {"Sackson", "Zeta", "Hydra", "Fusion", "America", "Phoenix", "Quantum"};
+    @VisibleForTesting protected static CorporationList INSTANCE = null; // Field to hold singleton instance of class
     private ArrayList<Corporation> activeCorps;
     private ArrayList<Corporation> inactiveCorps;
 
