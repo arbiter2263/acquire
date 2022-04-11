@@ -1,5 +1,6 @@
 package acquire;
 
+import javafx.stage.Stage;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -132,24 +133,20 @@ public class GameSystem {
      * @return
      */
 
-    /*
-    boolean playATile(Player player, Tile tile){
+    boolean playATile(Player player, Tile tile, Stage primaryStage){
 
         //checks if placement is valid
         if(Gameboard.getInstance().isValidTilePlay(tile)){
             //places tile on board
             //placeTile should also check for expansion, merger etc.
-            Gameboard.getInstance().placeTile(player, tile);
+            Gameboard.getInstance().placeTile(player, tile, primaryStage);
             //remove tile from player hand
             player.playTile(tile);
-
-
-
             return true;
         }
         return false;
     }
-*/
+
     /**
      * This method for when a merger happens, stocks are traded
      * at a ratio of 2:1

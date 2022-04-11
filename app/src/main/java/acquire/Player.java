@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) arbiter2263 and contributors. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for details.
+ */
+
 package acquire;
 
 import java.util.Hashtable;
@@ -34,7 +39,7 @@ public class Player {
      * Simple getter for name
      * @return  String  The name of this player
      */
-    public String getName() {
+    protected String getName() {
         return this.name;
     }
 
@@ -42,7 +47,7 @@ public class Player {
      * Simple getter for wallet
      * @return  int  The amount of money in this player's wallet
      */
-    public int getMoney(){
+    protected int getMoney(){
         return wallet;
     }
 
@@ -50,7 +55,7 @@ public class Player {
      * Simple getter for a list of Tiles this player has in their hand
      * @return  LinkedList<Tile>  A list of tiles this player has currently
      */
-    public LinkedList<Tile> getHand() {
+    protected LinkedList<Tile> getHand() {
         return this.hand;
     }
 
@@ -58,7 +63,7 @@ public class Player {
      * Simple getter for stocks
      * @return  HashTable<Corporation, Integer>  A copy of stock counts for each company
      */
-    public Hashtable<Corporation, Integer> getStocks() {
+    protected Hashtable<Corporation, Integer> getStocks() {
         return stockCounts;
     }
 
@@ -66,7 +71,7 @@ public class Player {
      * Method to set the name of this player to a custom name
      * @param name  The new name of this player
      */
-    public void setName(String name) {
+    protected void setName(String name) {
         this.name = name;
     }
 
@@ -76,17 +81,6 @@ public class Player {
      */
     protected Hint getHint(){
         return new Hint();
-    }
-
-    /**
-     * Method to get number of stocks in a corporation a player has
-     * @param corp corporation to check stock count of
-     * @return int of corporations held
-     */
-    protected int getStockCount(String corp) {
-        int count;
-        count = stockCounts.get(CorporationList.getInstance().getCorporation(corp));
-        return count;
     }
 
     /**
@@ -103,7 +97,7 @@ public class Player {
                 int cost = nextCorp.getStockPrice();
                 if (this.wallet >= cost) {
                     wallet -= cost;
-                    nextCorp.stockSold();
+                    nextCorp.stockBought();
                     int oldStockCount = this.stockCounts.get(nextCorp);
                     this.stockCounts.replace(nextCorp, (oldStockCount + 1) );
                     return true;
@@ -159,6 +153,28 @@ public class Player {
     }
 
     /**
+     * Method that allows a player to sell stock from a corporation at full price
+     * @param corp  The corporation that has gone defunct from a merger
+     * @param stockCount  The amount of stock the player wants to sell
+     * @throws IndexOutOfBoundsException  If the number of stock to be sold is higher than the number of stock the
+     *          player currently has in the corporation
+     */
+    protected void sellFullPricedStock(Corporation corp, int stockCount) throws IndexOutOfBoundsException{
+        int currentCount = this.stockCounts.get(corp);
+        if (currentCount < stockCount) {
+            throw new IndexOutOfBoundsException("Player " + this.name + " has " + this.stockCounts.get(corp) +
+                    " stocks in corporation " + corp.getName() + " and can not sell " + stockCount + " stocks.");
+        }
+        int counter = stockCount;
+        while (counter > 0) {
+            int stockSellValue = CorporationList.getInstance().getStockCost(corp);
+            this.wallet += stockSellValue;
+            counter--;
+        }
+        this.stockCounts.replace(corp, (currentCount - stockCount) );
+    }
+
+    /**
      * Method that adds the founders stock bonus to this player
      * @param newCorp  The newly formed corporation
      */
@@ -193,7 +209,7 @@ public class Player {
         Iterator<Tile> tiles = hand.iterator();
         while (tiles.hasNext()) {
             Tile nextTile = tiles.next();
-            if (tile == nextTile) {
+            if (tile.getSpace().equals(nextTile.getSpace())) {
                 tiles.remove();
                 return true;
             }
@@ -202,10 +218,29 @@ public class Player {
     }
 
     /**
+     * Method to get number of stocks in a corporation a player has
+     * @param corp corporation to check stock count of
+     * @return int of corporations held
+     */
+    protected int getStockCount(String corp) {
+        int count;
+        count = stockCounts.get(CorporationList.getInstance().getCorporation(corp));
+        return count;
+    }
+
+    /**
      * Method to add a tile to this player's hand
      * @param tile  The tile to be added
      */
     protected void addTile(Tile tile){
         hand.add(tile);
+    }
+
+    /**
+     * Method that gives bonus money to this player
+     * @param bonus  The amount of the bonus
+     */
+    protected void giveBonusMoney(int bonus) {
+        this.wallet += bonus;
     }
 }

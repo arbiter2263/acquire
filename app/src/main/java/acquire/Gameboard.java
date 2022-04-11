@@ -6,7 +6,9 @@
 package acquire;
 
 import com.google.common.annotations.VisibleForTesting;
+import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
 import java.util.LinkedList;
 
 public class Gameboard {
@@ -15,6 +17,7 @@ public class Gameboard {
     private Tile[][] board;
     @VisibleForTesting
     private static Gameboard INSTANCE = null; // Field to hold singleton instance of class
+    private static String corpName = null;
 
     /**
      * Private constructor to enforce only one instance
@@ -86,6 +89,14 @@ public class Gameboard {
     }
 
     /**
+     * Simple setter for corpName
+     * @param name  The name of the selected/winning corporation
+     */
+    protected void setCorpName(String name) {
+        corpName = name;
+    }
+
+    /**
      * Method that checks if a player is actually able to play a tile to the board
      * @param tile  The tile trying to be played
      * @return  bool  True if this tile is a valid move; False otherwise
@@ -118,11 +129,8 @@ public class Gameboard {
      * @param tile  The tile being played
      * @return  bool  True if the tile is played successfully; False if it can't be played
      */
-    protected boolean placeTile(Player player, Tile tile) {
+    protected boolean placeTile(Player player, Tile tile, Stage primaryStage) {
         if(isValidTilePlay(tile)) {
-            if (!player.playTile(tile)) {
-                return false;
-            }
             LinkedList<Integer> indexes = new LinkedList<Integer>();
             if (CorporationList.getInstance().getActiveCorps().size() > 0) {
                 for (int i = 0; i < CorporationList.getInstance().getActiveCorps().size(); i++) {
@@ -132,11 +140,11 @@ public class Gameboard {
                 }
             }
             if (indexes.size() > 1) {
-                merger(tile, indexes);
+                merger(player, tile, indexes, primaryStage);
             } else if (indexes.size() == 1){
                 expandCorp(tile, indexes.get(0));
             } else if (isTouchingPlacedTile(tile)[0] > -1){
-                makeNewCorp(tile, isTouchingPlacedTile(tile));
+                makeNewCorp(player, tile, isTouchingPlacedTile(tile), primaryStage);
             } else {
                 //just place tile
             }
@@ -173,13 +181,24 @@ public class Gameboard {
      * @param tile  The tile that started the merger
      * @param indexes  The indexes for the corporations involved
      */
-    private void merger(Tile tile, LinkedList<Integer> indexes){
+    private void merger(Player player, Tile tile, LinkedList<Integer> indexes, Stage primaryStage){
         //Will need to cooperate with the merger screen
         // needs user input
         Corporation biggestCorp = new Corporation("fakeCorp");
         for (int index : indexes) {
             Corporation corp = CorporationList.getInstance().getActiveCorps().get(index);
-            if (corp.getTileList().size() > biggestCorp.getTileList().size()) {
+            if (corp.getTileList().size() == biggestCorp.getTileList().size()) {
+                //We have a tie
+                MergerTieScreen tieScreen = new MergerTieScreen();
+                try {
+                    primaryStage.setScene(tieScreen.getScene(primaryStage, player, biggestCorp.getName(), corp.getName()));
+                    primaryStage.showAndWait();
+                } catch (FileNotFoundException e) {
+                    //it didn't work
+                }
+                biggestCorp = CorporationList.getInstance().getCorporation(corpName);
+                corpName = null;
+            } else if (corp.getTileList().size() > biggestCorp.getTileList().size()) {
                 biggestCorp = corp;
             }
         }
@@ -339,10 +358,14 @@ public class Gameboard {
      * @param tile  The tile that started the merger
      * @param rowColumnTile2  The row and column location of the previously placed tile
      */
-    private void makeNewCorp(Tile tile, int[] rowColumnTile2) {
+    private void makeNewCorp(Player player, Tile tile, int[] rowColumnTile2, Stage primaryStage) {
         //Will need to cooperate with the make new corporation screen
         // needs user input
-        String corpName = "Phoenix"; // Needs to ask user for name selection from inactiveCorps
+        MakeCorporationScreen makeCorpScreen = new MakeCorporationScreen();
+        primaryStage.setScene(makeCorpScreen.getScene(primaryStage, player));
+        primaryStage.showAndWait();
+        String name = corpName; // Needs to ask user for name selection from inactiveCorps
+        corpName = null;
         Corporation corp = CorporationList.getInstance().getCorporation(corpName);
         CorporationList.getInstance().activateCorp(corp);
         corp.addTile(tile);
@@ -400,4 +423,5 @@ public class Gameboard {
         L1 L2 L3 ... L9
          */
     }
+
 }

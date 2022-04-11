@@ -14,6 +14,7 @@ import javafx.stage.Window;
 import java.util.LinkedList;
 
 public class BuyStockScreen {
+    static int selected;
     static Player user;
     static LinkedList<String> tempStock= new LinkedList<>();
 
@@ -136,13 +137,10 @@ public class BuyStockScreen {
         cashAfter.setPrefWidth(120);
         gridPane.add(cashAfter, 0, 4);
 
-/* Increment functionality not working how envisioned, work on later
         // Add total stocks selected text
-        int selected = 0;
-        Text selectCount = new Text("            "+Integer.toString(selected) + "/3");
+        Text selectCount = new Text("            "+ selected + "/3");
         selectCount.setStyle("-fx-control-inner-background:#CBC3E3; -fx-font-size: 2em;");
         gridPane.add(selectCount, 3, 4);
-*/
 
         // Submit Button
         Button submit = new Button("Submit Purchase");
@@ -167,7 +165,10 @@ public class BuyStockScreen {
         reset.setOnAction(event -> {
             while (tempStock.size() > 0) {
                 tempStock.remove();
+                selected -= 1;
             }
+            BuyStockScreen refresh = new BuyStockScreen();
+            primaryStage.setScene(refresh.getScene(primaryStage, user));
         });
 
         // Submit event handler
@@ -175,7 +176,6 @@ public class BuyStockScreen {
             for (int i=0; i<tempStock.size();) {
                 user.buyStock(tempStock.remove());
             }
-            user.addTile(Pile.getInstance().drawTile());
             GameBoardScreen nextPlayer = new GameBoardScreen();
             primaryStage.setScene(nextPlayer.getScene(primaryStage, GameSystem.getInstance().playerTurn()));
         });
@@ -183,31 +183,52 @@ public class BuyStockScreen {
         // Sackson event handler
         sackson.setOnAction(event -> {
             tempStock.add("Sackson");
-            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Sackson")), gridPane));});
+            selected+=1;
+            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Sackson")), gridPane));
+            BuyStockScreen refresh = new BuyStockScreen();
+            primaryStage.setScene(refresh.getScene(primaryStage, user));
+        });
         // Zeta event handler
         sackson.setOnAction(event -> {
             tempStock.add("Zeta");
-            cashAfter.setText(calculateBalance((Integer.parseInt(cashAfter.getText())), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Zeta")), gridPane));});
+            cashAfter.setText(calculateBalance((Integer.parseInt(cashAfter.getText())), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Zeta")), gridPane));
+            BuyStockScreen refresh = new BuyStockScreen();
+            primaryStage.setScene(refresh.getScene(primaryStage, user));});
         // Hydra event handler
         sackson.setOnAction(event -> {
             tempStock.add("Hydra");
-            cashAfter.setText(calculateBalance((Integer.parseInt(cashAfter.getText())), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Hydra")), gridPane));});
+            selected+=1;
+            cashAfter.setText(calculateBalance((Integer.parseInt(cashAfter.getText())), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Hydra")), gridPane));
+            BuyStockScreen refresh = new BuyStockScreen();
+            primaryStage.setScene(refresh.getScene(primaryStage, user));});
         // Fusion event handler
         sackson.setOnAction(event -> {
             tempStock.add("Fusion");
-            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Fusion")), gridPane));});
+            selected+=1;
+            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Fusion")), gridPane));
+            BuyStockScreen refresh = new BuyStockScreen();
+            primaryStage.setScene(refresh.getScene(primaryStage, user));});
         // America event handler
         sackson.setOnAction(event -> {
             tempStock.add("America");
-            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("America")), gridPane));});
+            selected+=1;
+            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("America")), gridPane));
+            BuyStockScreen refresh = new BuyStockScreen();
+            primaryStage.setScene(refresh.getScene(primaryStage, user));});
         // Phoenix event handler
         sackson.setOnAction(event -> {
             tempStock.add("Phoenix");
-            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Phoenix")), gridPane));});
+            selected+=1;
+            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Phoenix")), gridPane));
+            BuyStockScreen refresh = new BuyStockScreen();
+            primaryStage.setScene(refresh.getScene(primaryStage, user));});
         // Quantum event handler
         sackson.setOnAction(event -> {
             tempStock.add("Quantum");
-            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Quantum")), gridPane));});
+            selected+=1;
+            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Quantum")), gridPane));
+            BuyStockScreen refresh = new BuyStockScreen();
+            primaryStage.setScene(refresh.getScene(primaryStage, user));});
     }
 
     /**

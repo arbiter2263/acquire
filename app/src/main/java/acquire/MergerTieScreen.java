@@ -1,5 +1,7 @@
 package acquire;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -23,12 +25,12 @@ public class MergerTieScreen {
     static String corporation1;
     static String corporation2;
 
-    protected Scene getScene(Player e, String k, String f) throws FileNotFoundException {
+    protected Scene getScene(Stage primaryStage, Player e, String k, String f) throws FileNotFoundException {
         GridPane gridPane = new GridPane();
         user = e;
         Scene scene = new Scene(gridPane, 1200, 800);
         gameSetup(gridPane);
-        addUIControls(gridPane);
+        addUIControls(primaryStage, gridPane);
         return scene;
     }
 /*
@@ -51,7 +53,7 @@ public class MergerTieScreen {
         return gridPane;
     }
 
-    private void addUIControls(GridPane gridPane) throws FileNotFoundException {
+    private void addUIControls(Stage primaryStage, GridPane gridPane) throws FileNotFoundException {
         TextArea merger = new TextArea("A merger has occurred between these 2 corporations: REPLACE ME 1 and REPLACE ME 2. The Corporations are the same size, select a corporation you would like to merge and take over. ");
         merger.setWrapText(true);
         merger.setPrefHeight(100);
@@ -70,5 +72,29 @@ public class MergerTieScreen {
         Image corpImage2 = new Image(inputstream2);
         ImageView imageView2 = new ImageView(corpImage2);
         gridPane.add(imageView2, 2, 1);
+
+        Button corp1 = new Button(corporation1);
+        gridPane.add(corp1, 0, 2);
+
+        Button corp2 = new Button(corporation2);
+        gridPane.add(corp2, 2, 2);
+
+        corp1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Gameboard.getInstance().setCorpName(corp1.getText());
+                GameBoardScreen goBack = new GameBoardScreen();
+                primaryStage.setScene(goBack.getScene(primaryStage, user));
+            }
+        });
+
+        corp2.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Gameboard.getInstance().setCorpName(corp1.getText());
+                GameBoardScreen goBack = new GameBoardScreen();
+                primaryStage.setScene(goBack.getScene(primaryStage, user));
+            }
+        });
     }
 }
