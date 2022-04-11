@@ -4,45 +4,19 @@
  */
 
 package acquire;
-
-import javafx.application.Application;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-public class MergerScreen extends Application {
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Merger");
-        GridPane gridPane = gameSetup();
-        addUIControls(gridPane);
-        Scene scene7 = new Scene(gridPane, 1200, 800);
-        ColumnConstraints columnOneConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        ColumnConstraints columnTwoConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        ColumnConstraints columnThreeConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        gridPane.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstraints, columnThreeConstraints);
-        primaryStage.setScene(scene7);
-        primaryStage.show();
-    }
+public class MergerScreen {
+    static GridPane gridPane = new GridPane();
+    static Player user;
 
-    private GridPane gameSetup() {
-        GridPane gridPane = new GridPane();
+    private GridPane gameSetup(GridPane gridPane) {
         gridPane.setAlignment(Pos.TOP_CENTER);
         gridPane.setHgap(10);
         gridPane.setVgap(10);
@@ -86,7 +60,13 @@ public class MergerScreen extends Application {
         GridPane.setMargin(holdButton, new Insets(20, 0,20,0));
     }
 
-    public static void main(String[] args) {
-        launch();
+    protected void loadScene(Stage primary, Player e) {
+        primary.setTitle("Buy Stock");
+        gameSetup(gridPane);
+        Scene scene11 = new Scene(gridPane, 1200, 800);
+        addUIControls(gridPane);
+        user = e;
+        primary.setScene(scene11);
     }
+
 }
