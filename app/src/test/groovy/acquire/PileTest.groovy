@@ -12,14 +12,28 @@ class PileTest extends Specification{
 
     def "Create pile of capacity size"(){
         given:
+        Pile.instance = null
+
         def pile = new Pile()
 
         assert pile.size() == 108
 
     }
 
+    //returnTile()
+    //drawing a tile and returning it
+    def "Return a tile method"(){
+        setup:
+        Pile.instance = null
+        def pile = new Pile()
+        def tile =pile.drawTile()
+        pile.returnTile(tile)
+        assert pile.size() == 108
+    }
+
     def "Draw tile test"(){
         given:
+        Pile.instance = null
         def pile = new Pile()
 
         when:
@@ -29,8 +43,21 @@ class PileTest extends Specification{
         pile.size() == 107
     }
 
+    def "Draw tile test for tile"(){
+        given:
+        Pile.instance = null
+        def pile = new Pile()
+
+        when:
+        def tile = pile.drawTile()
+
+        then:
+        assert tile.getClass()== Tile
+    }
+
     def "Draw tile after pile is empty"(){
         given:
+        Pile.instance = null
         def pile = new Pile()
         int size = pile.size()
 
@@ -45,6 +72,7 @@ class PileTest extends Specification{
 
     def "Returning tile to pile"(){
         given:
+        Pile.instance = null
         def pile = new Pile()
 
         char let = 'Z'
@@ -55,5 +83,14 @@ class PileTest extends Specification{
 
         then:
         pile.size() == 109
+    }
+
+    //toString()
+    def "To String Method"(){
+        setup:
+        Pile.instance = null
+        def pile = new Pile()
+
+        assert pile.toString().getClass() == String
     }
 }

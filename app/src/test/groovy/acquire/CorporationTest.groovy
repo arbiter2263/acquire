@@ -3,26 +3,28 @@
 * Licensed under the MIT license. See LICENSE file in the project root for details.
 */
 
-package acquire;
+package acquire
 
-import spock.lang.Specification;
+import spock.lang.Specification
 
 class CorporationTest extends Specification {
     //test for getName()
     def "get a corporation's name"() {
         setup:
-        def corp = new Corporation("Pheonix")
+        def corp = new Corporation("Phoenix")
 
         when:
         def result = corp.getName()
 
         then:
-        result == "Pheonix"
+        result == "Phoenix"
     }
+
+
     //tests for getTileList()
     def "get an empty list of tiles"() {
         setup:
-        def corp = new Corporation("Pheonix")
+        def corp = new Corporation("Phoenix")
 
         when:
         def result = corp.getTileList()
@@ -30,9 +32,11 @@ class CorporationTest extends Specification {
         then:
         result.size() == 0
     }
+
+
     def "get a list of tiles"() {
         setup:
-        def corp = new Corporation("Pheonix")
+        def corp = new Corporation("Phoenix")
         corp.addTile(new Tile(1, 'A' as char))
         corp.addTile(new Tile(2, 'B' as char))
         corp.addTile(new Tile(3, 'C' as char))
@@ -46,7 +50,7 @@ class CorporationTest extends Specification {
     //tests for checkIfSafe()
     def "check a safe corporation"() {
         setup:
-        def corp = new Corporation("Pheonix");
+        def corp = new Corporation("Phoenix")
         corp.addTile(new Tile(1, 'A' as char))
         corp.addTile(new Tile(2, 'A' as char))
         corp.addTile(new Tile(3, 'A' as char))
@@ -67,7 +71,7 @@ class CorporationTest extends Specification {
     }
     def "check a no-safe corporation"() {
         setup:
-        def corp = new Corporation("Pheonix");
+        def corp = new Corporation("Phoenix")
         corp.addTile(new Tile(1, 'A' as char))
         corp.addTile(new Tile(2, 'A' as char))
         corp.addTile(new Tile(3, 'A' as char))
@@ -79,10 +83,40 @@ class CorporationTest extends Specification {
         then:
         result == false
     }
+
+    //test for equals
+    def "Corp1 equals corp2 true"(){
+        setup:
+        CorporationList.INSTANCE = null
+        def corp1 = new Corporation("America")
+        def corp2 = new Corporation("America")
+
+        assert corp1.equals(corp2) == true
+    }
+    //test for equals
+    def "Corp1 equals corp2 false"(){
+        setup:
+        CorporationList.INSTANCE = null
+        def corp1 = new Corporation("America")
+        def corp2 = new Corporation("Phoenix")
+
+        assert corp1.equals(corp2) == false
+    }
+
+    //tests for toString()
+
+    def "To String method"(){
+        setup:
+        def corp1 = new Corporation("America")
+        corp1.stockBought()
+
+        assert corp1.toString() == "America: Size: 0 Stocks: 1"
+    }
+
     //tests for getStockCount()
     def "get the stock count after buying"() {
         setup:
-        def corp = new Corporation("Pheonix");
+        def corp = new Corporation("Phoenix")
         corp.stockBought()
         corp.stockBought()
 
@@ -94,7 +128,7 @@ class CorporationTest extends Specification {
     }
     def "get the stock count after buying and selling"() {
         setup:
-        def corp = new Corporation("Pheonix");
+        def corp = new Corporation("Phoenix")
         corp.stockBought()
         corp.stockBought()
         corp.stockSold()
@@ -108,7 +142,7 @@ class CorporationTest extends Specification {
     //tests for getStockCapMet()
     def "check if the stock cap met when it hasn't been"() {
         setup:
-        def corp = new Corporation("Pheonix");
+        def corp = new Corporation("Phoenix")
         corp.stockBought()
         corp.stockBought()
 
@@ -120,7 +154,7 @@ class CorporationTest extends Specification {
     }
     def "check if stock cap met when it has been"() {
         setup:
-        def corp = new Corporation("Pheonix");
+        def corp = new Corporation("Phoenix")
         for (int i = 0; i <= 25; i++) {
             corp.stockBought()
         }
@@ -134,7 +168,7 @@ class CorporationTest extends Specification {
     //tests for getStockPrice()
     def "check stock price for high-priced corporation"() {
         setup:
-        def corp = new Corporation("Pheonix");
+        def corp = new Corporation("Phoenix")
         corp.addTile(new Tile(1, 'A' as char))
         corp.addTile(new Tile(2, 'A' as char))
 
@@ -146,7 +180,7 @@ class CorporationTest extends Specification {
     }
     def "check stock price for mid-priced corporation"() {
         setup:
-        def corp = new Corporation("Hydra");
+        def corp = new Corporation("Hydra")
         corp.addTile(new Tile(1, 'A' as char))
         corp.addTile(new Tile(2, 'A' as char))
 
@@ -158,7 +192,7 @@ class CorporationTest extends Specification {
     }
     def "check stock price after adding tiles"() {
         setup:
-        def corp = new Corporation("Pheonix");
+        def corp = new Corporation("Phoenix")
         corp.addTile(new Tile(1, 'A' as char))
         corp.addTile(new Tile(2, 'A' as char))
         corp.addTile(new Tile(2, 'A' as char))
@@ -172,7 +206,7 @@ class CorporationTest extends Specification {
     //tests for addTile()
     def "add just one tile"() {
         setup:
-        def corp = new Corporation("Pheonix");
+        def corp = new Corporation("Phoenix")
 
         when:
         def result = corp.addTile(new Tile(1, 'A' as char))
@@ -182,7 +216,7 @@ class CorporationTest extends Specification {
     }
     def "add three tile"() {
         setup:
-        def corp = new Corporation("Pheonix");
+        def corp = new Corporation("Phoenix")
 
         when:
         corp.addTile(new Tile(3, 'A' as char))
@@ -195,7 +229,7 @@ class CorporationTest extends Specification {
     //test for stockBought()
     def "buy a stock"() {
         setup:
-        def corp = new Corporation("Pheonix");
+        def corp = new Corporation("Phoenix")
 
         when:
         corp.stockBought()
@@ -206,7 +240,7 @@ class CorporationTest extends Specification {
     //stockSold()
     def "sell a stock"() {
         setup:
-        def corp = new Corporation("Pheonix");
+        def corp = new Corporation("Phoenix")
 
         when:
         corp.stockBought()
@@ -214,11 +248,25 @@ class CorporationTest extends Specification {
 
         then:
         corp.getStockCount() == 0
+        assert corp.stockCapMet == false
     }
+    def "sell a stock at stock cap"() {
+        setup:
+        def corp = new Corporation("Phoenix")
+
+        when:
+        corp.stockCount = 25
+        corp.stockSold()
+
+        then:
+        corp.getStockCount() == 24
+        assert corp.stockCapMet == false
+    }
+
     //updateStockPrice()
     def "check stock price after 4 tiles are added"() {
         setup:
-        def corp = new Corporation("Pheonix");
+        def corp = new Corporation("Phoenix")
         for (int i = 0; i < 10; i++) {
             corp.addTile(new Tile(i, 'A' as char))
         }

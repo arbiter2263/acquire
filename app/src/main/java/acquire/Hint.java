@@ -28,6 +28,7 @@ public class Hint {
         return possibleHits[index];
     }
 
+
     /**
      * Method to get the next hint from the current index
      * @return String  The next possible hint

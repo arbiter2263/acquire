@@ -31,7 +31,7 @@ public class GameSystem {
     }
 
 
-    public static GameSystem getInstance(){
+    protected static GameSystem getInstance(){
         if (INSTANCE == null){
             INSTANCE = new GameSystem();
         }
@@ -94,7 +94,7 @@ public class GameSystem {
      * upon initializing game, system should initialize all require objects
      * to get started: Player objects, Pile object etc.
      */
-    private void initializeGame(boolean isHardMode, int numberOfPlayers){ //numberOfPlayers should come in from UI
+    protected void initializeGame(boolean isHardMode, int numberOfPlayers){ //numberOfPlayers should come in from UI
 
         //instantiate gameboard and fill it with players
         if (!isHardMode) {
@@ -167,10 +167,10 @@ public class GameSystem {
      * @param corp2   This is the remaining super corporation, the player will get 1 stock in this corp
      * @return
      */
-    protected boolean tradeStock(Player player, Corporation corp1, Corporation corp2) {
-        player.tradeInStock(corp1, corp2);          //we may want to add a parameter here that takes in the amount
+    protected boolean tradeStock(Player player, Corporation corp1, Corporation corp2, int amount) {
+        player.tradeInStock(corp1, corp2, amount);          //we may want to add a parameter here that takes in the amount
         int count = 0;
-        while(corp1.getStockCount() > 0){
+        while(count < amount){
 
             //using stockSold, this will not update any player stockCounts
             corp1.stockSold();
@@ -194,7 +194,7 @@ public class GameSystem {
      * @return
      * UI event handler calls this method feeding it the params
      */
-    private boolean sellDefunctStock(Player player, Corporation corp, int sellAmount){
+    protected boolean sellDefunctStock(Player player, Corporation corp, int sellAmount){
         player.sellDefunctStock(corp, sellAmount);
         for(int i = 0; i < sellAmount; i++){
             corp.stockSold();
@@ -229,7 +229,7 @@ public class GameSystem {
      * @return
      * This method should be checked after every players turn
      */
-    private boolean removeUnplayableTile(Player player){
+    protected boolean removeUnplayableTile(Player player){
         ArrayList<Tile> tilesToRemove = new ArrayList<>();
         for(Tile tile : player.getHand()){
             if(!Gameboard.getInstance().isValidTilePlay(tile)){ //if is not a valid play

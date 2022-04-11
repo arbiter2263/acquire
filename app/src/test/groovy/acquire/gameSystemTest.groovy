@@ -14,8 +14,7 @@ class gameSystemTest extends Specification {
 
 
     // purchaseStock(Player player, Corporation corp, int amount)
-    //TODO check that the stock values for the corp and the player
-    // are
+
     def "Purchasing a stock player updating stock"() {
         setup:
         def player = new Player("Chris")
@@ -117,19 +116,19 @@ class gameSystemTest extends Specification {
         CorporationList.getInstance().activateCorp(corp1)
         def corp2 = CorporationList.getInstance().getCorporation("Phoenix")
         CorporationList.getInstance().activateCorp(corp2)
-//        int amount = 2
+        int amount = 2
 
         player.buyStock(corp1.getName())
         player.buyStock(corp1.getName())
         player.buyStock(corp1.getName())
         player.buyStock(corp1.getName())
 
-        GameSystem.getInstance().tradeStock(player, corp1, corp2)
+        GameSystem.getInstance().tradeStock(player, corp1, corp2, amount)
 
         expect:
-        player.getStocks().get(corp1) == 0
-        corp1.getStockCount() == 0
-        corp2.getStockCount() == 2
+        player.getStocks().get(corp1) == 2
+        corp1.getStockCount() == 2
+        corp2.getStockCount() == 1
     }
 
     // sellDefunctStock(Player player, Corporation corp, int sellAmount)
@@ -190,6 +189,7 @@ class gameSystemTest extends Specification {
     // the pile and add it to the player's hand, players
     // should have 6 in hand at end of turn
     def "Drawing tile to end turn"() {
+        setup:
         CorporationList.INSTANCE = null
         Gameboard.INSTANCE = null
         Pile.instance = null
@@ -201,13 +201,34 @@ class gameSystemTest extends Specification {
         for(int i = 0; i < 105; i++){
             pile.getInstance().drawTile();
         }
+        when:
+        GameSystem.getInstance().drawTile(player)
+        //player starts with 0, so they should get 3 tiles into hand
+        //pile should be empty and throw now errors
+        then:
+        pile.getInstance().size()== 0
+        player.getHand().size() == 3
+
+    }
+    def "Drawing tile to end turn empty pile"() {
+        setup:
+        CorporationList.INSTANCE = null
+        Gameboard.INSTANCE = null
+        Pile.instance = null
+        GameSystem.INSTANCE = null
+
+        def pile = new Pile()
+        def player = new Player("name")
+        def player1 = new Player("name1")
+
+        GameSystem.getInstance().drawTile(player1)
         GameSystem.getInstance().drawTile(player)
         //player starts with 0, so they should get 3 tiles into hand
         //pile should be empty and throw now errors
         expect:
-        pile.getInstance().size()== 0
-        player.getHand().size() == 3
-
+        pile.getInstance().size()== 108 - 12
+        player.getHand().size() == 6
+        player.getHand().size() == 6
     }
 
     // endGameCheck()
