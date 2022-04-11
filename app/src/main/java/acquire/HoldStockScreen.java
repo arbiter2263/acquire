@@ -23,27 +23,12 @@ import javafx.css.converter.PaintConverter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class HoldStockScreen extends Application {
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Hold Stock");
-        GridPane gridPane = stockHold();
-        addUIControls(gridPane);
-        Scene scene5 = new Scene(gridPane, 1200, 800);
-        ColumnConstraints columnOneConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        ColumnConstraints columnTwoConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        ColumnConstraints columnThreeConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        gridPane.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstraints, columnThreeConstraints);
-        primaryStage.setScene(scene5);
-        primaryStage.show();
-    }
+public class HoldStockScreen {
+    static GridPane gridPane = new GridPane();
+    static Player user;
+    static String corporation;
 
     private GridPane stockHold() {
-        GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setBackground(new Background(new BackgroundFill(Color.web("#CBC3E3"), CornerRadii.EMPTY, Insets.EMPTY)));
         gridPane.setHgap(10);
@@ -51,7 +36,7 @@ public class HoldStockScreen extends Application {
         return gridPane;
     }
 
-    private void addUIControls(GridPane gridPane) throws FileNotFoundException {
+    private void addUIControls() throws FileNotFoundException {
         // Add Header
         Label headerLabel = new Label("Holding stocks was selected. This will end your opportunity to sell or trade stocks.");
         headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
@@ -108,8 +93,13 @@ public class HoldStockScreen extends Application {
         gridPane.add(holdButton, 2, 2, 1, 1);
         GridPane.setMargin(holdButton, new Insets(20, 0,20,0));
     }
-
-    public static void main(String[] args) {
-        launch();
+    protected void loadScene(Stage primary, Player e, String corp) throws FileNotFoundException{
+        primary.setTitle("Buy Stock");
+        stockHold();
+        addUIControls();
+        user = e;
+        corporation = corp;
+        Scene scene11 = new Scene(gridPane, 1200, 800);
+        primary.setScene(scene11);
     }
 }
