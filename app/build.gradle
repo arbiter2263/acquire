@@ -49,7 +49,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'UIHandler.app'
+    mainClass = 'UIHandler.java'
 }
 
 tasks.named('test') {
