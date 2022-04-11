@@ -6,6 +6,8 @@
 package acquire;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -54,14 +56,14 @@ public class SellStockScreen extends Application {
 
     private void addUIControls(GridPane gridPane) throws FileNotFoundException {
         // Add Header
-        Label headerLabel = new Label("Selling stocks was selected, please choose how many stocks you would like to sell");
+        Label headerLabel = new Label("Selling stocks was selected, please enter how many stocks you would like to sell");
         headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         gridPane.add(headerLabel, 0,0,3,1);
         GridPane.setHalignment(headerLabel, HPos.CENTER);
         GridPane.setMargin(headerLabel, new Insets(20, 0,20,0));
 
         //Corporation Image
-        FileInputStream inputstream = new FileInputStream("filler.png");
+        FileInputStream inputstream = new FileInputStream(corporation + ".png");
         Image corpImage = new Image(inputstream);
         ImageView imageView = new ImageView(corpImage);
         gridPane.add(imageView, 0, 1);
@@ -85,6 +87,25 @@ public class SellStockScreen extends Application {
         gridPane.add(sellButton, 0, 3, 1, 1);
         GridPane.setMargin(sellButton, new Insets(20, 0,20,0));
 
+        sellButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (numStock.getText().isEmpty()) {
+                    Alert emptyField = new Alert(Alert.AlertType.ERROR, "Please enter an integer in the text field.");
+                    emptyField.show();
+                } else {
+                    try {
+                        user.sellDefunctStock(CorporationList.getInstance().getCorporation(""), Integer.parseInt(numStock.getText()));
+                        Alert success = new Alert(Alert.AlertType.INFORMATION, "Stocks Sold!");
+                        success.show();
+                    }
+                    catch (final NumberFormatException e) {
+                        Alert emptyField = new Alert(Alert.AlertType.ERROR, "Please enter an integer lower than or equal to your current stock count in the text field.");
+                        emptyField.show();
+                    }
+                }
+            }
+        });
         // Add Trade Button
         Button tradeButton = new Button("Trade");
         tradeButton.setPrefHeight(100);
@@ -94,6 +115,12 @@ public class SellStockScreen extends Application {
         gridPane.add(tradeButton, 1, 3, 1, 1);
         GridPane.setMargin(tradeButton, new Insets(20, 0,20,0));
 
+        tradeButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
         // Add Hold Button
         Button holdButton = new Button("Hold");
         holdButton.setPrefHeight(100);
@@ -102,6 +129,15 @@ public class SellStockScreen extends Application {
         holdButton.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
         gridPane.add(holdButton, 2, 3, 1, 1);
         GridPane.setMargin(holdButton, new Insets(20, 0,20,0));
+
+        holdButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to hold stock in the defunct corporation? This will end selling and trading in stock.");
+                    confirm.showAndWait();
+                    if (confirm.getResult() == ButtonType.YES) {}
+                }
+            });
     }
 
     public static void main(Player e, String name) {
