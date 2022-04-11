@@ -5,6 +5,7 @@
 
 package acquire;
 
+import javafx.stage.Stage;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -98,7 +99,6 @@ public class GameSystem {
 
         //instantiate gameboard and fill it with players
         if (!isHardMode) {
-
             Gameboard.getInstance().initializeGame(numberOfPlayers);
             //instantiate a pile of tiles
             Pile.getInstance();
@@ -107,6 +107,12 @@ public class GameSystem {
             CorporationList.getInstance();
         }else{
             //same initialization but without hints and hide player's stocks
+            Gameboard.getInstance().initializeGame(numberOfPlayers);
+            //instantiate a pile of tiles
+            Pile.getInstance();
+
+            //instantiate the corporations
+            CorporationList.getInstance();
         }
     }
 
@@ -143,13 +149,13 @@ public class GameSystem {
      * @param tile    The tile chosen to be played
      * @return
      */
-    protected boolean playATile(Player player, Tile tile){
+    protected boolean playATile(Player player, Tile tile, Stage stage){
 
         //checks if placement is valid
         if(Gameboard.getInstance().isValidTilePlay(tile)){
             //places tile on board
             //placeTile should also check for expansion, merger etc.
-            Gameboard.getInstance().placeTile(player, tile);
+            Gameboard.getInstance().placeTile(player, tile, stage);
             //remove tile from player hand
             player.playTile(tile);
 
@@ -252,7 +258,7 @@ public class GameSystem {
      * if it is less than 6, then it will draw a tile and add it to the players hand
      * and check again if there are less than 6 tiles. This will also
      * remove the tile from the pile.
-      * @param player  The player drawing to end their turn
+     * @param player  The player drawing to end their turn
      * @return
      * UI handler will call this method after user has selected to draw tile
      */
@@ -374,14 +380,10 @@ public class GameSystem {
         }
     }
 
-
-    //TODO SAVE AND LOAD GAME
-    //not sure we need a pause game as I'm not sure what would qualify as a paused game in this instance
 //    private void pauseGame(){}
 //
 //    private void saveGame(){}
 //
 //    private void loadGame(){}
-
 
 }
