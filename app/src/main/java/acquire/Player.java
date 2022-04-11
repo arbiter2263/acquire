@@ -116,18 +116,20 @@ public class Player {
      * @param survivingCorp  The corporation that is surviving the merger
      * @throws NoSuchElementException  If the player has no stock in the defunct corporation
      */
-    protected void tradeInStock(Corporation defunctCorp, Corporation survivingCorp) throws NoSuchElementException {
+    protected void tradeInStock(Corporation defunctCorp, Corporation survivingCorp, int amount) throws NoSuchElementException {
         int oldCount = this.stockCounts.get(defunctCorp);
         if (oldCount == 0) {
             throw new NoSuchElementException("Player " + this.name + " has no stock in company " + defunctCorp);
-        } else {
-            int newStockCount = (int) (oldCount / 2);
-            if (oldCount % 2 > 0) {
+        } else{
+            int newCountDefunct = oldCount - amount;
+            int newStockCount = (int) (amount / 2);
+            if (amount % 2 > 0) {
                 sellDefunctStock(defunctCorp, 1);
             }
-            this.stockCounts.replace(defunctCorp, 0);
+            this.stockCounts.replace(defunctCorp, newCountDefunct);
             this.stockCounts.replace(survivingCorp, newStockCount);
         }
+
     }
 
     /**

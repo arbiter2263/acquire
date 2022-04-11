@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) arbiter2263 and contributors. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for details.
+ */
+
 package acquire;
 
 import javafx.stage.Stage;
@@ -11,9 +16,23 @@ public class GameSystem {
     private static ArrayList<Player> mergerPlayerOrder;
     private static int turnCounter= 0;
     private static final int lastPlayer = 0;
+    private static boolean isHardMode = false;
+    private static int numOfPlayers = 0;
+
+    protected int getNumOfPlayers(){
+        return numOfPlayers;
+    }
+
+    protected void setNumOfPlayers(int numOfPlayers){
+        this.numOfPlayers = numOfPlayers;
+    }
+
+    protected boolean setIsHardMode(boolean settings){
+        return isHardMode = settings;
+    }
 
 
-    public static GameSystem getInstance(){
+    protected static GameSystem getInstance(){
         if (INSTANCE == null){
             INSTANCE = new GameSystem();
         }
@@ -36,11 +55,21 @@ public class GameSystem {
      * at the beginning again.
      * @return returns a player
      */
-
     protected Player playerTurn(){
-        int playerUp = turnCounter%playerList.size();
-        turnCounter++;
-        return playerList.get(playerUp);
+        int lastPlayer = playerList.size()-1;
+        int currentPlayer = turnCounter;
+
+        if(turnCounter < lastPlayer) {
+            playerList.get(turnCounter);
+            turnCounter++;
+            return playerList.get(currentPlayer);
+
+        }else if(turnCounter == lastPlayer){
+            turnCounter = 0;
+            return playerList.get(lastPlayer);
+
+        }
+        return null;
     }
 
 
@@ -55,17 +84,7 @@ public class GameSystem {
         //UI();
         //TODO
 
-        initializeGame(false, 1);
-
-//        if (!ui.getload()) { //if UI return that this is not a loaded game
-//
-//            newGame(ui.getIsHardMode, ui.getPlayerCount); //should set up gameboard, the corporations, the players, and the pile of tiles
-//
-//        } else {initializeGame(saveFile); //use to instantiate a loadGame()but has the game file values
-//        }
-
-        //start method should start the game loop which will cycle through turns until someone decides to end game
-        //start(); // endGameCriteria will be what kicks the game out of the player turn loops, and move to tally up and print winner
+        initializeGame(isHardMode, numOfPlayers);
 
 
     }
@@ -80,7 +99,6 @@ public class GameSystem {
 
         //instantiate gameboard and fill it with players
         if (!isHardMode) {
-
             Gameboard.getInstance().initializeGame(numberOfPlayers);
             //instantiate a pile of tiles
             Pile.getInstance();
@@ -120,6 +138,10 @@ public class GameSystem {
 //        loadGame(saveFile);
 //    }
 
+
+
+
+
     /**
      * At the beginning of a players turn they play a tile
      * this method should check that the tile the player chose can be played
@@ -127,16 +149,16 @@ public class GameSystem {
      * @param tile    The tile chosen to be played
      * @return
      */
-
-    boolean playATile(Player player, Tile tile, Stage primaryStage){
+    protected boolean playATile(Player player, Tile tile, Stage stage){
 
         //checks if placement is valid
         if(Gameboard.getInstance().isValidTilePlay(tile)){
             //places tile on board
             //placeTile should also check for expansion, merger etc.
-            Gameboard.getInstance().placeTile(player, tile, primaryStage);
+            Gameboard.getInstance().placeTile(player, tile, stage);
             //remove tile from player hand
             player.playTile(tile);
+
             return true;
         }
         return false;
@@ -145,13 +167,26 @@ public class GameSystem {
     /**
      * This method for when a merger happens, stocks are traded
      * at a ratio of 2:1
+     * USER WILL CURRENTLY ONLY BE ABLE TO TRADE IN ALL STOCKS
      * @param player  The current player wanting to trade
      * @param corp1   This is the defunct corp, the player can trade in stocks for corp2
      * @param corp2   This is the remaining super corporation, the player will get 1 stock in this corp
      * @return
      */
-    boolean tradeStock(Player player, Corporation corp1, Corporation corp2) {
-        player.tradeInStock(corp1, corp2); //we may want to add a parameter here that takes in the amount
+    protected boolean tradeStock(Player player, Corporation corp1, Corporation corp2, int amount) {
+        player.tradeInStock(corp1, corp2, amount);          //we may want to add a parameter here that takes in the amount
+        int count = 0;
+        while(count < amount){
+
+            //using stockSold, this will not update any player stockCounts
+            corp1.stockSold();
+            count++;
+
+            if(count % 2 ==0){
+                //using stockBought, this will not update and player stockCounts
+                corp2.stockBought();
+            }
+        }
         //since the player does not have to trade in all the defunct corp stocks
         return true;
     }
@@ -165,7 +200,7 @@ public class GameSystem {
      * @return
      * UI event handler calls this method feeding it the params
      */
-    private boolean sellDefunctStock(Player player, Corporation corp, int sellAmount){
+    protected boolean sellDefunctStock(Player player, Corporation corp, int sellAmount){
         player.sellDefunctStock(corp, sellAmount);
         for(int i = 0; i < sellAmount; i++){
             corp.stockSold();
@@ -182,7 +217,7 @@ public class GameSystem {
      * @return
      * UI event handler calls this method feeding it the params
      */
-    boolean purchaseStock(Player player, Corporation corp, int amount){
+    protected boolean purchaseStock(Player player, Corporation corp, int amount){
         for(int i = 0; i < amount; i++){
 
             player.buyStock(corp.getName());
@@ -200,11 +235,18 @@ public class GameSystem {
      * @return
      * This method should be checked after every players turn
      */
-    private boolean removeUnplayableTile(Player player){
-        for(var tile : player.getHand()){
+    protected boolean removeUnplayableTile(Player player){
+        ArrayList<Tile> tilesToRemove = new ArrayList<>();
+        for(Tile tile : player.getHand()){
             if(!Gameboard.getInstance().isValidTilePlay(tile)){ //if is not a valid play
-                player.removeTile(tile);
+                tilesToRemove.add(tile);
             }
+        }
+
+
+        while(tilesToRemove.size() !=0){
+            player.removeTile(tilesToRemove.get(0));
+            tilesToRemove.remove(0);
         }
         return true;
     }
@@ -220,10 +262,15 @@ public class GameSystem {
      * @return
      * UI handler will call this method after user has selected to draw tile
      */
-    boolean drawTile(Player player) {
+    protected boolean drawTile(Player player) {
         while(player.getHand().size() < 6) { //Players should always have 6 tiles at the end of their turn
-            player.addTile(Pile.getInstance().drawTile());
-            //end go next player turn
+            if(Pile.getInstance().size() > 0){
+                player.addTile(Pile.getInstance().drawTile());
+
+            }else if(Pile.getInstance().size()==0){
+                //no more tiles left to pull, probably close to the end of the game
+                break;
+            }
         }
         return true;
     }
@@ -237,20 +284,24 @@ public class GameSystem {
      * the end game procedure
      * @return
      */
-    private boolean endGameCheck(){
-        int safeCounter = 0;
+    protected boolean endGameCheck(){
 
-        for(var corp : CorporationList.getInstance().getActiveCorps()) { //cycle through list of active corporations
-            if (corp.checkIfSafe()) {
-                safeCounter++;
+        if(CorporationList.getInstance().getActiveCorps().size() < 1) {
+            return false;
+        }else {
+            int safeCounter = 0;
+            for (var corp : CorporationList.getInstance().getActiveCorps()) { //cycle through list of active corporations
+                if (corp.checkIfSafe()) {
+                    safeCounter++;
+                }
+                if (corp.getTileList().size() >= 41) {
+                    return true; //game can end since there is at least 1 corp 41+ in size present end game option
+                }
             }
-            if (corp.getTileList().size() >= 41) {
-                return true; //game can end since there is at least 1 corp 41+ in size present end game option
+            if ((safeCounter >= 2) && (CorporationList.getInstance().getActiveCorps().size() == safeCounter)) {
+                //if all active corporations are safe game can end
+                return true; //Present end game option
             }
-        }
-        if (CorporationList.getInstance().getActiveCorps().size() == safeCounter) {
-            //if all active corporations are safe game can end
-            return true; //Present end game option
         }
         return false; //Game cannot be ended yet do not present option to end
     }
@@ -259,8 +310,12 @@ public class GameSystem {
      * Method that ends the game by selling all players' stocks and ordering them according to who has the most money
      * @return  LinkedList<Player>  The ordered list of players
      */
-    /*
-    private LinkedList<Player> endGame(){
+
+    /**
+     * Method that ends the game by selling all players' stocks and ordering them according to who has the most money
+     * @return  LinkedList<Player>  The ordered list of players
+     */
+    protected LinkedList<Player> endGame(){
         for (Corporation activeCorp : CorporationList.getInstance().getActiveCorps()) {
             HashMap<Player, Integer> stockCounts = new HashMap<>();
             for (Player player : Gameboard.getInstance().getPlayers()) {
@@ -296,7 +351,7 @@ public class GameSystem {
         });
         return winningOrder;
     }
-*/
+
     /**
      * Method that determines the majority and minority stockholders in a corporation and gives them their bonuses
      * @param stockCounts  The hashmap of players and their stock counts in a corporation
@@ -305,17 +360,25 @@ public class GameSystem {
     private void giveMajorityMinorityStockHolder(HashMap<Player, Integer> stockCounts, Corporation corp) {
         Player majorityHolder = null;
         Player minorityHolder = null;
+        boolean tie = false;
         for (Player player : Gameboard.getInstance().getPlayers()) {
             if ( (majorityHolder == null) || stockCounts.get(majorityHolder) < stockCounts.get(player) ) {
+                minorityHolder = majorityHolder;
+
                 majorityHolder = player;
-            } else if ( (minorityHolder == null) || stockCounts.get(minorityHolder) < stockCounts.get(player) ) {
+            }else if (minorityHolder == null || stockCounts.get(minorityHolder) < stockCounts.get(player) ) {
                 minorityHolder = player;
             }
         }
-        //majorityHolder.giveBonusMoney(corp.getStockPrice() * 10);
-        //minorityHolder.giveBonusMoney(corp.getStockPrice() * 5);
+        //tie pays out half of the combined payouts
+        if(stockCounts.get(minorityHolder) == stockCounts.get(majorityHolder)){
+            majorityHolder.giveBonusMoney( ( (corp.getStockPrice()* 10 + corp.getStockPrice() * 5) ) /2 );
+            minorityHolder.giveBonusMoney( ( (corp.getStockPrice()* 10 + corp.getStockPrice() * 5) ) /2 );
+        }else {
+            majorityHolder.giveBonusMoney(corp.getStockPrice() * 10);
+            minorityHolder.giveBonusMoney(corp.getStockPrice() * 5);
+        }
     }
-
 
     //TODO SAVE AND LOAD GAME
     //not sure we need a pause game as I'm not sure what would qualify as a paused game in this instance

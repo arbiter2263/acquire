@@ -11,7 +11,7 @@ import java.util.*;
 
 public class CorporationList {
     private static final String[] CORPORATIONS = {"Sackson", "Zeta", "Hydra", "Fusion", "America", "Phoenix", "Quantum"};
-    @VisibleForTesting private static CorporationList INSTANCE = null; // Field to hold singleton instance of class
+    @VisibleForTesting protected static CorporationList INSTANCE = null; // Field to hold singleton instance of class
     private ArrayList<Corporation> activeCorps;
     private ArrayList<Corporation> inactiveCorps;
 
@@ -148,6 +148,7 @@ public class CorporationList {
         }
         return -1;
     }
+
     /**
      * Method to check the status of a corporation given. Returns true if active and false if inactive
      * @param corp name of company that's status needs checked

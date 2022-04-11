@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) arbiter2263 and contributors. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for details.
+ */
+
 package acquire;
 
 import javafx.application.Platform;
@@ -144,7 +149,7 @@ public class GameBoardScreen {
         // Displays the end game button if game can be ended
         Button endGame = new Button("End Game");
 
-        //if (GameSystem.getInstance().endGameCheck()) gridPane.add(endGame, 10, 13);
+        if (GameSystem.getInstance().endGameCheck()) gridPane.add(endGame, 10, 13);
         GameSystem.getInstance().drawTile(user);
 
         // setup tile buttons

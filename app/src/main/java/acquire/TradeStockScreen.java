@@ -87,7 +87,7 @@ public class TradeStockScreen {
         tradeButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                user.tradeInStock(CorporationList.getInstance().getCorporation(corpDefunct), CorporationList.getInstance().getCorporation(corpSurviving));
+                user.tradeInStock(CorporationList.getInstance().getCorporation(corpDefunct), CorporationList.getInstance().getCorporation(corpSurviving), user.getStockCount(corpDefunct));
                 Alert tradeSuccess = new Alert(Alert.AlertType.INFORMATION, "Stocks Traded successfully");
                 tradeSuccess.show();
             }
