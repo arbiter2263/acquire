@@ -6,6 +6,8 @@
 package acquire;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -18,28 +20,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import org.checkerframework.checker.units.qual.A;
 
+import javax.management.Notification;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class TradeStockScreen extends Application {
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Trade Stock");
-        GridPane gridPane = stockTrade();
-        addUIControls(gridPane);
-        Scene scene10 = new Scene(gridPane, 1200, 800);
-        ColumnConstraints columnOneConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        ColumnConstraints columnTwoConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        ColumnConstraints columnThreeConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        gridPane.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstraints, columnThreeConstraints);
-        primaryStage.setScene(scene10);
-        primaryStage.show();
-    }
+public class TradeStockScreen {
+    static Player user;
+    static String corpSurviving;
+    static String corpDefunct;
 
     private GridPane stockTrade() {
         GridPane gridPane = new GridPane();
@@ -58,15 +48,14 @@ public class TradeStockScreen extends Application {
         GridPane.setHalignment(headerLabel, HPos.CENTER);
         GridPane.setMargin(headerLabel, new Insets(20, 0,20,0));
 
-/* UNABLE TO FIND IMAGES
         //Corporation Image
-        FileInputStream inputstream = new FileInputStream("~/resources/filler.png");
+        FileInputStream inputstream = new FileInputStream("resources/filler.png");
         Image corpImage = new Image(inputstream);
-        ImageView imageView = new ImageView(corpImage);
-        gridPane.add(imageView, 0, 1);
-*/
+        ImageView image = new ImageView(corpImage);
+        gridPane.add(image, 0, 1);
+
         // Stock Count Prompt
-        Label stockCount = new Label("You have blank stocks in this corporation. \nHow many would you like to trade?");
+        Label stockCount = new Label("You have " + user.getStockCount(corpDefunct) + " stocks in this corporation. \nHow many would you like to trade?");
         stockCount.setPrefHeight(100);
         gridPane.add(stockCount, 1,1);
 
@@ -84,6 +73,13 @@ public class TradeStockScreen extends Application {
         gridPane.add(sellButton, 0, 3, 1, 1);
         GridPane.setMargin(sellButton, new Insets(20, 0,20,0));
 
+        sellButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
+
         // Add Trade Button
         Button tradeButton = new Button("Trade");
         tradeButton.setPrefHeight(100);
@@ -93,6 +89,15 @@ public class TradeStockScreen extends Application {
         gridPane.add(tradeButton, 1, 3, 1, 1);
         GridPane.setMargin(tradeButton, new Insets(20, 0,20,0));
 
+        tradeButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                user.tradeInStock(CorporationList.getInstance().getCorporation(corpDefunct), CorporationList.getInstance().getCorporation(corpSurviving), user.getStockCount(corpDefunct));
+                Alert tradeSuccess = new Alert(Alert.AlertType.INFORMATION, "Stocks Traded successfully");
+                tradeSuccess.show();
+            }
+        });
+
         // Add Hold Button
         Button holdButton = new Button("Hold");
         holdButton.setPrefHeight(100);
@@ -101,9 +106,20 @@ public class TradeStockScreen extends Application {
         holdButton.setPrefWidth(300);
         gridPane.add(holdButton, 2, 3, 1, 1);
         GridPane.setMargin(holdButton, new Insets(20, 0,20,0));
+
+        holdButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to hold stock in the defunct corporation? This will end selling and trading in stock.");
+                confirm.showAndWait();
+                if (confirm.getResult() == ButtonType.YES) {}
+            }
+        });
     }
 
-    public static void main(String[] args) {
-        launch();
+    protected void loadScene(Stage primary, Player e, String f, String k) {
+        user = e;
+        corpSurviving = f;
+        corpDefunct = k;
     }
 }
