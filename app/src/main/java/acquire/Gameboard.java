@@ -218,8 +218,8 @@ public class Gameboard {
             if (board[rowColumn[0]][rowColumn[1]+1] != null) {
                 int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]+1};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]+1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]+1};
+            } else if (board[rowColumn[0]+1][rowColumn[0]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]+1, rowColumn[1]};
                 return touchingTileRowColumn;
             } else {
                 int [] badArray = {-1, -1};
@@ -229,8 +229,8 @@ public class Gameboard {
             if (board[rowColumn[0]][rowColumn[1]-1] != null) {
                 int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]-1};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]-1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]-1};
+            } else if (board[rowColumn[0]-1][rowColumn[1]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]-1, rowColumn[1]};
                 return touchingTileRowColumn;
             } else {
                 int [] badArray = {-1, -1};
@@ -240,8 +240,8 @@ public class Gameboard {
             if (board[rowColumn[0]][rowColumn[1]-1] != null) {
                 int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]-1};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]+1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]+1};
+            } else if (board[rowColumn[0]+1][rowColumn[1]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]+1, rowColumn[1]};
                 return touchingTileRowColumn;
             } else {
                 int [] badArray = {-1, -1};
@@ -251,8 +251,8 @@ public class Gameboard {
             if (board[rowColumn[0]][rowColumn[1]+1] != null) {
                 int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]+1};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]-1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]-1};
+            } else if (board[rowColumn[0]-1][rowColumn[1]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]-1, rowColumn[1]};
                 return touchingTileRowColumn;
             } else {
                 int [] badArray = {-1, -1};
@@ -265,8 +265,8 @@ public class Gameboard {
             } else if (board[rowColumn[0]][rowColumn[1]-1] != null) {
                 int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]-1};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]+1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]+1};
+            } else if (board[rowColumn[0]+1][rowColumn[1]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]+1, rowColumn[1]};
                 return touchingTileRowColumn;
             } else {
                 int [] badArray = {-1, -1};
@@ -279,8 +279,8 @@ public class Gameboard {
             } else if (board[rowColumn[0]][rowColumn[1]-1] != null) {
                 int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]-1};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]-1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]-1};
+            } else if (board[rowColumn[0]-1][rowColumn[1]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]-1, rowColumn[1]};
                 return touchingTileRowColumn;
             } else {
                 int [] badArray = {-1, -1};
@@ -290,11 +290,11 @@ public class Gameboard {
             if (board[rowColumn[0]][rowColumn[1]+1] != null) {
                 int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]+1};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]+1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]+1};
+            } else if (board[rowColumn[0]+1][rowColumn[1]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]+1, rowColumn[1]};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]-1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]-1};
+            } else if (board[rowColumn[0]-1][rowColumn[1]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]-1, rowColumn[1]};
                 return touchingTileRowColumn;
             } else {
                 int [] badArray = {-1, -1};
@@ -304,11 +304,11 @@ public class Gameboard {
            if (board[rowColumn[0]][rowColumn[1]-1] != null) {
                 int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]-1};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]+1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]+1};
+            } else if (board[rowColumn[0]+1][rowColumn[1]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]+1, rowColumn[1]};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]-1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]-1};
+            } else if (board[rowColumn[0]-1][rowColumn[1]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]-1, rowColumn[1]};
                 return touchingTileRowColumn;
             } else {
                 int [] badArray = {-1, -1};
@@ -321,11 +321,11 @@ public class Gameboard {
             } else if (board[rowColumn[0]][rowColumn[1]-1] != null) {
                 int[] touchingTileRowColumn = {rowColumn[0], rowColumn[1]-1};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]+1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]+1};
+            } else if (board[rowColumn[0]+1][rowColumn[1]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]+1, rowColumn[1]};
                 return touchingTileRowColumn;
-            } else if (board[rowColumn[1]][rowColumn[0]-1] != null) {
-                int[] touchingTileRowColumn = {rowColumn[1], rowColumn[0]-1};
+            } else if (board[rowColumn[0]-1][rowColumn[1]] != null) {
+                int[] touchingTileRowColumn = {rowColumn[0]-1, rowColumn[1]};
                 return touchingTileRowColumn;
             } else {
                 int [] badArray = {-1, -1};
