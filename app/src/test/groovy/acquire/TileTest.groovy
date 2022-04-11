@@ -25,7 +25,7 @@ class TileTest extends Specification{
         def tile = new Tile(num, ch)
 
         expect:
-        tile.letter == 'B'
+        tile.getLetter() == 'B'
 
     }
 
@@ -36,7 +36,7 @@ class TileTest extends Specification{
         def tile = new Tile(num, ch)
 
         expect:
-        tile.number == 1
+        tile.getNumber() == 1
     }
 
     def "Get tile's space"(){
