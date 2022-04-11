@@ -148,4 +148,18 @@ public class CorporationList {
         }
         return -1;
     }
+    
+    /**
+     * Method to check the status of a corporation given. Returns true if active and false if inactive
+     * @param corp name of company that's status needs checked
+     * @return boolean true or false to indicate status
+     */
+    protected boolean checkStatus(String corp) {
+
+        if (activeCorps.contains(CorporationList.getInstance().getCorporation(corp))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
