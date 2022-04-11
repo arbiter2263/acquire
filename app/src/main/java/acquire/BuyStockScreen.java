@@ -4,43 +4,43 @@
  */
 
 package acquire;
-import javafx.application.Application;
-import javafx.application.Platform;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+
 import java.util.LinkedList;
 
-public class BuyStockScreen extends Application {
+public class BuyStockScreen {
     static Player user;
-    static GridPane gridPane = new GridPane();
     static LinkedList<String> tempStock= new LinkedList<>();
 
-    /**
-     * Required by JavaFX, sets up the scene
-     * @param primaryStage Stage the scene will play on
-     */
-    @Override
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("Purchase Stock");
-        gameSetup();
-        addUIControls(gridPane);
-        Scene scene4 = new Scene(gridPane, 1200, 800);
-        primaryStage.setScene(scene4);
-        primaryStage.show();
+    protected Scene getScene(Stage primaryStage, Player e) {
+        GridPane gridPane = new GridPane();
+        user = e;
+        Scene scene = new Scene(gridPane, 1200, 800);
+        gameSetup(gridPane);
+        addUIControls(primaryStage, gridPane);
+        return scene;
     }
 
     /**
      * Method to setup gridPane
      */
-    private void gameSetup() {
+    private void gameSetup(GridPane gridPane) {
         gridPane.setAlignment(Pos.TOP_CENTER);
         gridPane.setHgap(10);
         gridPane.setVgap(10);
@@ -52,13 +52,13 @@ public class BuyStockScreen extends Application {
      * Method to setup the user interface the scene uses
      * @param gridPane allows for organization of user interface
      */
-    private void addUIControls(GridPane gridPane) {
-        Text merger = new Text();
-        merger.setText("Select up to 3\nstocks to purchase");
-        merger.setTextAlignment(TextAlignment.CENTER);
-        merger.setUnderline(true);
-        merger.setStyle("-fx-control-inner-background:#CBC3E3; -fx-font-size: 2em;");
-        gridPane.add(merger, 3, 0, 1, 1);
+    private void addUIControls(Stage primaryStage, GridPane gridPane) {
+        Text select = new Text();
+        select.setText("Select up to 3\nstocks to purchase");
+        select.setTextAlignment(TextAlignment.CENTER);
+        select.setUnderline(true);
+        select.setStyle("-fx-control-inner-background:#CBC3E3; -fx-font-size: 2em;");
+        gridPane.add(select, 3, 0, 1, 1);
 
         // Add Corporation Sackson
         Button sackson = new Button("Sackson");
@@ -67,7 +67,6 @@ public class BuyStockScreen extends Application {
         sackson.setPrefWidth(300);
         sackson.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
         gridPane.add(sackson, 0, 2);
-        GridPane.setMargin(sackson, new Insets(20, 0,20,0));
 
         // Add Corporation Zeta
         Button zeta = new Button("Zeta");
@@ -76,7 +75,6 @@ public class BuyStockScreen extends Application {
         zeta.setPrefWidth(300);
         zeta.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
         gridPane.add(zeta, 1, 2);
-        GridPane.setMargin(zeta, new Insets(20, 0,20,0));
 
         // Add Corporation Hydra
         Button hydra = new Button("Hydra");
@@ -85,7 +83,6 @@ public class BuyStockScreen extends Application {
         hydra.setPrefWidth(300);
         hydra.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
         gridPane.add(hydra, 2, 2);
-        GridPane.setMargin(hydra, new Insets(20, 0,20,0));
 
         // Add Corporation Fusion
         Button fusion = new Button("Fusion");
@@ -94,7 +91,6 @@ public class BuyStockScreen extends Application {
         fusion.setPrefWidth(300);
         fusion.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
         gridPane.add(fusion, 3, 2);
-        GridPane.setMargin(fusion, new Insets(20, 0,20,0));
 
         // Add Corporation America
         Button america = new Button("America");
@@ -103,7 +99,6 @@ public class BuyStockScreen extends Application {
         america.setPrefWidth(300);
         america.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
         gridPane.add(america, 4, 2);
-        GridPane.setMargin(america, new Insets(20, 0,20,0));
 
         // Add Corporation Phoenix
         Button phoenix = new Button("Phoenix");
@@ -112,7 +107,6 @@ public class BuyStockScreen extends Application {
         phoenix.setPrefWidth(300);
         phoenix.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
         gridPane.add(phoenix, 5, 2);
-        GridPane.setMargin(phoenix, new Insets(20, 0,20,0));
 
         // Add Corporation Quantum
         Button quantum = new Button("Quantum");
@@ -121,7 +115,6 @@ public class BuyStockScreen extends Application {
         quantum.setPrefWidth(300);
         quantum.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
         gridPane.add(quantum, 6, 2);
-        GridPane.setMargin(quantum, new Insets(20, 0,20,0));
 
         // Add Cash Text Box
         TextArea cash = new TextArea(Integer.toString(user.getMoney()));
@@ -178,42 +171,38 @@ public class BuyStockScreen extends Application {
             for (int i=0; i<tempStock.size();) {
                 user.buyStock(tempStock.remove());
             }
-            user.addTile(Pile.getInstance().drawTile());
-            Platform.exit();
-            /*
-            GameboardScreen.main();
-            NEED A METHOD IN GAMEBOARD OR SOMETHING THAT GETS THE NEXT PLAYER
-             */
+            GameBoardScreen nextPlayer = new GameBoardScreen();
+            primaryStage.setScene(nextPlayer.getScene(primaryStage, GameSystem.getInstance().playerTurn()));
         });
 
         // Sackson event handler
         sackson.setOnAction(event -> {
             tempStock.add("Sackson");
-            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Sackson"))));});
+            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Sackson")), gridPane));});
         // Zeta event handler
         sackson.setOnAction(event -> {
             tempStock.add("Zeta");
-            cashAfter.setText(calculateBalance((Integer.parseInt(cashAfter.getText())), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Zeta"))));});
+            cashAfter.setText(calculateBalance((Integer.parseInt(cashAfter.getText())), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Zeta")), gridPane));});
         // Hydra event handler
         sackson.setOnAction(event -> {
             tempStock.add("Hydra");
-            cashAfter.setText(calculateBalance((Integer.parseInt(cashAfter.getText())), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Hydra"))));});
+            cashAfter.setText(calculateBalance((Integer.parseInt(cashAfter.getText())), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Hydra")), gridPane));});
         // Fusion event handler
         sackson.setOnAction(event -> {
             tempStock.add("Fusion");
-            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Fusion"))));});
+            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Fusion")), gridPane));});
         // America event handler
         sackson.setOnAction(event -> {
             tempStock.add("America");
-            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("America"))));});
+            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("America")), gridPane));});
         // Phoenix event handler
         sackson.setOnAction(event -> {
             tempStock.add("Phoenix");
-            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Phoenix"))));});
+            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Phoenix")), gridPane));});
         // Quantum event handler
         sackson.setOnAction(event -> {
             tempStock.add("Quantum");
-            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Quantum"))));});
+            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Quantum")), gridPane));});
     }
 
     /**
@@ -222,7 +211,7 @@ public class BuyStockScreen extends Application {
      * @param cost cost of the stock selected
      * @return balance user would have after pressing submit
      */
-    private String calculateBalance(int balance, int cost) {
+    private String calculateBalance(int balance, int cost, GridPane gridPane) {
         if (cost > balance) {
             showAlert(gridPane.getScene().getWindow(), "The attempted purchase is more expensive than you can afford." + cost);
             return Integer.toString(balance);
@@ -241,10 +230,14 @@ public class BuyStockScreen extends Application {
         alert.initOwner(owner);
         alert.show();
     }
-
-
-    public static void main(Player e) {
+/*
+    protected void loadScene(Stage primary, Player e) {
+        primary.setTitle("Buy Stock");
+        gameSetup();
+        Scene scene11 = new Scene(gridPane, 1200, 800);
+        addUIControls(gridPane);
         user = e;
-        launch();
+        primary.setScene(scene11);
     }
+    */
 }
