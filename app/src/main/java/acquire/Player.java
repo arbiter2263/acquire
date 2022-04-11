@@ -23,15 +23,15 @@ public class Player {
     protected Player(String name) {
         this.name = name;
         this.wallet = 6000;
-        hand = new LinkedList<Tile>();
-        stockCounts = new Hashtable<>();
+        this.hand = new LinkedList<Tile>();
+        this.stockCounts = new Hashtable<>();
         // Add inactive corporations
         for (Corporation corp : CorporationList.getInstance().getInactiveCorps()) {
-            stockCounts.put(corp, 0);
+            this.stockCounts.put(corp, 0);
         }
         // Add active corporations -- should be an empty list ; future proofing
         for (Corporation corp : CorporationList.getInstance().getActiveCorps()) {
-            stockCounts.put(corp, 0);
+            this.stockCounts.put(corp, 0);
         }
     }
 
@@ -93,7 +93,7 @@ public class Player {
         Iterator<Corporation> corps = CorporationList.getInstance().getActiveCorps().iterator();
         while (corps.hasNext()) {
             Corporation nextCorp = corps.next();
-            if (nextCorp.getName() == stockName) {
+            if (nextCorp.getName().equals(stockName)) {
                 int cost = nextCorp.getStockPrice();
                 if (this.wallet >= cost) {
                     wallet -= cost;
@@ -121,11 +121,7 @@ public class Player {
         if (oldCount == 0) {
             throw new NoSuchElementException("Player " + this.name + " has no stock in company " + defunctCorp);
         } else{
-
             int newCountDefunct = oldCount - amount;
-
-
-
             int newStockCount = (int) (amount / 2);
             if (amount % 2 > 0) {
                 sellDefunctStock(defunctCorp, 1);
@@ -215,12 +211,23 @@ public class Player {
         Iterator<Tile> tiles = hand.iterator();
         while (tiles.hasNext()) {
             Tile nextTile = tiles.next();
-            if (tile == nextTile) {
+            if (tile.getSpace().equals(nextTile.getSpace())) {
                 tiles.remove();
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Method to get number of stocks in a corporation a player has
+     * @param corp corporation to check stock count of
+     * @return int of corporations held
+     */
+    protected int getStockCount(String corp) {
+        int count;
+        count = stockCounts.get(CorporationList.getInstance().getCorporation(corp));
+        return count;
     }
 
     /**
