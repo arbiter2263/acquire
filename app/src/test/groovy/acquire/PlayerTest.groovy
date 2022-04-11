@@ -82,13 +82,13 @@ class PlayerTest extends Specification {
         setup:
         def player = new Player("FunName")
         def list = CorporationList.getInstance()
-        def corp = list.getCorporation("Pheonix")
+        def corp = list.getCorporation("Phoenix")
         corp.addTile(new Tile(1, 'A' as char))
         corp.addTile(new Tile(2, 'A' as char))
         list.activateCorp(corp)
 
         when:
-        def result = player.buyStock("Pheonix")
+        def result = player.buyStock("Phoenix")
 
         then:
         result == true
