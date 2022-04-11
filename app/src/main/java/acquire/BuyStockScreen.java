@@ -61,7 +61,7 @@ public class BuyStockScreen {
         sackson.setDefaultButton(false);
         sackson.setPrefWidth(300);
         sackson.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
-        if (CorporationList.getInstance().checkStatus("Sackson")) gridPane.add(sackson, 0, 2);
+        gridPane.add(sackson, 0, 2);
 
         // Add Corporation Zeta
         Button zeta = new Button("Zeta");
@@ -69,7 +69,7 @@ public class BuyStockScreen {
         zeta.setDefaultButton(false);
         zeta.setPrefWidth(300);
         zeta.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
-        if (CorporationList.getInstance().checkStatus("Sackson")) gridPane.add(zeta, 1, 2);
+        gridPane.add(zeta, 1, 2);
 
         // Add Corporation Hydra
         Button hydra = new Button("Hydra");
@@ -77,7 +77,7 @@ public class BuyStockScreen {
         hydra.setDefaultButton(false);
         hydra.setPrefWidth(300);
         hydra.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
-        if (CorporationList.getInstance().checkStatus("Sackson")) gridPane.add(hydra, 2, 2);
+        gridPane.add(hydra, 2, 2);
 
         // Add Corporation Fusion
         Button fusion = new Button("Fusion");
@@ -85,7 +85,7 @@ public class BuyStockScreen {
         fusion.setDefaultButton(false);
         fusion.setPrefWidth(300);
         fusion.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
-        if (CorporationList.getInstance().checkStatus("Sackson")) gridPane.add(fusion, 3, 2);
+        gridPane.add(fusion, 3, 2);
 
         // Add Corporation America
         Button america = new Button("America");
@@ -93,7 +93,7 @@ public class BuyStockScreen {
         america.setDefaultButton(false);
         america.setPrefWidth(300);
         america.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
-        if (CorporationList.getInstance().checkStatus("Sackson")) gridPane.add(america, 4, 2);
+        gridPane.add(america, 4, 2);
 
         // Add Corporation Phoenix
         Button phoenix = new Button("Phoenix");
@@ -101,7 +101,7 @@ public class BuyStockScreen {
         phoenix.setDefaultButton(false);
         phoenix.setPrefWidth(300);
         phoenix.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
-        if (CorporationList.getInstance().checkStatus("Sackson")) gridPane.add(phoenix, 5, 2);
+        gridPane.add(phoenix, 5, 2);
 
         // Add Corporation Quantum
         Button quantum = new Button("Quantum");
@@ -109,7 +109,7 @@ public class BuyStockScreen {
         quantum.setDefaultButton(false);
         quantum.setPrefWidth(300);
         quantum.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
-        if (CorporationList.getInstance().checkStatus("Sackson")) gridPane.add(quantum, 6, 2);
+        gridPane.add(quantum, 6, 2);
 
         // Add Cash Text Box
         TextArea cash = new TextArea(Integer.toString(user.getMoney()));
@@ -134,14 +134,6 @@ public class BuyStockScreen {
         cashAfter.setPrefHeight(5);
         cashAfter.setPrefWidth(120);
         gridPane.add(cashAfter, 0, 4);
-
-        // Add Note
-        TextArea note = new TextArea("Note: If no options are available, don't worry. It just means that there are no active corporations at this time. Press the submit button to continue.");
-        note.setEditable(false);
-        note.setWrapText(true);
-        note.setPrefHeight(100);
-        note.setPrefWidth(120);
-        gridPane.add(note, 3, 4);
 
         // Submit Button
         Button submit = new Button("Submit Purchase");

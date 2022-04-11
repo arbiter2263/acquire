@@ -143,8 +143,8 @@ public class GameBoardScreen {
 
         // Displays the end game button if game can be ended
         Button endGame = new Button("End Game");
-        //if (GameSystem.getInstance().endGameCheck()) gridPane.add(endGame, 10, 13);
 
+        //if (GameSystem.getInstance().endGameCheck()) gridPane.add(endGame, 10, 13);
         GameSystem.getInstance().drawTile(user);
 
         // setup tile buttons
@@ -177,9 +177,6 @@ public class GameBoardScreen {
         tile6.setPrefHeight(50);
         tile6.setPrefWidth(150);
         gridPane.add(tile6, 11, 15, 2, 1);
-
-        TextArea test = new TextArea(user.getName());
-        gridPane.add(test, 11, 16);
 
         tile1.setOnAction(event -> {
             GameSystem.getInstance().playATile(user, user.getHand().remove(0), primaryStage);

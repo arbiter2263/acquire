@@ -38,20 +38,9 @@ public class GameSystem {
      */
 
     protected Player playerTurn(){
-        int lastPlayer = playerList.size()-1;
-        int currentPlayer = turnCounter;
-
-        if(turnCounter < lastPlayer) {
-            playerList.get(turnCounter);
-            turnCounter++;
-            return playerList.get(currentPlayer);
-
-        }else if(turnCounter == lastPlayer){
-            turnCounter = 0;
-            return playerList.get(lastPlayer);
-
-        }
-        return null;
+        int playerUp = turnCounter%playerList.size();
+        turnCounter++;
+        return playerList.get(playerUp);
     }
 
 

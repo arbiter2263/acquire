@@ -23,15 +23,15 @@ public class Player {
     protected Player(String name) {
         this.name = name;
         this.wallet = 6000;
-        hand = new LinkedList<Tile>();
-        stockCounts = new Hashtable<>();
+        this.hand = new LinkedList<Tile>();
+        this.stockCounts = new Hashtable<>();
         // Add inactive corporations
         for (Corporation corp : CorporationList.getInstance().getInactiveCorps()) {
-            stockCounts.put(corp, 0);
+            this.stockCounts.put(corp, 0);
         }
         // Add active corporations -- should be an empty list ; future proofing
         for (Corporation corp : CorporationList.getInstance().getActiveCorps()) {
-            stockCounts.put(corp, 0);
+            this.stockCounts.put(corp, 0);
         }
     }
 
@@ -93,7 +93,7 @@ public class Player {
         Iterator<Corporation> corps = CorporationList.getInstance().getActiveCorps().iterator();
         while (corps.hasNext()) {
             Corporation nextCorp = corps.next();
-            if (nextCorp.getName() == stockName) {
+            if (nextCorp.getName().equals(stockName)) {
                 int cost = nextCorp.getStockPrice();
                 if (this.wallet >= cost) {
                     wallet -= cost;
