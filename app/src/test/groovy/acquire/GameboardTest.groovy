@@ -3,8 +3,9 @@
 * Licensed under the MIT license. See LICENSE file in the project root for details.
 */
 
-package acquire;
+package acquire
 
+import javafx.stage.Stage;
 import spock.lang.Specification;
 
 class GameboardTest extends Specification {
@@ -38,8 +39,9 @@ class GameboardTest extends Specification {
         def board = Gameboard.getInstance()
         def player = new Player("name")
         def tile = new Tile(1, 'A' as char)
+        def stage = Mock(Stage)
         player.addTile(tile)
-        board.placeTile(player, tile)
+        board.placeTile(player, tile, stage)
 
         when:
         def result = board.getTilesPlayed()
@@ -75,7 +77,8 @@ class GameboardTest extends Specification {
         setup:
         Gameboard.INSTANCE = null
         def board = Gameboard.getInstance()
-        board.placeTile(new Player("name"), new Tile(1, 'A' as char))
+        def stage = Mock(Stage)
+        board.placeTile(new Player("name"), new Tile(1, 'A' as char), stage)
 
         when:
         def result = board.isValidTilePlay(new Tile(6, 'C' as char))
@@ -90,10 +93,11 @@ class GameboardTest extends Specification {
         def board = Gameboard.getInstance()
         def tile = new Tile(1, 'A' as char)
         def player = new Player("name")
+        def stage = Mock(Stage)
         player.addTile(tile)
 
         when:
-        def result = board.placeTile(player, tile)
+        def result = board.placeTile(player, tile, stage)
 
         then:
         board.getBoard()[0][0] == tile
@@ -141,9 +145,10 @@ class GameboardTest extends Specification {
         def tile = new Tile(3, 'A' as char)
         def player = new Player("name")
         def placedTile = new Tile(4, 'A' as char)
+        def stage = Mock(Stage)
         player.addTile(placedTile)
         player.addTile(tile)
-        board.placeTile(player, placedTile)
+        board.placeTile(player, placedTile, stage)
 
         when:
         def result = board.isTouchingPlacedTile(tile)
