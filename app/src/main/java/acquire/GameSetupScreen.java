@@ -81,14 +81,5 @@ public class GameSetupScreen {
         addUIControls(primaryStage, gridPane);
         return scene;
     }
-/*
-    protected void loadScene() {
-        Scene scene = new Scene(gridPane, 1200, 800);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        gameSetup();
-        //addUIControls();
-        stage.show();
-    }
-*/
+
 }
