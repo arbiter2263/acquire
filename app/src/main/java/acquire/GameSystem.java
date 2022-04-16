@@ -5,6 +5,7 @@
 
 package acquire;
 
+import com.google.gson.Gson;
 import javafx.stage.Stage;
 import org.json.JSONObject;
 
@@ -15,7 +16,6 @@ public class GameSystem {
     private static ArrayList<Player> playerList = new ArrayList<>();
     private static ArrayList<Player> mergerPlayerOrder;
     private static int turnCounter= 0;
-    private static final int lastPlayer = 0;
     private static boolean isHardMode = false;
     private static int numOfPlayers = 0;
 
@@ -56,18 +56,15 @@ public class GameSystem {
      * @return returns a player
      */
     protected Player playerTurn(){
-        int lastPlayer = playerList.size()-1;
+        int lastIndex = playerList.size()-1;
         int currentPlayer = turnCounter;
 
-        if(turnCounter < lastPlayer) {
-            playerList.get(turnCounter);
+        if(turnCounter < lastIndex) {
             turnCounter++;
             return playerList.get(currentPlayer);
-
-        }else if(turnCounter == lastPlayer){
+        }else if(turnCounter % lastIndex == 0){
             turnCounter = 0;
-            return playerList.get(lastPlayer);
-
+            return playerList.get(lastIndex);
         }
         return null;
     }
@@ -79,13 +76,7 @@ public class GameSystem {
      * or Standard mode, which will offer hints and allow players to see how many stocks other players have
      */
     protected GameSystem() {
-        //start UI and ask for new game or load old game
-        //if new game get difficulty and number of players
-        //UI();
-        //TODO
-
         initializeGame(isHardMode, numOfPlayers);
-
 
     }
 
@@ -96,7 +87,7 @@ public class GameSystem {
      * to get started: Player objects, Pile object etc.
      */
     protected void initializeGame(boolean isHardMode, int numberOfPlayers){ //numberOfPlayers should come in from UI
-
+        newGame();
         //instantiate gameboard and fill it with players
         if (!isHardMode) {
             Gameboard.getInstance().initializeGame(numberOfPlayers);
@@ -118,28 +109,20 @@ public class GameSystem {
 
 
     /**
-     * UI Requests player count and difficulty, this gets fed into
-     * this method, which then requests the names of the players
-     * and loops through creating the player objects for the game
-     * @param isHardMode if true, hid players stocks etc.
-     * @param playerCount Number of players
+     * new game resets all of the fields to
+     * defaults of 0 or false
      */
-    private void newGame(boolean isHardMode, int playerCount){
-        initializeGame(isHardMode, playerCount);
+    private void newGame(){
+        setNumOfPlayers(0);
+        while(playerList.size() != 0){
+            playerList.remove(0);
+        }
+        isHardMode = false;
+        turnCounter = 0;
+
+        
+
     }
-
-
-    /**
-     * Initializing a saved game going to need some work on this one
-     * @param saveFile
-     */
-    //TODO
-//    private void initializeGame(JSONObject saveFile){
-//        loadGame(saveFile);
-//    }
-
-
-
 
 
     /**
@@ -242,7 +225,6 @@ public class GameSystem {
                 tilesToRemove.add(tile);
             }
         }
-
 
         while(tilesToRemove.size() !=0){
             player.removeTile(tilesToRemove.get(0));
@@ -380,10 +362,27 @@ public class GameSystem {
         }
     }
 
-//    private void pauseGame(){}
-//
-//    private void saveGame(){}
-//
-//    private void loadGame(){}
+    /**
+     * Method to save instance of the game
+     * so players can return at a later time
+     */
+    protected void saveGame(){
+        Gameboard.getInstance().saveGame();
+        CorporationList.getInstance().saveGame();
+        Pile.getInstance().saveGame();
+
+    }
+
+    /**
+     * Method to load a saved instance
+     * so players can continue playing an
+     * instance from before
+     */
+    protected void loadGame(){
+       Gameboard.getInstance().loadGame();
+       CorporationList.getInstance().loadGame();
+       Pile.getInstance().loadGame();
+
+    }
 
 }

@@ -11,6 +11,8 @@ This class generates all 108 tiles and shuffles them into a list
 Tiles can be taken and added back into this "pile"
  */
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -115,5 +117,24 @@ public class Pile {
             ofTile.append(tile.getNumber()).append(" ").append(tile.getLetter()).append("\n");
         }
         return ofTile.toString();
+    }
+
+    /**
+     * Method to save instance of the game
+     * so players can return at a later time
+     */
+    protected void saveGame(){
+        Gson obj = new Gson();
+
+    }
+
+    /**
+     * Method to load a saved instance
+     * so players can continue playing an
+     * instance from before
+     */
+    protected void loadGame(){
+        Gson obj = new Gson();
+
     }
 }

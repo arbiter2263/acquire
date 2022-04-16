@@ -210,6 +210,47 @@ class gameSystemTest extends Specification {
         player.getHand().size() == 3
 
     }
+
+    // drawTile(Player player)
+    // Check that drawTile does not reset player hand
+    // player hand should only have 1 different tile when
+    // a tile is played and then drawTile is called
+    def "Drawing tile test for overwriting player hand"() {
+        setup:
+        CorporationList.INSTANCE = null
+        Gameboard.INSTANCE = null
+        Pile.instance = null
+        GameSystem.INSTANCE = null
+
+        def pile = new Pile()
+        def player = new Player("name")
+        def hand1 = new ArrayList<Tile>()
+        def hand2 = new ArrayList<Tile>()
+
+        when:
+
+        GameSystem.getInstance().drawTile(player)
+        for (Tile tile : player.getHand()) {
+            hand1.add(tile)
+        }
+        //play first tile in the hand
+        player.playTile(player.getHand().get(0))
+        GameSystem.getInstance().drawTile(player)
+        for (Tile tile : player.getHand()) {
+            hand2.add(tile)
+        }
+
+        //comparing the hands, should be different by only 1 tile
+        then:
+        for(Tile tile : hand1){
+            System.out.println(tile.getSpace())
+        }
+        System.out.println("-----")
+        for(Tile tile : hand2){
+            System.out.println(tile.getSpace())
+        }
+    }
+
     def "Drawing tile to end turn empty pile"() {
         setup:
         CorporationList.INSTANCE = null
@@ -297,6 +338,9 @@ class gameSystemTest extends Specification {
         GameSystem.getInstance().playOrder(player1)
         GameSystem.getInstance().playOrder(player2)
         GameSystem.getInstance().playOrder(player3)
+        GameSystem.getInstance().playerTurn()
+        GameSystem.getInstance().playerTurn()
+        GameSystem.getInstance().playerTurn()
         GameSystem.getInstance().playerTurn()
         GameSystem.getInstance().playerTurn()
         GameSystem.getInstance().playerTurn()

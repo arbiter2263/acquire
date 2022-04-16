@@ -6,6 +6,7 @@
 package acquire;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.gson.Gson;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
@@ -423,6 +424,25 @@ public class Gameboard {
         K1 K2 K3 ... K9
         L1 L2 L3 ... L9
          */
+    }
+
+    /**
+     * Method to save instance of the game
+     * so players can return at a later time
+     */
+    protected void saveGame(){
+        Gson obj = new Gson();
+
+    }
+
+    /**
+     * Method to load a saved instance
+     * so players can continue playing an
+     * instance from before
+     */
+    protected void loadGame(){
+        Gson obj = new Gson();
+
     }
 
 }

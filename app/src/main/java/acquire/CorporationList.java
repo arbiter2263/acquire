@@ -6,6 +6,7 @@
 package acquire;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.gson.Gson;
 
 import java.util.*;
 
@@ -155,11 +156,25 @@ public class CorporationList {
      * @return boolean true or false to indicate status
      */
     protected boolean checkStatus(String corp) {
+        return activeCorps.contains(CorporationList.getInstance().getCorporation(corp));
+       }
 
-        if (activeCorps.contains(CorporationList.getInstance().getCorporation(corp))) {
-            return true;
-        } else {
-            return false;
-        }
+    /**
+     * Method to save instance of the game
+     * so players can return at a later time
+     */
+    protected void saveGame(){
+        Gson obj = new Gson();
+
+    }
+
+    /**
+     * Method to load a saved instance
+     * so players can continue playing an
+     * instance from before
+     */
+    protected void loadGame(){
+        Gson obj = new Gson();
+
     }
 }
