@@ -96,7 +96,7 @@ public class GameSystem {
      * to get started: Player objects, Pile object etc.
      */
     protected void initializeGame(boolean isHardMode, int numberOfPlayers){ //numberOfPlayers should come in from UI
-
+        newGame();
         //instantiate gameboard and fill it with players
         if (!isHardMode) {
             Gameboard.getInstance().initializeGame(numberOfPlayers);
@@ -118,16 +118,18 @@ public class GameSystem {
 
 
     /**
-     * UI Requests player count and difficulty, this gets fed into
-     * this method, which then requests the names of the players
-     * and loops through creating the player objects for the game
-     * @param isHardMode if true, hid players stocks etc.
-     * @param playerCount Number of players
+     * Resets all values to 0 or null for a new game
      */
-    private void newGame(boolean isHardMode, int playerCount){
-        initializeGame(isHardMode, playerCount);
+    private void newGame() {
+        setNumOfPlayers(0);
+        try {
+            while (playerList.size() != 0) {
+                playerList.remove(0);
+            }
+        } catch (NullPointerException ignored) {}
+        isHardMode = false;
+        turnCounter = 0;
     }
-
 
     /**
      * Initializing a saved game going to need some work on this one

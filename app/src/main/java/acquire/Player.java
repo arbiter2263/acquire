@@ -90,23 +90,21 @@ public class Player {
      * @throws NoSuchElementException  If the corporation specified is not activated
      */
     protected boolean buyStock(String stockName) throws NoSuchElementException {
-        Iterator<Corporation> corps = CorporationList.getInstance().getActiveCorps().iterator();
-        while (corps.hasNext()) {
-            Corporation nextCorp = corps.next();
-            if (nextCorp.getName().equals(stockName)) {
-                int cost = nextCorp.getStockPrice();
-                if (this.wallet >= cost) {
-                    wallet -= cost;
-                    nextCorp.stockBought();
-                    int oldStockCount = this.stockCounts.get(nextCorp);
-                    this.stockCounts.replace(nextCorp, (oldStockCount + 1) );
-                    return true;
-                } else {
-                    return false;
-                }
+        if (CorporationList.getInstance().checkStatus(stockName)) {
+            Corporation corp = CorporationList.getInstance().getCorporation(stockName);
+            int cost = corp.getStockPrice();
+            if (this.wallet >= cost) {
+                wallet -= cost;
+                corp.stockBought();
+                int oldStockCount = this.stockCounts.get(corp);
+                this.stockCounts.replace(corp, (oldStockCount + 1) );
+                return true;
+            } else {
+                return false;
             }
+        } else {
+            throw new NoSuchElementException("Corporation " + stockName + " is not active, so stock can not be bought.");
         }
-        throw new NoSuchElementException("The named corporation is not active, so stock can not be bought.");
     }
 
     /**

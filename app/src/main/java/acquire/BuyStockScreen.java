@@ -53,6 +53,10 @@ public class BuyStockScreen {
      * @param gridPane allows for organization of user interface
      */
     private void addUIControls(Stage primaryStage, GridPane gridPane) {
+        while (tempStock.size() > 0) {
+            tempStock.remove();
+        }
+
         Text select = new Text();
         select.setText("Select up to 3\nstocks to purchase");
         select.setTextAlignment(TextAlignment.CENTER);
@@ -164,6 +168,7 @@ public class BuyStockScreen {
             while (tempStock.size() > 0) {
                 tempStock.remove();
             }
+            cashAfter.setText(cash.getText());
         });
 
         // Submit event handler
@@ -180,29 +185,44 @@ public class BuyStockScreen {
             tempStock.add("Sackson");
             cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Sackson")), gridPane));});
         // Zeta event handler
-        sackson.setOnAction(event -> {
+        zeta.setOnAction(event -> {
             tempStock.add("Zeta");
             cashAfter.setText(calculateBalance((Integer.parseInt(cashAfter.getText())), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Zeta")), gridPane));});
         // Hydra event handler
-        sackson.setOnAction(event -> {
+        hydra.setOnAction(event -> {
             tempStock.add("Hydra");
             cashAfter.setText(calculateBalance((Integer.parseInt(cashAfter.getText())), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Hydra")), gridPane));});
         // Fusion event handler
-        sackson.setOnAction(event -> {
+        fusion.setOnAction(event -> {
             tempStock.add("Fusion");
             cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Fusion")), gridPane));});
         // America event handler
-        sackson.setOnAction(event -> {
+        america.setOnAction(event -> {
             tempStock.add("America");
             cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("America")), gridPane));});
         // Phoenix event handler
-        sackson.setOnAction(event -> {
+        phoenix.setOnAction(event -> {
             tempStock.add("Phoenix");
             cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Phoenix")), gridPane));});
         // Quantum event handler
-        sackson.setOnAction(event -> {
+        quantum.setOnAction(event -> {
             tempStock.add("Quantum");
             cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Quantum")), gridPane));});
+
+        //Label for active corporations
+        Label actCor = new Label("Active Corporations");
+        gridPane.add(actCor,2, 7);
+
+        //list of active corporations, sizes
+        TextArea actives = new TextArea();
+        for (int i=0; i<CorporationList.getInstance().getActiveCorps().size(); i++) {
+            Corporation f = CorporationList.getInstance().getActiveCorps().get(i);
+            actives.appendText(f.getName() + " |Stocks: " + f.getStockCount() + "| |Stock Price: " + f.getStockPrice() + "| |Size: " + f.getTileList().size() + "|\n");
+        }
+        actives.setPrefWidth(50);
+        actives.setPrefHeight(100);
+        actives.setWrapText(true);
+        gridPane.add(actives, 3, 7, 2, 1);
     }
 
     /**
@@ -230,14 +250,5 @@ public class BuyStockScreen {
         alert.initOwner(owner);
         alert.show();
     }
-/*
-    protected void loadScene(Stage primary, Player e) {
-        primary.setTitle("Buy Stock");
-        gameSetup();
-        Scene scene11 = new Scene(gridPane, 1200, 800);
-        addUIControls(gridPane);
-        user = e;
-        primary.setScene(scene11);
-    }
-    */
+
 }

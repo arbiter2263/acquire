@@ -199,41 +199,41 @@ public class GameBoardScreen {
         gridPane.add(tile6, 11, 15, 2, 1);
 
         tile1.setOnAction(event -> {
-            GameSystem.getInstance().playATile(user, user.getHand().remove(0), primaryStage);
+            GameSystem.getInstance().playATile(user, user.getHand().get(0), primaryStage);
             user.addTile(Pile.getInstance().drawTile());
             BuyStockScreen purchase = new BuyStockScreen();
             primaryStage.setScene(purchase.getScene(primaryStage, user));
         });
 
         tile2.setOnAction(event -> {
-            GameSystem.getInstance().playATile(user, user.getHand().remove(1), primaryStage);
+            GameSystem.getInstance().playATile(user, user.getHand().get(1), primaryStage);
             user.addTile(Pile.getInstance().drawTile());
             BuyStockScreen purchase = new BuyStockScreen();
             primaryStage.setScene(purchase.getScene(primaryStage, user));            });
 
         tile3.setOnAction(event -> {
-            GameSystem.getInstance().playATile(user, user.getHand().remove(2), primaryStage);
+            GameSystem.getInstance().playATile(user, user.getHand().get(2), primaryStage);
             user.addTile(Pile.getInstance().drawTile());
             BuyStockScreen purchase = new BuyStockScreen();
             primaryStage.setScene(purchase.getScene(primaryStage, user));
         });
 
         tile4.setOnAction(event -> {
-            GameSystem.getInstance().playATile(user, user.getHand().remove(3), primaryStage);
+            GameSystem.getInstance().playATile(user, user.getHand().get(3), primaryStage);
             user.addTile(Pile.getInstance().drawTile());
             BuyStockScreen purchase = new BuyStockScreen();
             primaryStage.setScene(purchase.getScene(primaryStage, user));
         });
 
         tile5.setOnAction(event -> {
-            GameSystem.getInstance().playATile(user, user.getHand().remove(4), primaryStage);
+            GameSystem.getInstance().playATile(user, user.getHand().get(4), primaryStage);
             user.addTile(Pile.getInstance().drawTile());
             BuyStockScreen purchase = new BuyStockScreen();
             primaryStage.setScene(purchase.getScene(primaryStage, user));
         });
 
         tile6.setOnAction(event -> {
-            GameSystem.getInstance().playATile(user, user.getHand().remove(5), primaryStage);
+            GameSystem.getInstance().playATile(user, user.getHand().get(5), primaryStage);
             user.addTile(Pile.getInstance().drawTile());
             BuyStockScreen purchase = new BuyStockScreen();
             primaryStage.setScene(purchase.getScene(primaryStage, user));
