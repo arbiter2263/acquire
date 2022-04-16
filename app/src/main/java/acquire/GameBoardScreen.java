@@ -6,6 +6,8 @@
 package acquire;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -133,6 +135,9 @@ public class GameBoardScreen {
         cash.setPrefWidth(120);
         gridPane.add(cash, 0, 10);
 
+        //Add Player turn text
+        TextArea playerUp = new TextArea(user.getName());
+        gridPane.add(playerUp, 11, 16);
         // Add View Your Stocks Button
         Button viewStocks = new Button("Your Stocks");
         viewStocks.setPrefHeight(5);
@@ -148,8 +153,18 @@ public class GameBoardScreen {
 
         // Displays the end game button if game can be ended
         Button endGame = new Button("End Game");
-
         if (GameSystem.getInstance().endGameCheck()) gridPane.add(endGame, 10, 13);
+
+        //setup game end button
+        endGame.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                EndGameScreen end = new EndGameScreen();
+                primaryStage.setScene(end.getScene(primaryStage));
+                primaryStage.show();
+            }
+        });
+
         GameSystem.getInstance().drawTile(user);
 
         // setup tile buttons

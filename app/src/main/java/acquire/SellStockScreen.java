@@ -24,28 +24,23 @@ import javafx.stage.Stage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class SellStockScreen extends Application {
-    static String corporation;
-    static Player user;
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Sell Stock");
-        GridPane gridPane = stockSell();
-        addUIControls(gridPane);
-        Scene scene9 = new Scene(gridPane, 1200, 800);
-        ColumnConstraints columnOneConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        ColumnConstraints columnTwoConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        ColumnConstraints columnThreeConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        gridPane.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstraints, columnThreeConstraints);
-        primaryStage.setScene(scene9);
-        primaryStage.show();
+public class SellStockScreen {
+
+    protected Scene getScene(Stage primaryStage, Player e, String corp) throws FileNotFoundException {
+        Player user;
+        String corporation = corp;
+        GridPane gridPane = new GridPane();
+        user = e;
+        corporation = corp;
+        Scene scene = new Scene(gridPane, 1200, 800);
+        stockSell(gridPane);
+        addUIControls(gridPane, user, corporation);
+        return scene;
     }
 
-    private GridPane stockSell() {
-        GridPane gridPane = new GridPane();
+
+
+    private GridPane stockSell(GridPane gridPane) {
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setBackground(new Background(new BackgroundFill(Color.web("#CBC3E3"), CornerRadii.EMPTY, Insets.EMPTY)));
         gridPane.setPadding(new Insets(10, 10, 10, 10));
@@ -54,7 +49,7 @@ public class SellStockScreen extends Application {
         return gridPane;
     }
 
-    private void addUIControls(GridPane gridPane) throws FileNotFoundException {
+    private void addUIControls(GridPane gridPane, Player user, String corporation) throws FileNotFoundException {
         // Add Header
         Label headerLabel = new Label("Selling stocks was selected, please enter how many stocks you would like to sell");
         headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
@@ -138,11 +133,5 @@ public class SellStockScreen extends Application {
                     if (confirm.getResult() == ButtonType.YES) {}
                 }
             });
-    }
-
-    public static void main(Player e, String name) {
-        user = e;
-        corporation = name;
-        launch();
     }
 }

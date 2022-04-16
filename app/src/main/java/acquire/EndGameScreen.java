@@ -20,19 +20,16 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class EndGameScreen extends Application {
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Game Over!");
-        GridPane gridPane = mainScreen();
+public class EndGameScreen {
+
+    protected Scene getScene(Stage primaryStage) {
+        GridPane gridPane = new GridPane();
+        gridSetup(gridPane);
         addUIControls(gridPane);
-        Scene scene6 = new Scene(gridPane, 1200, 800);
-        primaryStage.setScene(scene6);
-        primaryStage.show();
+        return new Scene(gridPane, 1200, 800);
     }
 
-    private GridPane mainScreen() {
-        GridPane gridPane = new GridPane();
+    private GridPane gridSetup(GridPane gridPane) {
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setBackground(new Background(new BackgroundFill(Color.web("#CBC3E3"), CornerRadii.EMPTY, Insets.EMPTY)));
         gridPane.setHgap(10);
@@ -78,8 +75,5 @@ public class EndGameScreen extends Application {
         exitButton.setPrefWidth(600);
         gridPane.add(exitButton, 2, 3);
         GridPane.setMargin(exitButton, new Insets(20, 0,20,0));
-    }
-    public static void main(String[] args) {
-        launch();
     }
 }
