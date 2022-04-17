@@ -16,7 +16,9 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+import lombok.*;
 
+@EqualsAndHashCode @ToString
 public class Pile {
     private static Pile instance = null;
     private final ArrayList<Tile> pile;
@@ -105,18 +107,6 @@ public class Pile {
      */
     protected int size(){
         return pile.size();
-    }
-
-    /**
-     *
-     * @return String of all tiles (left) in pile
-     */
-    public String toString() {
-        StringBuilder ofTile = new StringBuilder();
-        for (var tile : pile) {
-            ofTile.append(tile.getNumber()).append(" ").append(tile.getLetter()).append("\n");
-        }
-        return ofTile.toString();
     }
 
     /**

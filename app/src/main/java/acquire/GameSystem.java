@@ -10,27 +10,25 @@ import javafx.stage.Stage;
 import org.json.JSONObject;
 
 import java.util.*;
+import lombok.*;
 
+@EqualsAndHashCode @ToString
 public class GameSystem {
-    private static GameSystem INSTANCE = new GameSystem();
-    private static ArrayList<Player> playerList = new ArrayList<>();
-    private static ArrayList<Player> mergerPlayerOrder;
-    private static int turnCounter= 0;
-    private static boolean isHardMode = false;
-    private static int numOfPlayers = 0;
+    private static GameSystem INSTANCE = null;
+    @Getter private static ArrayList<Player> playerList = new ArrayList<Player>();
+    @Getter private static ArrayList<Player> mergerPlayerOrder = new ArrayList<Player>();
+    @Getter private static int turnCounter= 0;
+    @Getter @Setter private static boolean isHardMode = false;
+    @Getter @Setter private static int numOfPlayers = 0;
 
-    protected int getNumOfPlayers(){
-        return numOfPlayers;
+    /**
+     * GameSystem When called should start the first scene which prompts the user for difficulty and number of players through the UI
+     * This should then initialize either a hard game (no hints, hides player stocks from each other)
+     * or Standard mode, which will offer hints and allow players to see how many stocks other players have
+     */
+    protected GameSystem() {
+        initializeGame(isHardMode, numOfPlayers);
     }
-
-    protected void setNumOfPlayers(int numOfPlayers){
-        this.numOfPlayers = numOfPlayers;
-    }
-
-    protected boolean setIsHardMode(boolean settings){
-        return isHardMode = settings;
-    }
-
 
     protected static GameSystem getInstance(){
         if (INSTANCE == null){
@@ -70,15 +68,7 @@ public class GameSystem {
     }
 
 
-    /**
-     * GameSystem When called should start the first scene which prompts the user for difficulty and number of players through the UI
-     * This should then initialize either a hard game (no hints, hides player stocks from each other)
-     * or Standard mode, which will offer hints and allow players to see how many stocks other players have
-     */
-    protected GameSystem() {
-        initializeGame(isHardMode, numOfPlayers);
 
-    }
 
 
     /**

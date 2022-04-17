@@ -11,14 +11,16 @@ import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
+import lombok.*;
 
+@EqualsAndHashCode @ToString
 public class Gameboard {
-    private LinkedList<Player> players;
-    private LinkedList<Tile> tilesPlayed;
-    private Tile[][] board;
+    @Getter private LinkedList<Player> players;
+    @Getter private LinkedList<Tile> tilesPlayed;
+    @Getter private Tile[][] board;
     @VisibleForTesting
     private static Gameboard INSTANCE = null; // Field to hold singleton instance of class
-    private static String corpName;
+    @Setter private static String corpName; //Global var for merger call to MergerTieScreen
 
     /**
      * Private constructor to enforce only one instance
@@ -27,21 +29,6 @@ public class Gameboard {
         this.players = new LinkedList<Player>();
         this.tilesPlayed = new LinkedList<Tile>();
         this.board = new Tile[12][9];
-
-        /*
-        A1 A2 A3 ... A9
-        B1 B2 B3 ... B9
-        C1 C2 C3 ... C9
-        D1 D2 D3 ... D9
-        E1 E2 E3 ... E9
-        F1 F2 F3 ... F9
-        G1 G2 G3 ... G9
-        H1 H2 H3 ... H9
-        I1 I2 I3 ... I9
-        J1 J2 J3 ... J9
-        K1 K2 K3 ... K9
-        L1 L2 L3 ... L9
-         */
     }
 
     /**
@@ -63,38 +50,6 @@ public class Gameboard {
         for (int i = 0; i < numOfPlayers; i++) {
             getInstance().players.add(new Player("Player " + i));
         }
-    }
-
-    /**
-     * Simple getter for players
-     * @return  LinkedList<Players>  A list of the players in this game
-     */
-    protected LinkedList<Player> getPlayers() {
-        return this.players;
-    }
-
-    /**
-     * Simple getter for tilesPLayed
-     * @return  LinkedList<Tile>  All the tiles that have been played to the board
-     */
-    protected LinkedList<Tile> getTilesPlayed() {
-        return tilesPlayed;
-    }
-
-    /**
-     * Simple getter for board
-     * @return  Tile[][]  An array representation of the gameboard
-     */
-    protected Tile[][] getBoard() {
-        return this.board;
-    }
-
-    /**
-     * Simple setter for corpName
-     * @param name  The name of the selected/winning corporation
-     */
-    protected void setCorpName(String name) {
-        corpName = name;
     }
 
     /**
@@ -360,7 +315,6 @@ public class Gameboard {
      * @param tile  The tile that started the merger
      * @param rowColumnTile2  The row and column location of the previously placed tile
      */
-
     private void makeNewCorp(Player player, Tile tile, int[] rowColumnTile2, Stage primaryStage) {
         //Will need to cooperate with the make new corporation screen
         // needs user input
@@ -372,6 +326,8 @@ public class Gameboard {
         CorporationList.getInstance().activateCorp(corp);
         corp.addTile(tile);
         corp.addTile(Gameboard.getInstance().board[rowColumnTile2[0]][rowColumnTile2[1]]);
+
+        player.addFoundersStock(corp);
     }
 
     /**

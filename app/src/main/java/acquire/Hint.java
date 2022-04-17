@@ -5,6 +5,9 @@
 
 package acquire;
 
+import lombok.*;
+
+@EqualsAndHashCode @ToString @NoArgsConstructor
 public class Hint {
     private static String[] possibleHits = {
             "Until a corporation contains at least 11 tiles, it can be merged into another corporation.",
@@ -16,18 +19,12 @@ public class Hint {
     private int index = 0;
 
     /**
-     * Constructor for Hint
-     */
-    protected Hint() {}
-
-    /**
      * Method to get the first hint, when the class is first initialized
      * @return String  The first hint
      */
     public String getHint() {
         return possibleHits[index];
     }
-
 
     /**
      * Method to get the next hint from the current index

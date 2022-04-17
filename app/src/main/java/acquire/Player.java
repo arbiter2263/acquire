@@ -9,12 +9,14 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
+import lombok.*;
 
+@EqualsAndHashCode @ToString
 public class Player {
-    private String name;
-    private int wallet;
-    private LinkedList<Tile> hand;
-    private Hashtable<Corporation, Integer> stockCounts;
+    @NonNull @Getter @Setter private String name;
+    @Getter private int money;
+    @Getter private LinkedList<Tile> hand;
+    @NonNull @Getter private Hashtable<Corporation, Integer> stocks;
 
     /**
      * Constructor for Player
@@ -22,57 +24,17 @@ public class Player {
      */
     protected Player(String name) {
         this.name = name;
-        this.wallet = 6000;
+        this.money = 6000;
         this.hand = new LinkedList<Tile>();
-        this.stockCounts = new Hashtable<>();
+        this.stocks = new Hashtable<>();
         // Add inactive corporations
         for (Corporation corp : CorporationList.getInstance().getInactiveCorps()) {
-            this.stockCounts.put(corp, 0);
+            this.stocks.put(corp, 0);
         }
         // Add active corporations -- should be an empty list ; future proofing
         for (Corporation corp : CorporationList.getInstance().getActiveCorps()) {
-            this.stockCounts.put(corp, 0);
+            this.stocks.put(corp, 0);
         }
-    }
-
-    /**
-     * Simple getter for name
-     * @return  String  The name of this player
-     */
-    protected String getName() {
-        return this.name;
-    }
-
-    /**
-     * Simple getter for wallet
-     * @return  int  The amount of money in this player's wallet
-     */
-    protected int getMoney(){
-        return wallet;
-    }
-
-    /**
-     * Simple getter for a list of Tiles this player has in their hand
-     * @return  LinkedList<Tile>  A list of tiles this player has currently
-     */
-    protected LinkedList<Tile> getHand() {
-        return this.hand;
-    }
-
-    /**
-     * Simple getter for stocks
-     * @return  HashTable<Corporation, Integer>  A copy of stock counts for each company
-     */
-    protected Hashtable<Corporation, Integer> getStocks() {
-        return stockCounts;
-    }
-
-    /**
-     * Method to set the name of this player to a custom name
-     * @param name  The new name of this player
-     */
-    protected void setName(String name) {
-        this.name = name;
     }
 
     /**
@@ -95,11 +57,11 @@ public class Player {
             Corporation nextCorp = corps.next();
             if (nextCorp.getName().equals(stockName)) {
                 int cost = nextCorp.getStockPrice();
-                if (this.wallet >= cost) {
-                    wallet -= cost;
+                if (this.money >= cost) {
+                    money -= cost;
                     nextCorp.stockBought();
-                    int oldStockCount = this.stockCounts.get(nextCorp);
-                    this.stockCounts.replace(nextCorp, (oldStockCount + 1) );
+                    int oldStockCount = this.getStocks().get(nextCorp);
+                    this.getStocks().replace(nextCorp, (oldStockCount + 1) );
                     return true;
                 } else {
                     return false;
@@ -117,7 +79,7 @@ public class Player {
      * @throws NoSuchElementException  If the player has no stock in the defunct corporation
      */
     protected void tradeInStock(Corporation defunctCorp, Corporation survivingCorp, int amount) throws NoSuchElementException {
-        int oldCount = this.stockCounts.get(defunctCorp);
+        int oldCount = this.stocks.get(defunctCorp);
         if (oldCount == 0) {
             throw new NoSuchElementException("Player " + this.name + " has no stock in company " + defunctCorp);
         } else{
@@ -126,8 +88,8 @@ public class Player {
             if (amount % 2 > 0) {
                 sellDefunctStock(defunctCorp, 1);
             }
-            this.stockCounts.replace(defunctCorp, newCountDefunct);
-            this.stockCounts.replace(survivingCorp, newStockCount);
+            this.stocks.replace(defunctCorp, newCountDefunct);
+            this.stocks.replace(survivingCorp, newStockCount);
         }
 
     }
@@ -140,18 +102,18 @@ public class Player {
      *          player currently has in the defunct corporation
      */
     protected void sellDefunctStock(Corporation defunctCorp, int stockCount) throws IndexOutOfBoundsException{
-        int currentCount = this.stockCounts.get(defunctCorp);
+        int currentCount = this.stocks.get(defunctCorp);
         if (currentCount < stockCount) {
-            throw new IndexOutOfBoundsException("Player " + this.name + " has " + this.stockCounts.get(defunctCorp) +
+            throw new IndexOutOfBoundsException("Player " + this.name + " has " + this.stocks.get(defunctCorp) +
                     " stocks in corporation " + defunctCorp.getName() + " and can not sell " + stockCount + " stocks.");
         }
         int counter = stockCount;
         while (counter > 0) {
             int stockSellValue = CorporationList.getInstance().getStockCost(defunctCorp) / 2;
-            this.wallet += stockSellValue;
+            this.money += stockSellValue;
             counter--;
         }
-        this.stockCounts.replace(defunctCorp, (currentCount - stockCount) );
+        this.stocks.replace(defunctCorp, (currentCount - stockCount) );
     }
 
     /**
@@ -162,18 +124,18 @@ public class Player {
      *          player currently has in the corporation
      */
     protected void sellFullPricedStock(Corporation corp, int stockCount) throws IndexOutOfBoundsException{
-        int currentCount = this.stockCounts.get(corp);
+        int currentCount = this.stocks.get(corp);
         if (currentCount < stockCount) {
-            throw new IndexOutOfBoundsException("Player " + this.name + " has " + this.stockCounts.get(corp) +
+            throw new IndexOutOfBoundsException("Player " + this.name + " has " + this.stocks.get(corp) +
                     " stocks in corporation " + corp.getName() + " and can not sell " + stockCount + " stocks.");
         }
         int counter = stockCount;
         while (counter > 0) {
             int stockSellValue = CorporationList.getInstance().getStockCost(corp);
-            this.wallet += stockSellValue;
+            this.money += stockSellValue;
             counter--;
         }
-        this.stockCounts.replace(corp, (currentCount - stockCount) );
+        this.stocks.replace(corp, (currentCount - stockCount) );
     }
 
     /**
@@ -181,8 +143,8 @@ public class Player {
      * @param newCorp  The newly formed corporation
      */
     protected void addFoundersStock(Corporation newCorp) {
-        int oldStockCount = this.stockCounts.get(newCorp);
-        this.stockCounts.replace(newCorp, oldStockCount + 1);
+        int oldStockCount = this.stocks.get(newCorp);
+        this.stocks.replace(newCorp, oldStockCount + 1);
     }
 
     /**
@@ -226,7 +188,7 @@ public class Player {
      */
     protected int getStockCount(String corp) {
         int count;
-        count = stockCounts.get(CorporationList.getInstance().getCorporation(corp));
+        count = stocks.get(CorporationList.getInstance().getCorporation(corp));
         return count;
     }
 
@@ -243,6 +205,6 @@ public class Player {
      * @param bonus  The amount of the bonus
      */
     protected void giveBonusMoney(int bonus) {
-        this.wallet += bonus;
+        this.money += bonus;
     }
 }

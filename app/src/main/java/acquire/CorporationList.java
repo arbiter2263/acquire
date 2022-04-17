@@ -9,12 +9,14 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.gson.Gson;
 
 import java.util.*;
+import lombok.*;
 
+@EqualsAndHashCode @ToString
 public class CorporationList {
-    private static final String[] CORPORATIONS = {"Sackson", "Zeta", "Hydra", "Fusion", "America", "Phoenix", "Quantum"};
+    @Getter private static final String[] CORPORATIONS = {"Sackson", "Zeta", "Hydra", "Fusion", "America", "Phoenix", "Quantum"};
     @VisibleForTesting protected static CorporationList INSTANCE = null; // Field to hold singleton instance of class
-    private ArrayList<Corporation> activeCorps;
-    private ArrayList<Corporation> inactiveCorps;
+    @Getter private ArrayList<Corporation> activeCorps;
+    @Getter private ArrayList<Corporation> inactiveCorps;
 
     /**
      * Private constructor to enforce only one instance
@@ -46,22 +48,6 @@ public class CorporationList {
      */
     protected int getStockCost(Corporation corporation) {
         return corporation.getStockPrice();
-    }
-
-    /**
-     * Simple getter for activeCorps
-     * @return ArrayList<Corporation>  A copy of activeCorps
-     */
-    protected ArrayList<Corporation> getActiveCorps() {
-        return activeCorps;
-    }
-
-    /**
-     * Simple getter for inactiveCorps
-     * @return ArrayList<Corporation>  A copy of inactiveCorps
-     */
-    protected ArrayList<Corporation> getInactiveCorps() {
-        return inactiveCorps;
     }
 
     /**

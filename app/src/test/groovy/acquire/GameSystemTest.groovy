@@ -5,10 +5,11 @@
 
 package acquire
 
+import javafx.stage.Stage
 import spock.lang.Specification
 
 
-class gameSystemTest extends Specification {
+class GameSystemTest extends Specification {
 
     // initializeGame()
 
@@ -66,6 +67,7 @@ class gameSystemTest extends Specification {
     //TODO check that tile correctly removed from players hand
     def "Playing a tile"() {
         setup:
+        def stage = Mock(Stage)
         def player = new Player("someString")
         char a = 'A'
         def tile = new Tile(1, a)
@@ -76,7 +78,7 @@ class gameSystemTest extends Specification {
         player.addTile(new Tile(3, a))
 
         when:
-        GameSystem.getInstance().playATile(player, tile)
+        GameSystem.getInstance().playATile(player, tile, stage)
 
         then:
         player.getHand().size() == 2
@@ -85,6 +87,7 @@ class gameSystemTest extends Specification {
 
     def "Playing a tile to Gameboard"() {
         setup:
+        def stage = Mock(Stage)
         Gameboard.INSTANCE = null
         def board = Gameboard.getInstance()
         def player = new Player("someString")
@@ -94,7 +97,7 @@ class gameSystemTest extends Specification {
 
 
         when:
-        GameSystem.getInstance().playATile(player, tile)
+        GameSystem.getInstance().playATile(player, tile, stage)
 
         then:
         board.getInstance().getTilesPlayed().size() == 1
@@ -486,9 +489,9 @@ class gameSystemTest extends Specification {
         }
         corp.updateStockPrice()
         corp1.updateStockPrice()
-        player1.wallet = 1000000  //enough to buy all the stock
-        player2.wallet = 1000000
-        player3.wallet = 1000000
+        player1.money = 1000000  //enough to buy all the stock
+        player2.money = 1000000
+        player3.money = 1000000
 
 
         for(int i = 0; i < 12; i++){
@@ -515,9 +518,9 @@ class gameSystemTest extends Specification {
             player3.buyStock(corp1.getName())
         }
 
-        player1.wallet = 0 //for easy math check
-        player2.wallet = 0
-        player3.wallet = 0
+        player1.money = 0 //for easy math check
+        player2.money = 0
+        player3.money = 0
 
 
         when:
