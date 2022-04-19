@@ -6,15 +6,16 @@
 package acquire;
 
 import java.util.LinkedList;
-import java.util.Objects;
+import lombok.*;
 
+@EqualsAndHashCode @ToString
 public class Corporation {
-    private String name;
-    private LinkedList<Tile> tileList;
-    private int stockCount;
-    private static final int STOCKCAP = 25;
-    private boolean stockCapMet;
-    private int stockPrice;
+    @NonNull @Getter @Setter private String name;
+    @Getter private LinkedList<Tile> tileList;
+    @Getter private int stockCount;
+    @Getter private static final int STOCKCAP = 25;
+    @Getter private boolean stockCapMet;
+    @Getter private int stockPrice;
 
     /**
      * Constructor for Corporation
@@ -23,24 +24,9 @@ public class Corporation {
     protected Corporation(String name){
         this.name = name;
         this.stockCount = 0;
+        this.stockCapMet = false;
         this.tileList = new LinkedList<Tile>();
         updateStockPrice();
-    }
-
-    /**
-     * Simple getter for name
-     * @return string  The name of this corporation
-     */
-    protected String getName() {
-        return name;
-    }
-
-    /**
-     * Simple getter for tileList
-     * @return LinkedList<Tile>  The tile contained within this corporation
-     */
-    protected LinkedList<Tile> getTileList() {
-        return tileList;
     }
 
     /**
@@ -48,59 +34,10 @@ public class Corporation {
      * @return bool  True if it is safe; False if it is not
      */
     protected boolean checkIfSafe() {
-        //Needs to be implemented
         if (this.tileList.size() >= 11) {
             return true;
         }
         return false;
-    }
-
-    /**
-     * Simple getter for stockCount
-     * @return int  The number of stock issued for this corporation
-     */
-    protected int getStockCount() {
-        return stockCount;
-    }
-
-    /**
-     * Simple getter for stockCapMet
-     * @return bool  True if the maximum number of stocks has been sold; False otherwise
-     */
-    protected boolean getStockCapMet() {
-        return this.stockCapMet;
-    }
-
-    /**
-     * Simple getter for stockPrice
-     * @return int  The current price of stock in this corporation
-     */
-    protected int getStockPrice() {
-        return stockPrice;
-    }
-
-    /**
-     * Overridden eguals method
-     * @param obj The object to be compared against
-     * @return bool  True if the names of both corporations match; False otherwise
-     */
-    @Override
-    public boolean equals(Object obj) {
-        Corporation corp = (Corporation) obj;
-        if (this.getName().equals(corp.getName())) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Overridden toString method
-     * @return String  "CorporationName: Size: [numOfTiles] Stocks: [numOfStocksInPlay]"
-     */
-    @Override
-    public String toString() {
-        return this.getName() + ": Size: " + this.tileList.size() + " Stocks: " + this.getStockCount();
     }
 
     /**

@@ -47,6 +47,7 @@ class CorporationTest extends Specification {
         then:
         result.size() == 3
     }
+
     //tests for checkIfSafe()
     def "check a safe corporation"() {
         setup:
@@ -93,7 +94,6 @@ class CorporationTest extends Specification {
 
         assert corp1.equals(corp2) == true
     }
-    //test for equals
     def "Corp1 equals corp2 false"(){
         setup:
         CorporationList.INSTANCE = null
@@ -104,13 +104,12 @@ class CorporationTest extends Specification {
     }
 
     //tests for toString()
-
     def "To String method"(){
         setup:
         def corp1 = new Corporation("America")
         corp1.stockBought()
 
-        assert corp1.toString() == "America: Size: 0 Stocks: 1"
+        assert corp1.toString() == "Corporation(name=America, tileList=[], stockCount=1, stockCapMet=false, stockPrice=0)"
     }
 
     //tests for getStockCount()
@@ -139,6 +138,7 @@ class CorporationTest extends Specification {
         then:
         result == 1
     }
+
     //tests for getStockCapMet()
     def "check if the stock cap met when it hasn't been"() {
         setup:
@@ -147,7 +147,7 @@ class CorporationTest extends Specification {
         corp.stockBought()
 
         when:
-        def result = corp.getStockCapMet()
+        def result = corp.isStockCapMet()
 
         then:
         result == false
@@ -160,11 +160,12 @@ class CorporationTest extends Specification {
         }
 
         when:
-        def result = corp.getStockCapMet()
+        def result = corp.isStockCapMet()
 
         then:
         result == true
     }
+
     //tests for getStockPrice()
     def "check stock price for high-priced corporation"() {
         setup:
@@ -203,6 +204,7 @@ class CorporationTest extends Specification {
         then:
         result == 500
     }
+
     //tests for addTile()
     def "add just one tile"() {
         setup:
@@ -226,6 +228,7 @@ class CorporationTest extends Specification {
         then:
         result == true  && corp.getTileList().size() == 3
     }
+
     //test for stockBought()
     def "buy a stock"() {
         setup:
@@ -237,6 +240,7 @@ class CorporationTest extends Specification {
         then:
         corp.getStockCount() == 1
     }
+
     //stockSold()
     def "sell a stock"() {
         setup:

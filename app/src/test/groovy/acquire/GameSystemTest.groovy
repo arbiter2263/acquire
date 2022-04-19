@@ -5,10 +5,11 @@
 
 package acquire
 
+import javafx.stage.Stage
 import spock.lang.Specification
 
 
-class gameSystemTest extends Specification {
+class GameSystemTest extends Specification {
 
     // initializeGame()
 
@@ -66,6 +67,7 @@ class gameSystemTest extends Specification {
     //TODO check that tile correctly removed from players hand
     def "Playing a tile"() {
         setup:
+        def stage = Mock(Stage)
         def player = new Player("someString")
         char a = 'A'
         def tile = new Tile(1, a)
@@ -76,7 +78,7 @@ class gameSystemTest extends Specification {
         player.addTile(new Tile(3, a))
 
         when:
-        GameSystem.getInstance().playATile(player, tile)
+        GameSystem.getInstance().playATile(player, tile, stage)
 
         then:
         player.getHand().size() == 2
@@ -85,6 +87,7 @@ class gameSystemTest extends Specification {
 
     def "Playing a tile to Gameboard"() {
         setup:
+        def stage = Mock(Stage)
         Gameboard.INSTANCE = null
         def board = Gameboard.getInstance()
         def player = new Player("someString")
@@ -94,7 +97,7 @@ class gameSystemTest extends Specification {
 
 
         when:
-        GameSystem.getInstance().playATile(player, tile)
+        GameSystem.getInstance().playATile(player, tile, stage)
 
         then:
         board.getInstance().getTilesPlayed().size() == 1
@@ -210,6 +213,47 @@ class gameSystemTest extends Specification {
         player.getHand().size() == 3
 
     }
+
+    // drawTile(Player player)
+    // Check that drawTile does not reset player hand
+    // player hand should only have 1 different tile when
+    // a tile is played and then drawTile is called
+    def "Drawing tile test for overwriting player hand"() {
+        setup:
+        CorporationList.INSTANCE = null
+        Gameboard.INSTANCE = null
+        Pile.instance = null
+        GameSystem.INSTANCE = null
+
+        def pile = new Pile()
+        def player = new Player("name")
+        def hand1 = new ArrayList<Tile>()
+        def hand2 = new ArrayList<Tile>()
+
+        when:
+
+        GameSystem.getInstance().drawTile(player)
+        for (Tile tile : player.getHand()) {
+            hand1.add(tile)
+        }
+        //play first tile in the hand
+        player.playTile(player.getHand().get(0))
+        GameSystem.getInstance().drawTile(player)
+        for (Tile tile : player.getHand()) {
+            hand2.add(tile)
+        }
+
+        //comparing the hands, should be different by only 1 tile
+        then:
+        for(Tile tile : hand1){
+            System.out.println(tile.getSpace())
+        }
+        System.out.println("-----")
+        for(Tile tile : hand2){
+            System.out.println(tile.getSpace())
+        }
+    }
+
     def "Drawing tile to end turn empty pile"() {
         setup:
         CorporationList.INSTANCE = null
@@ -297,6 +341,9 @@ class gameSystemTest extends Specification {
         GameSystem.getInstance().playOrder(player1)
         GameSystem.getInstance().playOrder(player2)
         GameSystem.getInstance().playOrder(player3)
+        GameSystem.getInstance().playerTurn()
+        GameSystem.getInstance().playerTurn()
+        GameSystem.getInstance().playerTurn()
         GameSystem.getInstance().playerTurn()
         GameSystem.getInstance().playerTurn()
         GameSystem.getInstance().playerTurn()
@@ -442,9 +489,9 @@ class gameSystemTest extends Specification {
         }
         corp.updateStockPrice()
         corp1.updateStockPrice()
-        player1.wallet = 1000000  //enough to buy all the stock
-        player2.wallet = 1000000
-        player3.wallet = 1000000
+        player1.money = 1000000  //enough to buy all the stock
+        player2.money = 1000000
+        player3.money = 1000000
 
 
         for(int i = 0; i < 12; i++){
@@ -471,9 +518,9 @@ class gameSystemTest extends Specification {
             player3.buyStock(corp1.getName())
         }
 
-        player1.wallet = 0 //for easy math check
-        player2.wallet = 0
-        player3.wallet = 0
+        player1.money = 0 //for easy math check
+        player2.money = 0
+        player3.money = 0
 
 
         when:

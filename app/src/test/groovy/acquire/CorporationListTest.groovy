@@ -98,4 +98,21 @@ class CorporationListTest extends Specification {
         then:
         list.getActiveCorps().size() == 0
     }
+
+    def "test get status"(){
+        setup:
+        CorporationList.INSTANCE = null
+        def list = CorporationList.getInstance()
+        when:
+        def corp = list.getCorporation("Sackson")
+        def corp1 = list.getCorporation("America")
+        def corp2 = list.getCorporation("Hydro")
+        list.activateCorp(corp)
+
+        then:
+        list.checkStatus(corp.getName()) == true
+
+
+    }
+
 }

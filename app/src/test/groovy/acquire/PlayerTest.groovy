@@ -3,8 +3,9 @@
 * Licensed under the MIT license. See LICENSE file in the project root for details.
 */
 
-package acquire;
+package acquire
 
+import javafx.stage.Stage;
 import spock.lang.Specification;
 
 class PlayerTest extends Specification {
@@ -19,6 +20,7 @@ class PlayerTest extends Specification {
         then:
         result.equals("FunName")
     }
+
     //test for getMoney()
     def "show a player's money"() {
         setup:
@@ -30,6 +32,7 @@ class PlayerTest extends Specification {
         then:
         result == 6000
     }
+
     //test for getHand()
     def "show a player's hand"() {
         setup:
@@ -42,6 +45,7 @@ class PlayerTest extends Specification {
         then:
         result.size() == 1
     }
+
     //test for getStocks()
     def "show a player's stocks"() {
         setup:
@@ -54,6 +58,7 @@ class PlayerTest extends Specification {
         then:
         listValues.get(0) == 0 && listValues.get(6) == 0
     }
+
     //test for setName()
     def "change a player's name"() {
         setup:
@@ -66,6 +71,7 @@ class PlayerTest extends Specification {
         then:
         result.equals("differentName")
     }
+
     //test for getHint()
     def "get a hint class"() {
         setup:
@@ -77,7 +83,20 @@ class PlayerTest extends Specification {
         then:
         result.getClass() == Hint
     }
-    //test for buyStock()
+
+    //test for getStocks()
+    def "test getting the value for a key in player.stocks"() {
+        setup:
+        def player = new Player("name")
+
+        when:
+        def stockList = player.getStocks()
+        def corp = CorporationList.getInstance().getCorporation("Sackson")
+        def result = stockList.get(corp)
+
+        then:
+        result == 0
+    }
     def "try to buy a stock from an active corporation"() {
         setup:
         def player = new Player("FunName")
@@ -93,6 +112,7 @@ class PlayerTest extends Specification {
         then:
         result == true
     }
+
     //test for removeTile()
     def "try to remove a tile from hand"() {
         setup:
@@ -106,6 +126,7 @@ class PlayerTest extends Specification {
         then:
         player.getHand().size() == 0
     }
+
     //test for playTile()
     def "try to play a tile"() {
         setup:
@@ -119,6 +140,7 @@ class PlayerTest extends Specification {
         then:
         result == true
     }
+
     //test for addTile()
     def "try to add a tile"() {
         setup:

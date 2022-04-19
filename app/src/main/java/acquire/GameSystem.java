@@ -5,32 +5,30 @@
 
 package acquire;
 
+import com.google.gson.Gson;
 import javafx.stage.Stage;
 import org.json.JSONObject;
 
 import java.util.*;
+import lombok.*;
 
+@EqualsAndHashCode @ToString
 public class GameSystem {
-    private static GameSystem INSTANCE = new GameSystem();
-    private static ArrayList<Player> playerList = new ArrayList<>();
-    private static ArrayList<Player> mergerPlayerOrder;
-    private static int turnCounter= 0;
-    private static final int lastPlayer = 0;
-    private static boolean isHardMode = false;
-    private static int numOfPlayers = 0;
+    private static GameSystem INSTANCE = null;
+    @Getter private static ArrayList<Player> playerList = new ArrayList<Player>();
+    @Getter private static ArrayList<Player> mergerPlayerOrder = new ArrayList<Player>();
+    @Getter private static int turnCounter= 0;
+    @Getter @Setter private static boolean isHardMode = false;
+    @Getter @Setter private static int numOfPlayers = 0;
 
-    protected int getNumOfPlayers(){
-        return numOfPlayers;
+    /**
+     * GameSystem When called should start the first scene which prompts the user for difficulty and number of players through the UI
+     * This should then initialize either a hard game (no hints, hides player stocks from each other)
+     * or Standard mode, which will offer hints and allow players to see how many stocks other players have
+     */
+    protected GameSystem() {
+        initializeGame(isHardMode, numOfPlayers);
     }
-
-    protected void setNumOfPlayers(int numOfPlayers){
-        this.numOfPlayers = numOfPlayers;
-    }
-
-    protected boolean setIsHardMode(boolean settings){
-        return isHardMode = settings;
-    }
-
 
     protected static GameSystem getInstance(){
         if (INSTANCE == null){
@@ -56,38 +54,21 @@ public class GameSystem {
      * @return returns a player
      */
     protected Player playerTurn(){
-        int lastPlayer = playerList.size()-1;
+        int lastIndex = playerList.size()-1;
         int currentPlayer = turnCounter;
 
-        if(turnCounter < lastPlayer) {
-            playerList.get(turnCounter);
+        if(turnCounter < lastIndex) {
             turnCounter++;
             return playerList.get(currentPlayer);
-
-        }else if(turnCounter == lastPlayer){
+        }else if(turnCounter % lastIndex == 0){
             turnCounter = 0;
-            return playerList.get(lastPlayer);
-
+            return playerList.get(lastIndex);
         }
         return null;
     }
 
 
-    /**
-     * GameSystem When called should start the first scene which prompts the user for difficulty and number of players through the UI
-     * This should then initialize either a hard game (no hints, hides player stocks from each other)
-     * or Standard mode, which will offer hints and allow players to see how many stocks other players have
-     */
-    protected GameSystem() {
-        //start UI and ask for new game or load old game
-        //if new game get difficulty and number of players
-        //UI();
-        //TODO
 
-        initializeGame(isHardMode, numOfPlayers);
-
-
-    }
 
 
     /**
@@ -130,19 +111,6 @@ public class GameSystem {
         isHardMode = false;
         turnCounter = 0;
     }
-
-    /**
-     * Initializing a saved game going to need some work on this one
-     * @param saveFile
-     */
-    //TODO
-//    private void initializeGame(JSONObject saveFile){
-//        loadGame(saveFile);
-//    }
-
-
-
-
 
     /**
      * At the beginning of a players turn they play a tile
@@ -244,7 +212,6 @@ public class GameSystem {
                 tilesToRemove.add(tile);
             }
         }
-
 
         while(tilesToRemove.size() !=0){
             player.removeTile(tilesToRemove.get(0));
@@ -382,10 +349,27 @@ public class GameSystem {
         }
     }
 
-//    private void pauseGame(){}
-//
-//    private void saveGame(){}
-//
-//    private void loadGame(){}
+    /**
+     * Method to save instance of the game
+     * so players can return at a later time
+     */
+    protected void saveGame(){
+        Gameboard.getInstance().saveGame();
+        CorporationList.getInstance().saveGame();
+        Pile.getInstance().saveGame();
+
+    }
+
+    /**
+     * Method to load a saved instance
+     * so players can continue playing an
+     * instance from before
+     */
+    protected void loadGame(){
+       Gameboard.getInstance().loadGame();
+       CorporationList.getInstance().loadGame();
+       Pile.getInstance().loadGame();
+
+    }
 
 }
