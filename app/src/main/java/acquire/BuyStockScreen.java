@@ -27,6 +27,7 @@ import java.util.LinkedList;
 public class BuyStockScreen {
     static Player user;
     static LinkedList<String> tempStock= new LinkedList<>();
+    static int counter;
 
     protected Scene getScene(Stage primaryStage, Player e) {
         GridPane gridPane = new GridPane();
@@ -41,6 +42,7 @@ public class BuyStockScreen {
      * Method to setup gridPane
      */
     private void gameSetup(GridPane gridPane) {
+        counter = 0;
         gridPane.setAlignment(Pos.TOP_CENTER);
         gridPane.setHgap(10);
         gridPane.setVgap(10);
@@ -144,6 +146,21 @@ public class BuyStockScreen {
         cashAfter.setPrefWidth(120);
         gridPane.add(cashAfter, 0, 4);
 
+
+        // Add stocks selected label
+        Label selectCount = new Label("Amount of Stocks Currently Selected");
+        selectCount.setWrapText(true);
+        gridPane.add(selectCount, 2, 4);
+
+        // Add Stocks Selected Counter
+        TextArea selected = new TextArea("0/3");
+        selected.setEditable(false);
+        selected.setStyle("-fx-font-size: 26");
+
+        selected.setPrefHeight(5);
+        selected.setPrefWidth(120);
+        gridPane.add(selected, 3, 4);
+
         // Submit Button
         Button submit = new Button("Submit Purchase");
         submit.setPrefHeight(5);
@@ -183,31 +200,66 @@ public class BuyStockScreen {
         // Sackson event handler
         sackson.setOnAction(event -> {
             tempStock.add("Sackson");
-            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Sackson")), gridPane));});
+            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Sackson")), gridPane));
+            if (counter <= 2) {
+            counter +=1;
+            selected.setText(Integer.toString(counter) + "/3");}
+            else showAlertStock(gridPane.getScene().getWindow());
+        });
         // Zeta event handler
         zeta.setOnAction(event -> {
             tempStock.add("Zeta");
-            cashAfter.setText(calculateBalance((Integer.parseInt(cashAfter.getText())), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Zeta")), gridPane));});
+            cashAfter.setText(calculateBalance((Integer.parseInt(cashAfter.getText())), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Zeta")), gridPane));
+            if (counter <= 2) {
+                counter +=1;
+                selected.setText(Integer.toString(counter) + "/3");}
+            else showAlertStock(gridPane.getScene().getWindow());
+        });
         // Hydra event handler
         hydra.setOnAction(event -> {
             tempStock.add("Hydra");
-            cashAfter.setText(calculateBalance((Integer.parseInt(cashAfter.getText())), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Hydra")), gridPane));});
+            cashAfter.setText(calculateBalance((Integer.parseInt(cashAfter.getText())), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Hydra")), gridPane));
+            if (counter <= 2) {
+                counter +=1;
+                selected.setText(Integer.toString(counter) + "/3");}
+            else showAlertStock(gridPane.getScene().getWindow());
+        });
         // Fusion event handler
         fusion.setOnAction(event -> {
             tempStock.add("Fusion");
-            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Fusion")), gridPane));});
+            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Fusion")), gridPane));
+            if (counter <= 2) {
+                counter +=1;
+                selected.setText(Integer.toString(counter) + "/3");}
+            else showAlertStock(gridPane.getScene().getWindow());
+        });
         // America event handler
         america.setOnAction(event -> {
             tempStock.add("America");
-            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("America")), gridPane));});
+            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("America")), gridPane));
+            if (counter <= 2) {
+                counter +=1;
+                selected.setText(Integer.toString(counter) + "/3");}
+            else showAlertStock(gridPane.getScene().getWindow());
+        });
         // Phoenix event handler
         phoenix.setOnAction(event -> {
             tempStock.add("Phoenix");
-            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Phoenix")), gridPane));});
+            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Phoenix")), gridPane));
+            if (counter <= 2) {
+                counter +=1;
+                selected.setText(Integer.toString(counter) + "/3");}
+            else showAlertStock(gridPane.getScene().getWindow());
+        });
         // Quantum event handler
         quantum.setOnAction(event -> {
             tempStock.add("Quantum");
-            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Quantum")), gridPane));});
+            cashAfter.setText(calculateBalance(Integer.parseInt(cashAfter.getText()), CorporationList.getInstance().getStockCost(CorporationList.getInstance().getCorporation("Quantum")), gridPane));
+            if (counter <= 2) {
+                counter +=1;
+                selected.setText(Integer.toString(counter) + "/3");}
+            else showAlertStock(gridPane.getScene().getWindow());
+        });
 
         //Label for active corporations
         Label actCor = new Label("Active Corporations");
@@ -251,4 +303,12 @@ public class BuyStockScreen {
         alert.show();
     }
 
+    private void showAlertStock(Window owner) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Selection Error!");
+        alert.setHeaderText(null);
+        alert.setContentText("You have already selected the maximum amount of purchasable stocks this turn. Please reset the stocks selected or press enter to continue");
+        alert.initOwner(owner);
+        alert.show();
+    }
 }
