@@ -40,6 +40,15 @@ public class Corporation {
         return false;
     }
 
+    protected int getStocksAvailable() {
+        if (stockCapMet) {return 0;}
+        else {
+            int available;
+            available = 25 - this.stockCount;
+            return available;
+        }
+    }
+
     /**
      * Method that adds a tile to this corporation
      * @param tile  The tile to be added

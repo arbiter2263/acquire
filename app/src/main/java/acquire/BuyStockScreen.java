@@ -161,6 +161,13 @@ public class BuyStockScreen {
         selected.setPrefWidth(120);
         gridPane.add(selected, 3, 4);
 
+        // Add stocks available counter
+        //TextArea available = new TextArea();
+        //for (int i=0; i<CorporationList.getInstance().getActiveCorps().size(); i++) {
+            //available.appendText(CorporationList.getInstance().getActiveCorps().get(i).getName() + CorporationList.getInstance().getActiveCorps().get(i).getStocksAvailable());
+        //}
+        //gridPane.add(available, 4, 4);
+
         // Submit Button
         Button submit = new Button("Submit Purchase");
         submit.setPrefHeight(5);
