@@ -10,6 +10,8 @@ import com.google.gson.Gson;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.LinkedList;
 import lombok.*;
 
@@ -386,8 +388,21 @@ public class Gameboard {
      * Method to save instance of the game
      * so players can return at a later time
      */
-    protected void saveGame(){
-        Gson obj = new Gson();
+    protected void saveGame() throws IOException {
+        Gson gson = new Gson();
+        Player[] playersList = new Player[players.size()];
+        for(int i = 0; i < players.size(); i++){
+            playersList[i] = players.get(i);
+        }
+        gson.toJson(playersList, new FileWriter("aqcuire/app/jsonsave/SaveGame.json"));
+
+        Tile[] playedTiles = new Tile[tilesPlayed.size()];
+        for(int i = 0; i < tilesPlayed.size(); i++){
+            playedTiles[i] = tilesPlayed.get(i);
+        }
+        gson.toJson(playedTiles, new FileWriter("aqcuire/app/jsonsave/SaveGame.json"));
+
+        gson.toJson(Gameboard.getInstance(), new FileWriter("aqcuire/app/jsonsave/SaveGame.json"));
 
     }
 

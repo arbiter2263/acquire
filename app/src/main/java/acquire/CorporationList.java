@@ -8,6 +8,8 @@ package acquire;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.gson.Gson;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import lombok.*;
 
@@ -149,9 +151,20 @@ public class CorporationList {
      * Method to save instance of the game
      * so players can return at a later time
      */
-    protected void saveGame(){
-        Gson obj = new Gson();
+    protected void saveGame() throws IOException {
+        Gson gson = new Gson();
 
+        Corporation[] corpsInactive = new Corporation[inactiveCorps.size()];
+        for(int i = 0; i < inactiveCorps.size(); i++){
+            corpsInactive[i] = inactiveCorps.get(i);
+        }
+        gson.toJson(corpsInactive, new FileWriter("aqcuire/app/jsonsave/SaveGame.json"));
+
+        Corporation[] corpsActive = new Corporation[activeCorps.size()];
+        for(int i = 0; i < activeCorps.size(); i++){
+            corpsActive[i] = activeCorps.get(i);
+        }
+        gson.toJson(corpsActive, new FileWriter("aqcuire/app/jsonsave/SaveGame.json"));
     }
 
     /**

@@ -9,6 +9,8 @@ import com.google.gson.Gson;
 import javafx.stage.Stage;
 import org.json.JSONObject;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import lombok.*;
 
@@ -356,11 +358,13 @@ public class GameSystem {
      * Method to save instance of the game
      * so players can return at a later time
      */
-    protected void saveGame(){
+    protected void saveGame() throws IOException {
         Gameboard.getInstance().saveGame();
         CorporationList.getInstance().saveGame();
         Pile.getInstance().saveGame();
 
+        Gson gson = new Gson();
+        gson.toJson(GameSystem.getInstance(), new FileWriter("aqcuire/app/jsonsave/SaveGame.json") );
     }
 
     /**
@@ -373,6 +377,8 @@ public class GameSystem {
        CorporationList.getInstance().loadGame();
        Pile.getInstance().loadGame();
 
+       Gson gson = new Gson();
+       gson.fromJson();
     }
 
 }

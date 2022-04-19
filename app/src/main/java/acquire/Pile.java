@@ -13,13 +13,19 @@ Tiles can be taken and added back into this "pile"
 
 import com.google.gson.Gson;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+import java.util.logging.Logger;
+
+
 import lombok.*;
 
 @EqualsAndHashCode @ToString
 public class Pile {
+    private static Logger LOGGER = Logger.getLogger(Pile.class.getName());
     private static Pile instance = null;
     private final ArrayList<Tile> pile;
 
@@ -113,9 +119,18 @@ public class Pile {
      * Method to save instance of the game
      * so players can return at a later time
      */
-    protected void saveGame(){
-        Gson obj = new Gson();
+    protected void saveGame() throws IOException {
 
+        Gson gson = new Gson();
+        Tile[] newPile = new Tile[pile.size()];
+        for(int i = 0; i < pile.size(); i++){
+            newPile[i] = pile.get(i);
+        }
+        try {
+            gson.toJson(newPile, new FileWriter("aqcuire/app/jsonsave/SaveGame.json"));
+        }catch(Exception IOE){
+            LOGGER.info("Failed to write out save file");
+        }
     }
 
     /**
