@@ -14,6 +14,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
 import lombok.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @EqualsAndHashCode @ToString
 public class Gameboard {
@@ -23,7 +25,7 @@ public class Gameboard {
     @VisibleForTesting
     private static Gameboard INSTANCE = null; // Field to hold singleton instance of class
     @Setter private static String corpName; //Global var for merger call to MergerTieScreen
-
+    private static Logger LOGGER = LoggerFactory.getLogger(Gameboard.class);
     /**
      * Private constructor to enforce only one instance
      */
@@ -52,6 +54,7 @@ public class Gameboard {
         for (int i = 0; i < numOfPlayers; i++) {
             getInstance().players.add(new Player("Player " + i));
         }
+        LOGGER.info("Game initialized for {} players", numOfPlayers);
     }
 
     /**
@@ -107,6 +110,7 @@ public class Gameboard {
                 //just place tile
             }
             addTileToBoard(tile);
+            LOGGER.info("Tile {} was added to the gameboard", tile.getSpace());
             return true;
         } else {
             return false;
@@ -328,7 +332,7 @@ public class Gameboard {
         CorporationList.getInstance().activateCorp(corp);
         corp.addTile(tile);
         corp.addTile(Gameboard.getInstance().board[rowColumnTile2[0]][rowColumnTile2[1]]);
-
+        LOGGER.info("New corporation was formed");
         player.addFoundersStock(corp);
     }
 

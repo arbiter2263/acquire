@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import lombok.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @EqualsAndHashCode @ToString
 public class Player {
@@ -17,6 +19,7 @@ public class Player {
     @Getter private int money;
     @Getter private LinkedList<Tile> hand;
     @NonNull @Getter private Hashtable<Corporation, Integer> stocks;
+    private static Logger LOGGER = LoggerFactory.getLogger(Player.class);
 
     /**
      * Constructor for Player
@@ -60,8 +63,9 @@ public class Player {
                 if (this.money >= cost) {
                     money -= cost;
                     nextCorp.stockBought();
-                    int oldStockCount = this.getStocks().get(nextCorp);
+                    int oldStockCount = this.stocks.get(nextCorp);
                     this.getStocks().replace(nextCorp, (oldStockCount + 1) );
+                    LOGGER.info("Player {} bought stock in corporation: {}", this, stockName);
                     return true;
                 } else {
                     return false;
@@ -104,8 +108,10 @@ public class Player {
     protected void sellDefunctStock(Corporation defunctCorp, int stockCount) throws IndexOutOfBoundsException{
         int currentCount = this.stocks.get(defunctCorp);
         if (currentCount < stockCount) {
+            LOGGER.warn("IOB exception thrown for corporation {}", defunctCorp.getName());
             throw new IndexOutOfBoundsException("Player " + this.name + " has " + this.stocks.get(defunctCorp) +
                     " stocks in corporation " + defunctCorp.getName() + " and can not sell " + stockCount + " stocks.");
+
         }
         int counter = stockCount;
         while (counter > 0) {
@@ -126,6 +132,7 @@ public class Player {
     protected void sellFullPricedStock(Corporation corp, int stockCount) throws IndexOutOfBoundsException{
         int currentCount = this.stocks.get(corp);
         if (currentCount < stockCount) {
+            LOGGER.warn("IOB exception thrown for player {} not having sufficient stocks", this.name );
             throw new IndexOutOfBoundsException("Player " + this.name + " has " + this.stocks.get(corp) +
                     " stocks in corporation " + corp.getName() + " and can not sell " + stockCount + " stocks.");
         }
@@ -145,6 +152,7 @@ public class Player {
     protected void addFoundersStock(Corporation newCorp) {
         int oldStockCount = this.stocks.get(newCorp);
         this.stocks.replace(newCorp, oldStockCount + 1);
+        LOGGER.info("Player {} formed corporation {} and they gained 1 stock in this corporation", this.name, newCorp.getName());
     }
 
     /**
@@ -198,6 +206,7 @@ public class Player {
      */
     protected void addTile(Tile tile){
         hand.add(tile);
+        LOGGER.info("Tile {} was added to Player {}'s hand", tile.getSpace(), this.name);
     }
 
     /**

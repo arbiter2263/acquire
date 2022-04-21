@@ -99,15 +99,15 @@ class PlayerTest extends Specification {
     }
     def "try to buy a stock from an active corporation"() {
         setup:
-        def player = new Player("FunName")
         def list = CorporationList.getInstance()
-        def corp = list.getCorporation("Phoenix")
+        def corp = list.getCorporation("Quantum")
+        def player = new Player("FunName")
         corp.addTile(new Tile(1, 'A' as char))
         corp.addTile(new Tile(2, 'A' as char))
         list.activateCorp(corp)
 
         when:
-        def result = player.buyStock("Phoenix")
+        def result = player.buyStock("Quantum")
 
         then:
         result == true

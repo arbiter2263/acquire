@@ -7,6 +7,8 @@ package acquire;
 
 import java.util.LinkedList;
 import lombok.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @EqualsAndHashCode @ToString
 public class Corporation {
@@ -16,6 +18,7 @@ public class Corporation {
     @Getter private static final int STOCKCAP = 25;
     @Getter private boolean stockCapMet;
     @Getter private int stockPrice;
+    private static Logger LOGGER = LoggerFactory.getLogger(Corporation.class);
 
     /**
      * Constructor for Corporation
@@ -48,6 +51,7 @@ public class Corporation {
     protected boolean addTile(Tile tile) {
         boolean didItWork = this.tileList.add(tile);
         updateStockPrice();
+        LOGGER.info("Tile {} was added to the {} corporation", tile.getSpace(), this.name);
         return didItWork;
     }
 
@@ -139,5 +143,6 @@ public class Corporation {
                 this.stockPrice = 1200;
             }
         }
+        LOGGER.info("Stock price for {} corporation updated", this.name);
     }
 }

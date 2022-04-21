@@ -11,6 +11,9 @@ import com.google.gson.Gson;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import lombok.*;
 
 @EqualsAndHashCode @ToString
@@ -19,6 +22,7 @@ public class CorporationList {
     @VisibleForTesting protected static CorporationList INSTANCE = null; // Field to hold singleton instance of class
     @Getter private ArrayList<Corporation> activeCorps;
     @Getter private ArrayList<Corporation> inactiveCorps;
+    private static Logger LOGGER = LoggerFactory.getLogger(CorporationList.class);
 
     /**
      * Private constructor to enforce only one instance
@@ -89,6 +93,7 @@ public class CorporationList {
                     activeCorps.add(corporation);
                     //Remove corp from inactiveCorps
                     iterator.remove();
+                    LOGGER.info("Corporation {} was activated", corporation.getName());
                     return;
                 }
             }
@@ -112,6 +117,7 @@ public class CorporationList {
                     inactiveCorps.add(corporation);
                     //Remove corp from activeCorps
                     iterator.remove();
+                    LOGGER.info("Corporation {} was moved to inactive state", corporation.getName());
                     return;
                 }
             }

@@ -18,14 +18,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import lombok.*;
 
 @EqualsAndHashCode @ToString
 public class Pile {
-    private static Logger LOGGER = Logger.getLogger(Pile.class.getName());
+    private static Logger LOGGER = LoggerFactory.getLogger(Pile.class);
     private static Pile instance = null;
     private final ArrayList<Tile> pile;
 
@@ -61,6 +62,7 @@ public class Pile {
             }
         //After all are added, shuffle the deck
         } shuffle();
+        LOGGER.info("Pile was created");
     }
 
 
@@ -96,10 +98,14 @@ public class Pile {
         Random random = new Random();
         int randomInt = random.nextInt(pile.size());
             if (pile.size() != 0) {
+                LOGGER.info("Tile {} was drawn and removed from the pile.", pile.get(randomInt).getSpace());
                 return pile.remove(randomInt);
                 //Print out remaining number of tiles?
+
             } else if (pile.size() < 1) {
+                LOGGER.info("Pile was empty when player tried to draw");
                     throw new IllegalArgumentException("The pile is empty, cannot draw more tiles");
+
             }
             return null;
        }
@@ -122,14 +128,11 @@ public class Pile {
     protected void saveGame() throws IOException {
 
         Gson gson = new Gson();
-        Tile[] newPile = new Tile[pile.size()];
-        for(int i = 0; i < pile.size(); i++){
-            newPile[i] = pile.get(i);
-        }
+
         try {
-            gson.toJson(newPile, new FileWriter("aqcuire/app/jsonsave/SaveGame.json"));
+            gson.toJson(Pile.getInstance(), new FileWriter("aqcuire/app/jsonsave/SaveGame.json"));
         }catch(Exception IOE){
-            LOGGER.info("Failed to write out save file");
+            LOGGER.info("Failed to write out Pile object to save file");
         }
     }
 
@@ -138,8 +141,9 @@ public class Pile {
      * so players can continue playing an
      * instance from before
      */
-    protected void loadGame(){
+    protected Pile loadGame(){
         Gson obj = new Gson();
-
+        LOGGER.info("LoadGame called successfully");
+        return null;
     }
 }

@@ -12,6 +12,10 @@ import org.json.JSONObject;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 import lombok.*;
 
 @EqualsAndHashCode @ToString
@@ -22,6 +26,7 @@ public class GameSystem {
     @Getter private static int turnCounter= 0;
     @Getter @Setter private static boolean isHardMode = false;
     @Getter @Setter private static int numOfPlayers = 0;
+    private static Logger LOGGER = LoggerFactory.getLogger(GameSystem.class);
 
     /**
      * GameSystem When called should start the first scene which prompts the user for difficulty and number of players through the UI
@@ -88,6 +93,7 @@ public class GameSystem {
 
             //instantiate the corporations
             CorporationList.getInstance();
+            LOGGER.info("Game initialized in easy mode");
         }else{
             //same initialization but without hints and hide player's stocks
             Gameboard.getInstance().initializeGame(numberOfPlayers);
@@ -96,6 +102,7 @@ public class GameSystem {
 
             //instantiate the corporations
             CorporationList.getInstance();
+            LOGGER.info("Game initialized in hard mode");
         }
     }
 
@@ -133,6 +140,7 @@ public class GameSystem {
             Gameboard.getInstance().placeTile(player, tile, stage);
             //remove tile from player hand
             player.playTile(tile);
+            LOGGER.info("A tile was played");
 
             return true;
         }
@@ -149,7 +157,7 @@ public class GameSystem {
      * @return
      */
     protected boolean tradeStock(Player player, Corporation corp1, Corporation corp2, int amount) {
-        player.tradeInStock(corp1, corp2, amount);          //we may want to add a parameter here that takes in the amount
+        player.tradeInStock(corp1, corp2, amount);
         int count = 0;
         while(count < amount){
 
@@ -161,7 +169,8 @@ public class GameSystem {
                 //using stockBought, this will not update and player stockCounts
                 corp2.stockBought();
             }
-        }
+        }   LOGGER.info("Player {} traded {} stocks from {} for {} stocks in {} .", player.getName(), count, corp1.getName(), count/2, corp2.getName());
+
         //since the player does not have to trade in all the defunct corp stocks
         return true;
     }
@@ -215,12 +224,8 @@ public class GameSystem {
         for(Tile tile : player.getHand()){
             if(!Gameboard.getInstance().isValidTilePlay(tile)){ //if is not a valid play
                 tilesToRemove.add(tile);
+                player.removeTile(tile);
             }
-        }
-
-        while(tilesToRemove.size() !=0){
-            player.removeTile(tilesToRemove.get(0));
-            tilesToRemove.remove(0);
         }
         return true;
     }
@@ -378,7 +383,7 @@ public class GameSystem {
        Pile.getInstance().loadGame();
 
        Gson gson = new Gson();
-       gson.fromJson();
+       //gson.fromJson();
     }
 
 }
