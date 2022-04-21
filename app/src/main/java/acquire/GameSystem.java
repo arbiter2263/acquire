@@ -6,11 +6,13 @@
 package acquire;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import javafx.stage.Stage;
 import org.json.JSONObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +23,11 @@ import lombok.*;
 @EqualsAndHashCode @ToString
 public class GameSystem {
     private static GameSystem INSTANCE = null;
-    @Getter private static ArrayList<Player> playerList = new ArrayList<Player>();
-    @Getter private static ArrayList<Player> mergerPlayerOrder = new ArrayList<Player>();
-    @Getter private static int turnCounter= 0;
-    @Getter @Setter private static boolean isHardMode = false;
-    @Getter @Setter private static int numOfPlayers = 0;
+    @Getter private  ArrayList<Player> playerList = new ArrayList<Player>();
+    @Getter private  ArrayList<Player> mergerPlayerOrder = new ArrayList<Player>();
+    @Getter private int turnCounter= 0;
+    @Getter @Setter private boolean isHardMode = false;
+    @Getter @Setter private int numOfPlayers = 0;
     private static Logger LOGGER = LoggerFactory.getLogger(GameSystem.class);
 
     /**
@@ -34,6 +36,7 @@ public class GameSystem {
      * or Standard mode, which will offer hints and allow players to see how many stocks other players have
      */
     protected GameSystem() {
+
         initializeGame(isHardMode, numOfPlayers);
     }
 
@@ -364,12 +367,19 @@ public class GameSystem {
      * so players can return at a later time
      */
     protected void saveGame() throws IOException {
-        Gameboard.getInstance().saveGame();
-        CorporationList.getInstance().saveGame();
-        Pile.getInstance().saveGame();
+        Writer writer = new FileWriter("acquire/app/jsonsave/SaveGame.json", false);
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+        Object[] gameObjects = new Object[4];
+        gameObjects[0] = Pile.getInstance();
+        gameObjects[1] = CorporationList.getInstance();
+        gameObjects[2] = Gameboard.getInstance();
+        gameObjects[3] = GameSystem.getInstance();
 
-        Gson gson = new Gson();
-        gson.toJson(GameSystem.getInstance(), new FileWriter("aqcuire/app/jsonsave/SaveGame.json") );
+        gson.toJson(gameObjects, writer); //Not appending to keep file fresh on new save
+        writer.flush();
+        writer.close();
     }
 
     /**
@@ -386,4 +396,8 @@ public class GameSystem {
        //gson.fromJson();
     }
 
+    public static void main(String[] args) throws IOException {
+        GameSystem game = new GameSystem();
+        game.saveGame();
+    }
 }

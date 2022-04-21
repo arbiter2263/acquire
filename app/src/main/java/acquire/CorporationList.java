@@ -10,7 +10,10 @@ import com.google.gson.Gson;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.*;
+
+import com.google.gson.GsonBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -153,25 +156,6 @@ public class CorporationList {
         return activeCorps.contains(CorporationList.getInstance().getCorporation(corp));
        }
 
-    /**
-     * Method to save instance of the game
-     * so players can return at a later time
-     */
-    protected void saveGame() throws IOException {
-        Gson gson = new Gson();
-
-        Corporation[] corpsInactive = new Corporation[inactiveCorps.size()];
-        for(int i = 0; i < inactiveCorps.size(); i++){
-            corpsInactive[i] = inactiveCorps.get(i);
-        }
-        gson.toJson(corpsInactive, new FileWriter("aqcuire/app/jsonsave/SaveGame.json"));
-
-        Corporation[] corpsActive = new Corporation[activeCorps.size()];
-        for(int i = 0; i < activeCorps.size(); i++){
-            corpsActive[i] = activeCorps.get(i);
-        }
-        gson.toJson(corpsActive, new FileWriter("aqcuire/app/jsonsave/SaveGame.json"));
-    }
 
     /**
      * Method to load a saved instance

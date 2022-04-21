@@ -7,6 +7,7 @@ package acquire;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
@@ -386,28 +387,6 @@ public class Gameboard {
         K1 K2 K3 ... K9
         L1 L2 L3 ... L9
          */
-    }
-
-    /**
-     * Method to save instance of the game
-     * so players can return at a later time
-     */
-    protected void saveGame() throws IOException {
-        Gson gson = new Gson();
-        Player[] playersList = new Player[players.size()];
-        for(int i = 0; i < players.size(); i++){
-            playersList[i] = players.get(i);
-        }
-        gson.toJson(playersList, new FileWriter("aqcuire/app/jsonsave/SaveGame.json"));
-
-        Tile[] playedTiles = new Tile[tilesPlayed.size()];
-        for(int i = 0; i < tilesPlayed.size(); i++){
-            playedTiles[i] = tilesPlayed.get(i);
-        }
-        gson.toJson(playedTiles, new FileWriter("aqcuire/app/jsonsave/SaveGame.json"));
-
-        gson.toJson(Gameboard.getInstance(), new FileWriter("aqcuire/app/jsonsave/SaveGame.json"));
-
     }
 
     /**

@@ -15,9 +15,12 @@ import com.google.gson.Gson;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+
+import com.google.gson.GsonBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -121,20 +124,6 @@ public class Pile {
         return pile.size();
     }
 
-    /**
-     * Method to save instance of the game
-     * so players can return at a later time
-     */
-    protected void saveGame() throws IOException {
-
-        Gson gson = new Gson();
-
-        try {
-            gson.toJson(Pile.getInstance(), new FileWriter("aqcuire/app/jsonsave/SaveGame.json"));
-        }catch(Exception IOE){
-            LOGGER.info("Failed to write out Pile object to save file");
-        }
-    }
 
     /**
      * Method to load a saved instance
