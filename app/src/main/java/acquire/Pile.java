@@ -156,7 +156,7 @@ public class Pile {
      * instance from before
      * @return
      */
-    protected void loadGame() throws FileNotFoundException {
+    protected void loadPile() throws FileNotFoundException {
         //Empty old instance pile so it can be replaced with the load instance
         if(pile.size() > 0){
             while(pile.size() > 0){
