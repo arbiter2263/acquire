@@ -10,9 +10,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import javafx.stage.Stage;
 
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.lang.reflect.Type;
 import java.util.LinkedList;
 import lombok.*;
 import org.slf4j.Logger;
@@ -390,12 +389,38 @@ public class Gameboard {
     }
 
     /**
-     * Method to load a saved instance
-     * so players can continue playing an
-     * instance from before
+     * Write out the current gameboard fields to be saved
+     * for later
+     * @throws IOException
      */
-    protected void loadGame(){
-        Gson obj = new Gson();
+    protected void saveGameboard() throws IOException {
+        Writer writer = new FileWriter("acquire/app/jsonsave/gameboard.json", false);
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+        try{
+            gson.toJson(Gameboard.getInstance(), writer); //Not appending to keep file fresh on new save
+        }catch(Exception IOE){
+            LOGGER.warn("Unable to write game objects to file to save.");
+        }
+        writer.flush();
+        writer.close();
+        LOGGER.info("Game was saved");
+    }
+
+
+    /**
+     * loadGameboard will load a previous instance of
+     * the gameboard including players
+     * @throws FileNotFoundException
+     */
+    protected void loadGameboard() throws FileNotFoundException {
+        Gson gson = new Gson();
+        Reader reader = new FileReader("acquire/app/jsonsave/gameboard.json");
+        Gameboard newGameboard = gson.fromJson(reader, (Type) Gameboard.class);
+        Gameboard.getInstance().board = newGameboard.board;
+        Gameboard.getInstance().tilesPlayed = newGameboard.tilesPlayed;
+        Gameboard.getInstance().players = newGameboard.players;
 
     }
 
