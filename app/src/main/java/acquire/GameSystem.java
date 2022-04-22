@@ -396,6 +396,4 @@ public class GameSystem {
         GameSystem.getInstance().turnCounter = newGameSystem.turnCounter;
         GameSystem.getInstance().mergerPlayerOrder = newGameSystem.mergerPlayerOrder;
     }
-
-
 }
