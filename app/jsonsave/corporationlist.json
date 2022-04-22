@@ -1,0 +1,55 @@
+{
+  "activeCorps": [
+    {
+      "name": "America",
+      "tileList": [],
+      "stockCount": 0,
+      "stockCapMet": false,
+      "stockPrice": 0
+    }
+  ],
+  "inactiveCorps": [
+    {
+      "name": "Sackson",
+      "tileList": [],
+      "stockCount": 0,
+      "stockCapMet": false,
+      "stockPrice": 0
+    },
+    {
+      "name": "Zeta",
+      "tileList": [],
+      "stockCount": 0,
+      "stockCapMet": false,
+      "stockPrice": 0
+    },
+    {
+      "name": "Hydra",
+      "tileList": [],
+      "stockCount": 0,
+      "stockCapMet": false,
+      "stockPrice": 0
+    },
+    {
+      "name": "Fusion",
+      "tileList": [],
+      "stockCount": 0,
+      "stockCapMet": false,
+      "stockPrice": 0
+    },
+    {
+      "name": "Phoenix",
+      "tileList": [],
+      "stockCount": 0,
+      "stockCapMet": false,
+      "stockPrice": 0
+    },
+    {
+      "name": "Quantum",
+      "tileList": [],
+      "stockCount": 0,
+      "stockCapMet": false,
+      "stockPrice": 0
+    }
+  ]
+}

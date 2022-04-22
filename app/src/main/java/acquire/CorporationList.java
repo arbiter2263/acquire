@@ -8,9 +8,8 @@ package acquire;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.gson.Gson;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
+import java.lang.reflect.Type;
 import java.util.*;
 
 import com.google.gson.GsonBuilder;
@@ -158,12 +157,41 @@ public class CorporationList {
 
 
     /**
-     * Method to load a saved instance
-     * so players can continue playing an
-     * instance from before
+     * saveCorpList will save the corporation objects in this
+     * list to use to load later should the players choose to
+     * stop playing for a bit
+      * @throws IOException
      */
-    protected void loadGame(){
-        Gson obj = new Gson();
+    protected void saveCorpList() throws IOException {
+        Writer writer = new FileWriter("acquire/app/jsonsave/corporationlist.json", false);
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+        try{
+            gson.toJson(CorporationList.getInstance(), writer); //Not appending to keep file fresh on new save
+        }catch(Exception IOE){
+            LOGGER.warn("Unable to write game objects to file to save.");
+        }
+        writer.flush();
+        writer.close();
+        LOGGER.info("Game was saved");
+    }
 
+
+    /**
+     *  loadCorpList loads in saved corporations from the save
+     *  file and replaces the current instance corporations with
+     *  the saved ones
+     * @throws FileNotFoundException
+     */
+    protected void loadCorpList() throws FileNotFoundException {
+
+        Gson gson = new Gson();
+        Reader reader = new FileReader("acquire/app/jsonsave/corporationlist.json");
+        CorporationList newCorpList = gson.fromJson(reader, (Type) CorporationList.class);
+
+        //Now replace current instance with saved instance corporations
+        CorporationList.getInstance().activeCorps = newCorpList.activeCorps;
+        CorporationList.getInstance().inactiveCorps = newCorpList.inactiveCorps;
     }
 }
