@@ -140,8 +140,12 @@ public class GameBoardScreen {
         gridPane.add(cash, 0, 10);
 
         //Add Player turn text
-        TextArea playerUp = new TextArea(user.getName());
-        gridPane.add(playerUp, 11, 16);
+        TextArea playerUp = new TextArea(user.getName() + " is up!");
+        playerUp.setEditable(false);
+        playerUp.setPrefWidth(150);
+        playerUp.setPrefHeight(5);
+        gridPane.add(playerUp, 0, 15);
+
         // Add View Your Stocks Button
         Button viewStocks = new Button("Your Stocks");
         viewStocks.setPrefHeight(5);
@@ -157,7 +161,7 @@ public class GameBoardScreen {
 
         // Displays the end game button if game can be ended
         Button endGame = new Button("End Game");
-        if (GameSystem.getInstance().endGameCheck()) gridPane.add(endGame, 10, 13);
+        if (GameSystem.getInstance().endGameCheck()) gridPane.add(endGame, 11, 15);
 
         //setup game end button
         endGame.setOnAction(new EventHandler<ActionEvent>() {
@@ -173,34 +177,34 @@ public class GameBoardScreen {
 
         // setup tile buttons
         Button tile1 = new Button(user.getHand().get(0).getSpace());
-        tile1.setPrefHeight(50);
+        tile1.setPrefHeight(5);
         tile1.setPrefWidth(150);
-        gridPane.add(tile1, 1, 15, 2, 1);
+        gridPane.add(tile1, 11, 1, 2, 1);
 
         Button tile2 = new Button(user.getHand().get(1).getSpace());
-        tile2.setPrefHeight(50);
+        tile2.setPrefHeight(5);
         tile2.setPrefWidth(150);
-        gridPane.add(tile2, 3, 15, 2, 1);
+        gridPane.add(tile2, 11, 3, 2, 1);
 
         Button tile3 = new Button(user.getHand().get(2).getSpace());
-        tile3.setPrefHeight(50);
+        tile3.setPrefHeight(5);
         tile3.setPrefWidth(150);
-        gridPane.add(tile3, 5, 15, 2, 1);
+        gridPane.add(tile3, 11, 5, 2, 1);
 
         Button tile4 = new Button(user.getHand().get(3).getSpace());
-        tile4.setPrefHeight(50);
+        tile4.setPrefHeight(5);
         tile4.setPrefWidth(150);
-        gridPane.add(tile4, 7, 15, 2, 1);
+        gridPane.add(tile4, 11, 7, 2, 1);
 
         Button tile5 = new Button(user.getHand().get(4).getSpace());
-        tile5.setPrefHeight(50);
+        tile5.setPrefHeight(5);
         tile5.setPrefWidth(150);
-        gridPane.add(tile5, 9, 15,2, 1);
+        gridPane.add(tile5, 11, 9,2, 1);
 
         Button tile6 = new Button(user.getHand().get(5).getSpace());
-        tile6.setPrefHeight(50);
+        tile6.setPrefHeight(5);
         tile6.setPrefWidth(150);
-        gridPane.add(tile6, 11, 15, 2, 1);
+        gridPane.add(tile6, 11, 11, 2, 1);
 
         tile1.setOnAction(event -> {
             GameSystem.getInstance().playATile(user, user.getHand().get(0), primaryStage);

@@ -52,7 +52,8 @@ public class Gameboard {
      */
     protected void initializeGame(int numOfPlayers){
         for (int i = 0; i < numOfPlayers; i++) {
-            getInstance().players.add(new Player("Player " + i));
+            int e = i+1;
+            getInstance().players.add(new Player("Player " + e));
         }
         LOGGER.info("Game initialized for {} players", numOfPlayers);
     }
