@@ -120,6 +120,7 @@ public class GameSystem {
         Gameboard.getInstance().newGame();
         CorporationList.getInstance().newGame();
         Pile.getInstance().newGame();
+        mergerPlayerOrder = new ArrayList<>();
     }
 
     /**
@@ -280,7 +281,6 @@ public class GameSystem {
         }
         return false; //Game cannot be ended yet do not present option to end
     }
-
 
     /**
      * Method that ends the game by selling all players' stocks and ordering them according to who has the most money

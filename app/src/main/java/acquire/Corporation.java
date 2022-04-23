@@ -20,6 +20,12 @@ public class Corporation {
     @Getter private int stockPrice;
     private static Logger LOGGER = LoggerFactory.getLogger(Corporation.class);
 
+    @Override
+    public boolean equals(Object obj) {
+        Corporation corp = (Corporation) obj;
+        return this.getName() == corp.getName();
+    }
+
     /**
      * Constructor for Corporation
      * @param name  The name of the corporation being created
