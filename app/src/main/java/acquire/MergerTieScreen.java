@@ -48,7 +48,7 @@ public class MergerTieScreen {
     }
 
     private void addUIControls(Stage primaryStage, GridPane gridPane) throws FileNotFoundException {
-        TextArea merger = new TextArea("A merger has occurred between these 2 corporations: REPLACE ME 1 and REPLACE ME 2. The Corporations are the same size, select a corporation you would like to merge and take over. ");
+        TextArea merger = new TextArea("A merger has occurred between these 2 corporations: " + corporation1 + " and " + corporation2 + ". The Corporations are the same size, select a corporation you would like to merge and take over. ");
         merger.setWrapText(true);
         merger.setPrefHeight(100);
         merger.setEditable(false);

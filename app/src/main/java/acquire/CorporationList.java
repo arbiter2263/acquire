@@ -120,6 +120,10 @@ public class CorporationList {
                     //Remove corp from activeCorps
                     iterator.remove();
                     LOGGER.info("Corporation {} was moved to inactive state", corporation.getName());
+                    //remove tiles from tilelist
+                    while(corporation.getTileList().size() != 0) {
+                        corporation.getTileList().remove();
+                    }
                     return;
                 }
             }

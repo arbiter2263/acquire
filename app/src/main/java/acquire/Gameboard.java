@@ -107,8 +107,6 @@ public class Gameboard {
                 expandCorp(tile, indexes.get(0));
             } else if (isTouchingPlacedTile(tile)[0] > -1){
                 makeNewCorp(player, tile, isTouchingPlacedTile(tile), primaryStage);
-            } else {
-                //just place tile
             }
             addTileToBoard(tile);
             LOGGER.info("Tile {} was added to the gameboard", tile.getSpace());
@@ -143,7 +141,7 @@ public class Gameboard {
         LinkedList<Player> hasStake = new LinkedList<>();
         for (int index : indexes) {
             for (Player player : players) {
-                if (player.getStockCount(CorporationList.getInstance().getActiveCorps().get(indexes.get(index)).getName()) > 0) {
+                if (player.getStockCount(CorporationList.getInstance().getActiveCorps().get(index).getName()) > 0) {
                     if (!hasStake.contains(player)) {
                         hasStake.add(player);
                     }
@@ -162,7 +160,7 @@ public class Gameboard {
         LinkedList<Player> shareHolders;
         Corporation biggestCorp = CorporationList.getInstance().getActiveCorps().get(indexes.getFirst());
         for (int i = 1; i < indexes.size(); i++) {
-            Corporation corp = CorporationList.getInstance().getActiveCorps().get(i);
+            Corporation corp = CorporationList.getInstance().getActiveCorps().get(indexes.get(i));
             if (corp.getTileList().size() == biggestCorp.getTileList().size()) {
                 //We have a tie
                 MergerTieScreen tieScreen = new MergerTieScreen();
@@ -185,14 +183,16 @@ public class Gameboard {
                 }
             }
         }
+        for (int i=0; i<indexes.size(); i++) {
+            if (CorporationList.getInstance().getActiveCorps().get(indexes.get(i)).getName().equals(biggestCorp.getName())) {indexes.remove(i);}
+        }
+
         biggestCorp.addTile(tile);
-        for (int index : indexes) {
-            Corporation c = CorporationList.getInstance().getActiveCorps().get(index);
+        for (int i=0; i<indexes.size(); i++) {
+            Corporation c = CorporationList.getInstance().getActiveCorps().get(indexes.get(i));
             CorporationList.getInstance().deactivateCorp(c);
         }
-        for (int index : indexes) {
-            if (CorporationList.getInstance().getActiveCorps().get(index).getName().equals(biggestCorp.getName())) {indexes.remove(index);}
-        }
+
         shareHolders = checkStakes(indexes);
         MergerScreen playerChoices = new MergerScreen();
         corpName = null;
