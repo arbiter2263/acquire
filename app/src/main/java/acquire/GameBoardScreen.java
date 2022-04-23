@@ -19,6 +19,9 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.LinkedList;
 
 public class GameBoardScreen {
@@ -77,6 +80,16 @@ public class GameBoardScreen {
         saveGame.setDefaultButton(false);
         gridPane.add(saveGame, 0, 2);
 
+        // Set save logic
+        saveGame.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    GameSystem.getInstance().saveGameSystem();
+                } catch (IOException ignored) {}
+            }
+        });
+
         // Add Load Game Button
         Button loadGame = new Button("Load Game");
         loadGame.setPrefHeight(5);
@@ -84,6 +97,16 @@ public class GameBoardScreen {
         loadGame.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
         loadGame.setDefaultButton(false);
         gridPane.add(loadGame, 0, 3);
+
+        // Set load game logic
+        loadGame.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    GameSystem.getInstance().loadGameSystem();
+                } catch (FileNotFoundException ignored) {}
+            }
+        });
 
         // Add Exit Button
         Button exit = new Button("Exit");
