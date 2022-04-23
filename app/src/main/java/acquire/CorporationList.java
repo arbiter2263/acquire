@@ -8,7 +8,14 @@ package acquire;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.gson.Gson;
 
+import java.io.*;
+import java.lang.reflect.Type;
 import java.util.*;
+
+import com.google.gson.GsonBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import lombok.*;
 
 @EqualsAndHashCode @ToString
@@ -17,6 +24,7 @@ public class CorporationList {
     @VisibleForTesting protected static CorporationList INSTANCE = null; // Field to hold singleton instance of class
     @Getter private ArrayList<Corporation> activeCorps;
     @Getter private ArrayList<Corporation> inactiveCorps;
+    private static Logger LOGGER = LoggerFactory.getLogger(CorporationList.class);
 
     /**
      * Private constructor to enforce only one instance
@@ -87,6 +95,7 @@ public class CorporationList {
                     activeCorps.add(corporation);
                     //Remove corp from inactiveCorps
                     iterator.remove();
+                    LOGGER.info("Corporation {} was activated", corporation.getName());
                     return;
                 }
             }
@@ -110,6 +119,7 @@ public class CorporationList {
                     inactiveCorps.add(corporation);
                     //Remove corp from activeCorps
                     iterator.remove();
+                    LOGGER.info("Corporation {} was moved to inactive state", corporation.getName());
                     return;
                 }
             }
@@ -145,22 +155,43 @@ public class CorporationList {
         return activeCorps.contains(CorporationList.getInstance().getCorporation(corp));
        }
 
-    /**
-     * Method to save instance of the game
-     * so players can return at a later time
-     */
-    protected void saveGame(){
-        Gson obj = new Gson();
 
+    /**
+     * saveCorpList will save the corporation objects in this
+     * list to use to load later should the players choose to
+     * stop playing for a bit
+      * @throws IOException
+     */
+    protected void saveCorpList() throws IOException {
+        Writer writer = new FileWriter("acquire/app/jsonsave/corporationlist.json", false);
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+        try{
+            gson.toJson(CorporationList.getInstance(), writer); //Not appending to keep file fresh on new save
+        }catch(Exception IOE){
+            LOGGER.warn("Unable to write game objects to file to save.");
+        }
+        writer.flush();
+        writer.close();
+        LOGGER.info("Game was saved");
     }
 
-    /**
-     * Method to load a saved instance
-     * so players can continue playing an
-     * instance from before
-     */
-    protected void loadGame(){
-        Gson obj = new Gson();
 
+    /**
+     *  loadCorpList loads in saved corporations from the save
+     *  file and replaces the current instance corporations with
+     *  the saved ones
+     * @throws FileNotFoundException
+     */
+    protected void loadCorpList() throws FileNotFoundException {
+
+        Gson gson = new Gson();
+        Reader reader = new FileReader("acquire/app/jsonsave/corporationlist.json");
+        CorporationList newCorpList = gson.fromJson(reader, (Type) CorporationList.class);
+
+        //Now replace current instance with saved instance corporations
+        CorporationList.getInstance().activeCorps = newCorpList.activeCorps;
+        CorporationList.getInstance().inactiveCorps = newCorpList.inactiveCorps;
     }
 }

@@ -13,15 +13,29 @@ Tiles can be taken and added back into this "pile"
 
 import com.google.gson.Gson;
 
+import java.io.*;
+import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+
+
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 import lombok.*;
 
 @EqualsAndHashCode @ToString
 public class Pile {
+    private static Logger LOGGER = LoggerFactory.getLogger(Pile.class);
     private static Pile instance = null;
-    private final ArrayList<Tile> pile;
+    private ArrayList<Tile> pile;
 
     private static final int CAPACITY = 108;
 
@@ -55,6 +69,7 @@ public class Pile {
             }
         //After all are added, shuffle the deck
         } shuffle();
+        LOGGER.info("Pile was created");
     }
 
 
@@ -90,10 +105,14 @@ public class Pile {
         Random random = new Random();
         int randomInt = random.nextInt(pile.size());
             if (pile.size() != 0) {
+                LOGGER.info("Tile {} was drawn and removed from the pile.", pile.get(randomInt).getSpace());
                 return pile.remove(randomInt);
                 //Print out remaining number of tiles?
+
             } else if (pile.size() < 1) {
+                LOGGER.info("Pile was empty when player tried to draw");
                     throw new IllegalArgumentException("The pile is empty, cannot draw more tiles");
+
             }
             return null;
        }
@@ -109,22 +128,44 @@ public class Pile {
         return pile.size();
     }
 
-    /**
-     * Method to save instance of the game
-     * so players can return at a later time
-     */
-    protected void saveGame(){
-        Gson obj = new Gson();
 
+    /**
+     *
+     * @throws IOException
+     */
+
+    protected void savePile() throws IOException {
+        Writer writer = new FileWriter("acquire/app/jsonsave/pile.json", false);
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+        try{
+            gson.toJson(Pile.getInstance(), writer); //Not appending to keep file fresh on new save
+        }catch(Exception IOE){
+            LOGGER.warn("Unable to write game objects to file to save.");
+        }
+        writer.flush();
+        writer.close();
+        LOGGER.info("Game was saved");
     }
+
 
     /**
      * Method to load a saved instance
      * so players can continue playing an
      * instance from before
+     * @return
      */
-    protected void loadGame(){
-        Gson obj = new Gson();
-
+    protected void loadPile() throws FileNotFoundException {
+        //Empty old instance pile so it can be replaced with the load instance
+        if(pile.size() > 0){
+            while(pile.size() > 0){
+                pile.remove(0);
+            }
+        }
+        Gson gson = new Gson();
+        Reader reader = new FileReader("acquire/app/jsonsave/pile.json");
+        Pile newPile = gson.fromJson(reader, (Type) Pile.class);
+        Pile.getInstance().pile = newPile.pile;
     }
 }

@@ -6,20 +6,28 @@
 package acquire;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import javafx.stage.Stage;
 import org.json.JSONObject;
 
+import java.io.*;
+import java.lang.reflect.Type;
 import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 import lombok.*;
 
 @EqualsAndHashCode @ToString
 public class GameSystem {
     private static GameSystem INSTANCE = null;
-    @Getter private static ArrayList<Player> playerList = new ArrayList<Player>();
-    @Getter private static ArrayList<Player> mergerPlayerOrder = new ArrayList<Player>();
-    @Getter private static int turnCounter= 0;
-    @Getter @Setter private static boolean isHardMode = false;
-    @Getter @Setter private static int numOfPlayers = 0;
+    @Getter private ArrayList<Player> playerList = new ArrayList<>();
+    @Getter private ArrayList<Player> mergerPlayerOrder = new ArrayList<>();
+    @Getter private int turnCounter= 0;
+    @Getter @Setter private boolean isHardMode = false;
+    @Getter @Setter private int numOfPlayers = 0;
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameSystem.class);
 
     /**
      * GameSystem When called should start the first scene which prompts the user for difficulty and number of players through the UI
@@ -27,6 +35,7 @@ public class GameSystem {
      * or Standard mode, which will offer hints and allow players to see how many stocks other players have
      */
     protected GameSystem() {
+
         initializeGame(isHardMode, numOfPlayers);
     }
 
@@ -72,20 +81,21 @@ public class GameSystem {
 
 
     /**
-     *  Method to initialize all of the objects for a new game
+     *  Method to initialize all the objects for a new game
      * upon initializing game, system should initialize all require objects
      * to get started: Player objects, Pile object etc.
      */
     protected void initializeGame(boolean isHardMode, int numberOfPlayers){ //numberOfPlayers should come in from UI
         newGame();
-        //instantiate gameboard and fill it with players
-        if (!isHardMode) {
+        //instantiate the game board and fill it with players
+        if (isHardMode == false) {
             Gameboard.getInstance().initializeGame(numberOfPlayers);
             //instantiate a pile of tiles
             Pile.getInstance();
 
             //instantiate the corporations
             CorporationList.getInstance();
+            LOGGER.info("Game initialized in easy mode");
         }else{
             //same initialization but without hints and hide player's stocks
             Gameboard.getInstance().initializeGame(numberOfPlayers);
@@ -94,6 +104,7 @@ public class GameSystem {
 
             //instantiate the corporations
             CorporationList.getInstance();
+            LOGGER.info("Game initialized in hard mode");
         }
     }
 
@@ -117,7 +128,7 @@ public class GameSystem {
      * this method should check that the tile the player chose can be played
      * @param player  The player who has the current turn
      * @param tile    The tile chosen to be played
-     * @return
+     * @return return true if successfully played tile
      */
     protected boolean playATile(Player player, Tile tile, Stage stage){
 
@@ -128,6 +139,7 @@ public class GameSystem {
             Gameboard.getInstance().placeTile(player, tile, stage);
             //remove tile from player hand
             player.playTile(tile);
+            LOGGER.info("A tile was played");
 
             return true;
         }
@@ -141,10 +153,10 @@ public class GameSystem {
      * @param player  The current player wanting to trade
      * @param corp1   This is the defunct corp, the player can trade in stocks for corp2
      * @param corp2   This is the remaining super corporation, the player will get 1 stock in this corp
-     * @return
+     * @return return true if stock is traded in
      */
     protected boolean tradeStock(Player player, Corporation corp1, Corporation corp2, int amount) {
-        player.tradeInStock(corp1, corp2, amount);          //we may want to add a parameter here that takes in the amount
+        player.tradeInStock(corp1, corp2, amount);
         int count = 0;
         while(count < amount){
 
@@ -156,7 +168,8 @@ public class GameSystem {
                 //using stockBought, this will not update and player stockCounts
                 corp2.stockBought();
             }
-        }
+        }   LOGGER.info("Player {} traded {} stocks from {} for {} stocks in {} .", player.getName(), count, corp1.getName(), count/2, corp2.getName());
+
         //since the player does not have to trade in all the defunct corp stocks
         return true;
     }
@@ -182,7 +195,7 @@ public class GameSystem {
      * Method can be used during
      * @param player Current player who is taking their turn
      * @param corp   The corporation the player has chosen to buy stocks from
-     * @amount       The amount of stocks the player wants to buy from corp
+     * @param amount The amount of stocks the player wants to buy from corp
      *               A player can only purchase up to 3 stocks per turn
      * @return
      * UI event handler calls this method feeding it the params
@@ -196,26 +209,20 @@ public class GameSystem {
     }
 
     /**
-     * Method to dump unplayable tiles at the end of players turn
+     * Method to dump unplayable tiles at the end of player's turn
      * before they draw tile(s) to end their turn.  This method should
      * check each of the tiles in the players hand to see if any
      * are unplayable (if they merge 2 safe corporations) and removes
      * them from the players hand.
-     * @param player
+     * @param player the player currently taking their turn
      * @return
      * This method should be checked after every players turn
      */
     protected boolean removeUnplayableTile(Player player){
-        ArrayList<Tile> tilesToRemove = new ArrayList<>();
         for(Tile tile : player.getHand()){
             if(!Gameboard.getInstance().isValidTilePlay(tile)){ //if is not a valid play
-                tilesToRemove.add(tile);
+                player.removeTile(tile);
             }
-        }
-
-        while(tilesToRemove.size() !=0){
-            player.removeTile(tilesToRemove.get(0));
-            tilesToRemove.remove(0);
         }
         return true;
     }
@@ -223,12 +230,12 @@ public class GameSystem {
 
     /**
      * Method for when a player draws a tile to end their turn
-     * This method will check the size of the players hand, draws a tile which
+     * This method will check the size of the players hand, draws a tile
      * if it is less than 6, then it will draw a tile and add it to the players hand
      * and check again if there are less than 6 tiles. This will also
      * remove the tile from the pile.
      * @param player  The player drawing to end their turn
-     * @return
+     * @return returns true if successfully draws tile from pile
      * UI handler will call this method after user has selected to draw tile
      */
     protected boolean drawTile(Player player) {
@@ -251,7 +258,7 @@ public class GameSystem {
      * Criteria: either 1 corporation has 41 tiles and/or all active corporations are safe
      * end game option might just be an addition button that when clicked activates
      * the end game procedure
-     * @return
+     * @return returns true if endgame criteria is met else false
      */
     protected boolean endGameCheck(){
 
@@ -275,10 +282,6 @@ public class GameSystem {
         return false; //Game cannot be ended yet do not present option to end
     }
 
-    /**
-     * Method that ends the game by selling all players' stocks and ordering them according to who has the most money
-     * @return  LinkedList<Player>  The ordered list of players
-     */
 
     /**
      * Method that ends the game by selling all players' stocks and ordering them according to who has the most money
@@ -350,26 +353,44 @@ public class GameSystem {
     }
 
     /**
-     * Method to save instance of the game
-     * so players can return at a later time
+     * Write out the current gamesystem fields to be saved
+     * for later also calls all other save methods to be written
+     * to be used later
+     * @throws IOException
      */
-    protected void saveGame(){
-        Gameboard.getInstance().saveGame();
-        CorporationList.getInstance().saveGame();
-        Pile.getInstance().saveGame();
-
+    protected void saveGameSystem() throws IOException {
+        Writer writer = new FileWriter("acquire/app/jsonsave/gamesystem.json", false);
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+        try{
+            gson.toJson(GameSystem.getInstance(), writer); //Not appending to keep file fresh on new save
+            Pile.getInstance().savePile();
+            CorporationList.getInstance().saveCorpList();
+            Gameboard.getInstance().saveGameboard();
+        }catch(Exception IOE){
+            LOGGER.warn("Unable to write game objects to file to save.");
+        }
+        writer.flush();
+        writer.close();
+        LOGGER.info("Game was saved");
     }
+
 
     /**
-     * Method to load a saved instance
-     * so players can continue playing an
-     * instance from before
+     * loadGameSystem will load a previous instance of
+     * the gameSystem as well as call the load methods for
+     * each of the other required classes for the game
+     * @throws FileNotFoundException
      */
-    protected void loadGame(){
-       Gameboard.getInstance().loadGame();
-       CorporationList.getInstance().loadGame();
-       Pile.getInstance().loadGame();
-
+    protected void loadGameSystem() throws FileNotFoundException {
+        Gson gson = new Gson();
+        Reader reader = new FileReader("acquire/app/jsonsave/gamesystem.json");
+        GameSystem newGameSystem = gson.fromJson(reader, (Type) GameSystem.class);
+        GameSystem.getInstance().isHardMode = newGameSystem.isHardMode;
+        GameSystem.getInstance().numOfPlayers = newGameSystem.numOfPlayers;
+        GameSystem.getInstance().playerList = newGameSystem.playerList;
+        GameSystem.getInstance().turnCounter = newGameSystem.turnCounter;
+        GameSystem.getInstance().mergerPlayerOrder = newGameSystem.mergerPlayerOrder;
     }
-
 }

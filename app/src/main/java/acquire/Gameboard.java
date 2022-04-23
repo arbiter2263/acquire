@@ -7,11 +7,15 @@ package acquire;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import javafx.stage.Stage;
 
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.lang.reflect.Type;
 import java.util.LinkedList;
 import lombok.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @EqualsAndHashCode @ToString
 public class Gameboard {
@@ -21,7 +25,7 @@ public class Gameboard {
     @VisibleForTesting
     private static Gameboard INSTANCE = null; // Field to hold singleton instance of class
     @Setter private static String corpName; //Global var for merger call to MergerTieScreen
-
+    private static Logger LOGGER = LoggerFactory.getLogger(Gameboard.class);
     /**
      * Private constructor to enforce only one instance
      */
@@ -50,6 +54,7 @@ public class Gameboard {
         for (int i = 0; i < numOfPlayers; i++) {
             getInstance().players.add(new Player("Player " + i));
         }
+        LOGGER.info("Game initialized for {} players", numOfPlayers);
     }
 
     /**
@@ -105,6 +110,7 @@ public class Gameboard {
                 //just place tile
             }
             addTileToBoard(tile);
+            LOGGER.info("Tile {} was added to the gameboard", tile.getSpace());
             return true;
         } else {
             return false;
@@ -347,7 +353,7 @@ public class Gameboard {
         CorporationList.getInstance().activateCorp(corp);
         corp.addTile(tile);
         corp.addTile(Gameboard.getInstance().board[rowColumnTile2[0]][rowColumnTile2[1]]);
-
+        LOGGER.info("New corporation was formed");
         player.addFoundersStock(corp);
     }
 
@@ -404,21 +410,38 @@ public class Gameboard {
     }
 
     /**
-     * Method to save instance of the game
-     * so players can return at a later time
+     * Write out the current gameboard fields to be saved
+     * for later
+     * @throws IOException
      */
-    protected void saveGame(){
-        Gson obj = new Gson();
-
+    protected void saveGameboard() throws IOException {
+        Writer writer = new FileWriter("acquire/app/jsonsave/gameboard.json", false);
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+        try{
+            gson.toJson(Gameboard.getInstance(), writer); //Not appending to keep file fresh on new save
+        }catch(Exception IOE){
+            LOGGER.warn("Unable to write game objects to file to save.");
+        }
+        writer.flush();
+        writer.close();
+        LOGGER.info("Game was saved");
     }
 
+
     /**
-     * Method to load a saved instance
-     * so players can continue playing an
-     * instance from before
+     * loadGameboard will load a previous instance of
+     * the gameboard including players
+     * @throws FileNotFoundException
      */
-    protected void loadGame(){
-        Gson obj = new Gson();
+    protected void loadGameboard() throws FileNotFoundException {
+        Gson gson = new Gson();
+        Reader reader = new FileReader("acquire/app/jsonsave/gameboard.json");
+        Gameboard newGameboard = gson.fromJson(reader, (Type) Gameboard.class);
+        Gameboard.getInstance().board = newGameboard.board;
+        Gameboard.getInstance().tilesPlayed = newGameboard.tilesPlayed;
+        Gameboard.getInstance().players = newGameboard.players;
 
     }
 
