@@ -411,6 +411,15 @@ public class Gameboard {
     }
 
     /**
+     * Resets all fields to a new game value
+     */
+    protected void newGame(){
+        Gameboard.getInstance().tilesPlayed = new LinkedList<Tile>();
+        Gameboard.getInstance().players = new LinkedList<Player>();
+        Gameboard.getInstance().board = new Tile[12][9];
+    }
+
+    /**
      * Write out the current gameboard fields to be saved
      * for later
      * @throws IOException

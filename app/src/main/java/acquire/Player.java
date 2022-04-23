@@ -61,12 +61,8 @@ public class Player {
             if (this.money >= cost) {
                 money -= cost;
                 corp.stockBought();
-                try {
-                    int oldStockCount = this.stocks.get(corp);
-                    this.stocks.replace(corp, (oldStockCount + 1));
-                } catch (NullPointerException ignored) {
-                    this.stocks.replace(corp, 1);
-                }
+                int oldStockCount = this.stocks.get(corp);
+                this.stocks.replace(corp, (oldStockCount + 1));
                 LOGGER.info("Player {} bought stock in corporation: {}", this, stockName);
                 return true;
             } else {
@@ -97,7 +93,6 @@ public class Player {
             this.stocks.replace(defunctCorp, newCountDefunct);
             this.stocks.replace(survivingCorp, newStockCount);
         }
-
     }
 
     /**
@@ -152,12 +147,8 @@ public class Player {
      * @param newCorp  The newly formed corporation
      */
     protected void addFoundersStock(Corporation newCorp) {
-        try {
-            int oldStockCount = this.stocks.get(newCorp);
-            this.stocks.replace(newCorp, oldStockCount + 1);
-        } catch (NullPointerException ignored) {
-            this.stocks.replace(newCorp, 1);
-        }
+        int oldStockCount = this.stocks.get(newCorp);
+        this.stocks.replace(newCorp, oldStockCount + 1);
         LOGGER.info("Player {} formed corporation {} and they gained 1 stock in this corporation", this.name, newCorp.getName());
     }
 
@@ -222,4 +213,5 @@ public class Player {
     protected void giveBonusMoney(int bonus) {
         this.money += bonus;
     }
+
 }

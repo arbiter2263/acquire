@@ -168,4 +168,12 @@ public class Pile {
         Pile newPile = gson.fromJson(reader, (Type) Pile.class);
         Pile.getInstance().pile = newPile.pile;
     }
+
+    /**
+     * Create a fresh new pile and replace the old one
+     * with it
+     */
+    protected void newGame(){
+        this.pile = new Pile().pile;
+    }
 }

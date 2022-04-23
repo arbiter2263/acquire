@@ -117,6 +117,9 @@ public class GameSystem {
         } catch (NullPointerException ignored) {}
         isHardMode = false;
         turnCounter = 0;
+        Gameboard.getInstance().newGame();
+        CorporationList.getInstance().newGame();
+        Pile.getInstance().newGame();
     }
 
     /**
@@ -380,6 +383,11 @@ public class GameSystem {
      * @throws FileNotFoundException
      */
     protected void loadGameSystem() throws FileNotFoundException {
+
+        Pile.getInstance().loadPile();
+        CorporationList.getInstance().loadCorpList();
+        Gameboard.getInstance().loadGameboard();
+
         Gson gson = new Gson();
         Reader reader = new FileReader("acquire/app/jsonsave/gamesystem.json");
         GameSystem newGameSystem = gson.fromJson(reader, (Type) GameSystem.class);
