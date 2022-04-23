@@ -72,7 +72,7 @@ public class Player {
                 }
             }
         }
-        throw new NoSuchElementException("The named corporation is not active, so stock can not be bought.");
+        throw new NoSuchElementException("The named corporation <" + stockName + "> is not active, so stock can not be bought.");
     }
 
     /**

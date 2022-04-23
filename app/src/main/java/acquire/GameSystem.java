@@ -337,6 +337,26 @@ public class GameSystem {
         Player minorityHolder = null;
         boolean tie = false;
         for (Player player : Gameboard.getInstance().getPlayers()) {
+            if (majorityHolder == null) {
+                minorityHolder = majorityHolder;
+                majorityHolder = player;
+            } else if (minorityHolder == null) {
+                minorityHolder = player;
+            } else {
+                try {
+                    if (stockCounts.get(majorityHolder) < stockCounts.get(player)) {
+                        minorityHolder = majorityHolder;
+
+                        majorityHolder = player;
+                    } else if (stockCounts.get(minorityHolder) < stockCounts.get(player)) {
+                        minorityHolder = player;
+                    }
+                } catch (NullPointerException e){
+                    //
+                }
+            }
+
+            /*
             if ( (majorityHolder == null) || stockCounts.get(majorityHolder) < stockCounts.get(player) ) {
                 minorityHolder = majorityHolder;
 
@@ -344,6 +364,8 @@ public class GameSystem {
             }else if (minorityHolder == null || stockCounts.get(minorityHolder) < stockCounts.get(player) ) {
                 minorityHolder = player;
             }
+
+             */
         }
         //tie pays out half of the combined payouts
         if(stockCounts.get(minorityHolder) == stockCounts.get(majorityHolder)){
