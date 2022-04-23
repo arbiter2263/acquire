@@ -194,4 +194,23 @@ public class CorporationList {
         CorporationList.getInstance().activeCorps = newCorpList.activeCorps;
         CorporationList.getInstance().inactiveCorps = newCorpList.inactiveCorps;
     }
+
+    /**
+     * newGame will check all current inactive corporations
+     * and reset them to default stats with newGame call
+     * Then it will check for active corporations and reset their
+     * stats to default and deactivate them
+     */
+    protected void newGame(){
+
+        for(Corporation corp : inactiveCorps){
+            corp.newGame();
+        }
+
+        for(Corporation corp : activeCorps){
+            corp.newGame();
+            deactivateCorp(corp);
+        }
+    }
+
 }

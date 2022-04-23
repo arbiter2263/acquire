@@ -73,6 +73,7 @@ public class Corporation {
         this.stockCapMet = false;
     }
 
+
     /**
      * Method that updates the price of stock for this corporation, based on a set of rules
      * Should be called whenever stockCount is incremented or decremented
@@ -145,4 +146,17 @@ public class Corporation {
         }
         LOGGER.info("Stock price for {} corporation updated", this.name);
     }
+
+    /**
+     * newGame will reset the corporations fields back to default
+     * No stocks should be bought, size of corp 0, update stock price
+     * back to lowest, reset stock cap to false
+     */
+    protected void newGame(){
+        this.tileList = new LinkedList<>();
+        this.stockCount = 0;
+        this.stockCapMet = false;
+        updateStockPrice();
+    }
+
 }
