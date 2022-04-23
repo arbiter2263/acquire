@@ -256,7 +256,7 @@ public class GameBoardScreen {
             case "Quantum" -> spot.setStyle("-fx-control-inner-background:#0000ff");
             case "Zeta" -> spot.setStyle("-fx-control-inner-background:#FFFF00");
             case "Hydra" -> spot.setStyle("-fx-control-inner-background:#FFA500");
-            case "Phoenix" -> spot.setStyle("-fx-control-inner-background:#CC8899");
+            case "Phoenix" -> spot.setStyle("-fx-control-inner-background:#C724B1");
         }
     }
 }
