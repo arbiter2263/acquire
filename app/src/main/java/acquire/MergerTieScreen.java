@@ -31,23 +31,14 @@ public class MergerTieScreen {
     protected Scene getScene(Stage primaryStage, Player e, String k, String f) throws FileNotFoundException {
         GridPane gridPane = new GridPane();
         user = e;
+        corporation1 = k;
+        corporation2 = f;
         Scene scene = new Scene(gridPane, 1200, 800);
         gameSetup(gridPane);
         addUIControls(primaryStage, gridPane);
         return scene;
     }
-/*
-    protected void loadScene(Stage primary, Player e, String k, String f) throws FileNotFoundException {
-        primary.setTitle("Merger Tie");
-        gameSetup();
-        addUIControls(gridPane);
-        user = e;
-        corporation1 = f;
-        corporation2 = k;
-        Scene scene14 = new Scene(gridPane, 1200, 800);
-        primary.setScene(scene14);
-    }
-*/
+
     private GridPane gameSetup(GridPane gridPane) {
         gridPane.setAlignment(Pos.TOP_CENTER);
         gridPane.setHgap(10);

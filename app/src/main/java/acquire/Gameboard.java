@@ -87,7 +87,7 @@ public class Gameboard {
      */
     protected boolean placeTile(Player player, Tile tile, Stage primaryStage) {
         if(isValidTilePlay(tile)) {
-            LinkedList<Integer> indexes = new LinkedList<Integer>();
+            LinkedList<Integer> indexes = new LinkedList<>();
             if (CorporationList.getInstance().getActiveCorps().size() > 0) {
                 for (int i = 0; i < CorporationList.getInstance().getActiveCorps().size(); i++) {
                     if (doesTileTouchCorp(tile, CorporationList.getInstance().getActiveCorps().get(i))) {
@@ -120,7 +120,6 @@ public class Gameboard {
     private boolean doesTileTouchCorp(Tile tile, Corporation corporation) {
         int[] rowColumn = getRowColumnTile(tile);
         LinkedList<Tile> corpTiles = corporation.getTileList();
-
         for (Tile tileX : corpTiles) {
             int[] tileXRowColumn = getRowColumnTile(tileX);
             if (tileXRowColumn[0] == rowColumn[0] && ( tileXRowColumn[1] == rowColumn[1]+1 || tileXRowColumn[1] == rowColumn[1]-1) ) {
@@ -132,17 +131,31 @@ public class Gameboard {
         return false;
     }
 
+
+    private LinkedList<Player> checkStakes(LinkedList<Integer> indexes) {
+        LinkedList<Player> hasStake = new LinkedList<>();
+        for (int index : indexes) {
+            for (Player player : players) {
+                if (player.getStockCount(CorporationList.getInstance().getActiveCorps().get(indexes.get(index)).getName()) > 0) {
+                    if (!hasStake.contains(player)) {
+                        hasStake.add(player);
+                    }
+                }
+            }
+        }
+        return hasStake;
+    }
+
     /**
      * Method to merger corporations together
      * @param tile  The tile that started the merger
      * @param indexes  The indexes for the corporations involved
      */
     private void merger(Player player, Tile tile, LinkedList<Integer> indexes, Stage primaryStage){
-        //Will need to cooperate with the merger screen
-        // needs user input
-        Corporation biggestCorp = new Corporation("fakeCorp");
-        for (int index : indexes) {
-            Corporation corp = CorporationList.getInstance().getActiveCorps().get(index);
+        LinkedList<Player> shareHolders;
+        Corporation biggestCorp = CorporationList.getInstance().getActiveCorps().get(indexes.getFirst());
+        for (int i = 1; i < indexes.size(); i++) {
+            Corporation corp = CorporationList.getInstance().getActiveCorps().get(i);
             if (corp.getTileList().size() == biggestCorp.getTileList().size()) {
                 //We have a tie
                 MergerTieScreen tieScreen = new MergerTieScreen();
@@ -154,7 +167,6 @@ public class Gameboard {
                     //it didn't work
                 }
                 biggestCorp = CorporationList.getInstance().getCorporation(corpName);
-                corpName = null;
             } else if (corp.getTileList().size() > biggestCorp.getTileList().size()) {
                 biggestCorp = corp;
             }
@@ -171,6 +183,15 @@ public class Gameboard {
             Corporation c = CorporationList.getInstance().getActiveCorps().get(index);
             CorporationList.getInstance().deactivateCorp(c);
         }
+        for (int index : indexes) {
+            if (CorporationList.getInstance().getActiveCorps().get(index).getName().equals(biggestCorp.getName())) {indexes.remove(index);}
+        }
+        shareHolders = checkStakes(indexes);
+        MergerScreen playerChoices = new MergerScreen();
+        corpName = null;
+        try {
+            primaryStage.setScene(playerChoices.getScene(primaryStage, shareHolders.remove(), biggestCorp.getName(), CorporationList.getInstance().getActiveCorps().get(indexes.get(0)).getName()));
+        } catch (FileNotFoundException ignored) {}
     }
 
     /**

@@ -141,8 +141,8 @@ public class Player {
      * @param newCorp  The newly formed corporation
      */
     protected void addFoundersStock(Corporation newCorp) {
-        int oldStockCount = this.stocks.get(newCorp);
-        this.stocks.replace(newCorp, oldStockCount + 1);
+            int oldStockCount = this.stocks.get(newCorp);
+            this.stocks.replace(newCorp, oldStockCount + 1);
     }
 
     /**
