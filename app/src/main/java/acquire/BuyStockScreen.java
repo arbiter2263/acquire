@@ -279,7 +279,7 @@ public class BuyStockScreen {
             actives.appendText(f.getName() + " |Stocks: " + f.getStockCount() + "| |Stock Price: " + f.getStockPrice() + "| |Size: " + f.getTileList().size() + "|\n");
         }
         actives.setPrefWidth(50);
-        actives.setPrefHeight(100);
+        actives.setPrefHeight(150);
         actives.setWrapText(true);
         gridPane.add(actives, 3, 7, 2, 1);
     }

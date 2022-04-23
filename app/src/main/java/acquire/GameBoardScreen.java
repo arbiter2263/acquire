@@ -123,7 +123,11 @@ public class GameBoardScreen {
                 for (Tile t : f) {
                     if (spot.getText().equals(t.getSpace())) {
                         spot.setStyle("-fx-control-inner-background:#808080");
+                        for (Corporation corp : CorporationList.getInstance().getActiveCorps()) {
+                            if (corp.getTileList().contains(t)) {setStyle(corp, spot);}
+                        }
                     }
+
                 }
                 gridPane.add(spot, e, i);
             }
@@ -238,5 +242,17 @@ public class GameBoardScreen {
             BuyStockScreen purchase = new BuyStockScreen();
             primaryStage.setScene(purchase.getScene(primaryStage, user));
         });
+    }
+
+    private void setStyle(Corporation corp, TextArea spot) {
+        switch (corp.getName()) {
+            case "Sackson" -> spot.setStyle("-fx-control-inner-background:#dc143c");
+            case "America" -> spot.setStyle("-fx-control-inner-background:#FFFFFF");
+            case "Fusion" -> spot.setStyle("-fx-control-inner-background:#00ff00");
+            case "Quantum" -> spot.setStyle("-fx-control-inner-background:#0000ff");
+            case "Zeta" -> spot.setStyle("-fx-control-inner-background:#FFFF00");
+            case "Hydra" -> spot.setStyle("-fx-control-inner-background:#FFA500");
+            case "Phoenix" -> spot.setStyle("-fx-control-inner-background:#CC8899");
+        }
     }
 }

@@ -76,10 +76,6 @@ public class GameSystem {
         return null;
     }
 
-
-
-
-
     /**
      *  Method to initialize all the objects for a new game
      * upon initializing game, system should initialize all require objects
@@ -87,8 +83,9 @@ public class GameSystem {
      */
     protected void initializeGame(boolean isHardMode, int numberOfPlayers){ //numberOfPlayers should come in from UI
         newGame();
+        setNumOfPlayers(numberOfPlayers);
         //instantiate the game board and fill it with players
-        if (isHardMode == false) {
+        if (!isHardMode) {
             Gameboard.getInstance().initializeGame(numberOfPlayers);
             //instantiate a pile of tiles
             Pile.getInstance();
@@ -113,7 +110,6 @@ public class GameSystem {
      * Resets all values to 0 or null for a new game
      */
     private void newGame() {
-        setNumOfPlayers(0);
         try {
             while (playerList.size() != 0) {
                 playerList.remove(0);

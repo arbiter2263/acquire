@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 @EqualsAndHashCode @ToString
 public class Corporation {
     @NonNull @Getter @Setter private String name;
-    @Getter private LinkedList<Tile> tileList;
+    @Getter protected LinkedList<Tile> tileList;
     @Getter private int stockCount;
     @Getter private static final int STOCKCAP = 25;
     @Getter private boolean stockCapMet;

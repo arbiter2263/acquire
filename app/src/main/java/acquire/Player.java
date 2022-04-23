@@ -18,7 +18,7 @@ public class Player {
     @NonNull @Getter @Setter private String name;
     @Getter private int money;
     @Getter private LinkedList<Tile> hand;
-    @NonNull @Getter private Hashtable<Corporation, Integer> stocks;
+    @NonNull @Getter private Hashtable<Corporation, Integer> stocks = new Hashtable<Corporation, Integer>();
     private static Logger LOGGER = LoggerFactory.getLogger(Player.class);
 
     /**
@@ -61,8 +61,12 @@ public class Player {
             if (this.money >= cost) {
                 money -= cost;
                 corp.stockBought();
-                int oldStockCount = this.stocks.get(corp);
-                this.stocks.replace(corp, (oldStockCount + 1) );
+                try {
+                    int oldStockCount = this.stocks.get(corp);
+                    this.stocks.replace(corp, (oldStockCount + 1));
+                } catch (NullPointerException ignored) {
+                    this.stocks.replace(corp, 1);
+                }
                 LOGGER.info("Player {} bought stock in corporation: {}", this, stockName);
                 return true;
             } else {
@@ -148,8 +152,12 @@ public class Player {
      * @param newCorp  The newly formed corporation
      */
     protected void addFoundersStock(Corporation newCorp) {
-        int oldStockCount = this.stocks.get(newCorp);
-        this.stocks.replace(newCorp, oldStockCount + 1);
+        try {
+            int oldStockCount = this.stocks.get(newCorp);
+            this.stocks.replace(newCorp, oldStockCount + 1);
+        } catch (NullPointerException ignored) {
+            this.stocks.replace(newCorp, 1);
+        }
         LOGGER.info("Player {} formed corporation {} and they gained 1 stock in this corporation", this.name, newCorp.getName());
     }
 
