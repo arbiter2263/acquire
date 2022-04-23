@@ -12,17 +12,24 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Random;
 
 public class GameBoardScreen {
     static private Player user;
@@ -54,6 +61,28 @@ public class GameBoardScreen {
     }
 
     private void addUIControls(Stage primaryStage, GridPane gridPane) {
+        // Hint Button
+        try {
+            FileInputStream inputstream = new FileInputStream("hint.png");
+            Image img = new Image(inputstream);
+            ImageView hint = new ImageView(img);
+            hint.setFitHeight(30);
+            hint.setPreserveRatio(true);
+            Button hintButton = new Button();
+            hintButton.setGraphic(hint);
+            gridPane.add(hintButton, 11, 0);
+
+            hintButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    HintScreen hints = new HintScreen();
+                    Stage setup = new Stage();
+                    setup.setScene(hints.getScene(setup));
+                    setup.show();
+                }
+            });
+        } catch (FileNotFoundException ignored) {}
+
         // Settings Label
         Label settings = new Label("Settings");
         gridPane.add(settings, 0, 0);
