@@ -9,6 +9,14 @@ import javafx.stage.Stage;
 import spock.lang.Specification;
 
 class GameboardTest extends Specification {
+    //Set up method
+    def setup() {
+        GameSystem.INSTANCE = null
+        Gameboard.INSTANCE = null
+        CorporationList.INSTANCE = null
+        Pile.instance = null
+    }
+
     //test for getInstance()
     def "get an instance"() {
         setup:

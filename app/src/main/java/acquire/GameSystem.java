@@ -288,7 +288,7 @@ public class GameSystem {
             HashMap<Player, Integer> stockCounts = new HashMap<>();
             for (Player player : Gameboard.getInstance().getPlayers()) {
                 stockCounts.put(player, player.getStocks().get(activeCorp));
-                player.sellFullPricedStock(activeCorp, player.getStocks().get(activeCorp));
+                player.sellFullPricedStock(activeCorp, player.getStocks().get(activeCorp.getName()));
             }
             giveMajorityMinorityStockHolder(stockCounts, activeCorp);
         }

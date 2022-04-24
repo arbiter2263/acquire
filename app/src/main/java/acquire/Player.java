@@ -82,7 +82,7 @@ public class Player {
         int oldCount = this.stocks.get(defunctCorp.getName());
         if (oldCount == 0) {
             throw new NoSuchElementException("Player " + this.name + " has no stock in company " + defunctCorp);
-        } else{
+        } else {
             int newCountDefunct = oldCount - amount;
             int newStockCount = (int) (amount / 2);
             if (amount % 2 > 0) {
@@ -90,6 +90,12 @@ public class Player {
             }
             this.stocks.replace(defunctCorp.getName(), newCountDefunct);
             this.stocks.replace(survivingCorp.getName(), newStockCount);
+            for (int i = 0; i < amount; i++) {
+                CorporationList.getInstance().getCorporation(defunctCorp.getName()).stockSold();
+            }
+            for (int i = 0; i < newStockCount; i++) {
+                CorporationList.getInstance().getCorporation(survivingCorp.getName()).stockBought();
+            }
         }
     }
 
@@ -101,7 +107,7 @@ public class Player {
      *          player currently has in the defunct corporation
      */
     protected void sellDefunctStock(Corporation defunctCorp, int stockCount) throws IndexOutOfBoundsException{
-        int currentCount = this.stocks.get(defunctCorp);
+        int currentCount = this.stocks.get(defunctCorp.getName());
         if (currentCount < stockCount) {
             LOGGER.warn("IOB exception thrown for corporation {}", defunctCorp.getName());
             throw new IndexOutOfBoundsException("Player " + this.name + " has " + this.stocks.get(defunctCorp) +
@@ -112,6 +118,7 @@ public class Player {
         while (counter > 0) {
             int stockSellValue = CorporationList.getInstance().getStockCost(defunctCorp) / 2;
             this.money += stockSellValue;
+            CorporationList.getInstance().getCorporation(defunctCorp.getName()).stockSold();
             counter--;
         }
         this.stocks.replace(defunctCorp.getName(), (currentCount - stockCount) );
