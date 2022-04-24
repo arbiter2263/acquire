@@ -216,10 +216,15 @@ public class GameSystem {
      * This method should be checked after every players turn
      */
     protected boolean removeUnplayableTile(Player player){
+
+        ArrayList<Tile> tilesToRemove = new ArrayList<>();
         for(Tile tile : player.getHand()){
             if(!Gameboard.getInstance().isValidTilePlay(tile)){ //if is not a valid play
-                player.removeTile(tile);
+                tilesToRemove.add(tile);
             }
+        }
+        for(Tile tile : tilesToRemove) {
+            player.getHand().remove(tile);
         }
         return true;
     }
