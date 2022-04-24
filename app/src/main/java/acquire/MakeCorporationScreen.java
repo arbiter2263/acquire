@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -44,29 +45,51 @@ public class MakeCorporationScreen {
     }
 
     private void addUIControls(Stage primaryStage, GridPane gridPane) {
-        //Add label
-        Label makeCorp = new Label("A new Corporation can be created. Which would you like to create?");
-        gridPane.add(makeCorp, 0, 0);
+        if (CorporationList.getInstance().getInactiveCorps().size() > 0) {
+            //Add label
+            Label makeCorp = new Label("A new Corporation can be created. Which would you like to create?");
+            gridPane.add(makeCorp, 0, 0);
 
-        //Add choicebox
-        ChoiceBox<String> corps = new ChoiceBox<>();
-        ArrayList<Corporation> inactive = CorporationList.getInstance().getInactiveCorps();
-        for (int i=0; i<inactive.size(); i++) {
-            String f = inactive.get(i).getName();
-            corps.getItems().add(f);
-        }
-        gridPane.add(corps, 0, 1);
-
-        //Add submit button
-        Button submit = new Button("Submit");
-        gridPane.add(submit, 0, 3);
-
-        submit.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Gameboard.getInstance().setCorpName(corps.getValue());
-                primaryStage.close();
+            //Add choicebox
+            ChoiceBox<String> corps = new ChoiceBox<>();
+            ArrayList<Corporation> inactive = CorporationList.getInstance().getInactiveCorps();
+            for (int i = 0; i < inactive.size(); i++) {
+                String f = inactive.get(i).getName();
+                corps.getItems().add(f);
             }
-        });
+            gridPane.add(corps, 0, 1);
+
+            //Add submit button
+            Button submit = new Button("Submit");
+            gridPane.add(submit, 0, 3);
+
+            submit.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    Gameboard.getInstance().setCorpName(corps.getValue());
+                    primaryStage.close();
+                }
+            });
+        }
+        else {
+            TextArea error = new TextArea("There are no corporations that can be created at this time. That means this tile is temporarily unplayable. Please select another.");
+            error.setWrapText(true);
+            error.setPrefWidth(400);
+            error.setPrefHeight(300);
+            gridPane.add(error, 0, 0);
+
+            Button close = new Button("Close");
+            gridPane.add(close, 0, 1);
+
+            close.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    GameBoardScreen gbs = new GameBoardScreen();
+                    Scene scene = gbs.getScene(primaryStage, user);
+                    primaryStage.setScene(scene);
+                    primaryStage.show();
+                }
+            });
+        }
     }
 }
