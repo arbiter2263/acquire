@@ -94,6 +94,7 @@ public class GameSystem {
             CorporationList.getInstance();
             LOGGER.info("Game initialized in easy mode");
         }else{
+            setHardMode(true);
             //same initialization but without hints and hide player's stocks
             Gameboard.getInstance().initializeGame(numberOfPlayers);
             //instantiate a pile of tiles
