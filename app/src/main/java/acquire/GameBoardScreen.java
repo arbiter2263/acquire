@@ -6,17 +6,27 @@
 package acquire;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.LinkedList;
 
 public class GameBoardScreen {
@@ -49,6 +59,28 @@ public class GameBoardScreen {
     }
 
     private void addUIControls(Stage primaryStage, GridPane gridPane) {
+        // Hint Button
+        try {
+            FileInputStream inputstream = new FileInputStream("hint.png");
+            Image img = new Image(inputstream);
+            ImageView hint = new ImageView(img);
+            hint.setFitHeight(30);
+            hint.setPreserveRatio(true);
+            Button hintButton = new Button();
+            hintButton.setGraphic(hint);
+            gridPane.add(hintButton, 11, 0);
+
+            hintButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    HintScreen hints = new HintScreen();
+                    Stage setup = new Stage();
+                    setup.setScene(hints.getScene(setup));
+                    setup.show();
+                }
+            });
+        } catch (FileNotFoundException ignored) {}
+
         // Settings Label
         Label settings = new Label("Settings");
         gridPane.add(settings, 0, 0);
@@ -75,6 +107,16 @@ public class GameBoardScreen {
         saveGame.setDefaultButton(false);
         gridPane.add(saveGame, 0, 2);
 
+        // Set save logic
+        saveGame.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    GameSystem.getInstance().saveGameSystem();
+                } catch (IOException ignored) {}
+            }
+        });
+
         // Add Load Game Button
         Button loadGame = new Button("Load Game");
         loadGame.setPrefHeight(5);
@@ -82,6 +124,20 @@ public class GameBoardScreen {
         loadGame.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
         loadGame.setDefaultButton(false);
         gridPane.add(loadGame, 0, 3);
+
+        // Set load game logic
+        loadGame.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    GameSystem.getInstance().loadGameSystem();
+                    GameBoardScreen loaded = new GameBoardScreen();
+                    Scene scene = loaded.getScene(primaryStage, GameSystem.getInstance().playerTurn());
+                    primaryStage.setScene(scene);
+                    primaryStage.show();
+                } catch (FileNotFoundException ignored) {}
+            }
+        });
 
         // Add Exit Button
         Button exit = new Button("Exit");
@@ -102,7 +158,13 @@ public class GameBoardScreen {
         gridPane.add(viewOthers, 0, 5);
 
         viewOthers.setOnAction(event -> {
-
+            if (GameSystem.getInstance().isHardMode()) {
+                AdvancedScreen view = new AdvancedScreen();
+                Scene scene = view.getScene(primaryStage, user);
+                primaryStage.setScene(scene);
+                primaryStage.show();
+            }
+            else {difficultyError(gridPane.getScene().getWindow());}
         });
 
         // Create rectangle to make board cohesive
@@ -121,7 +183,11 @@ public class GameBoardScreen {
                 for (Tile t : f) {
                     if (spot.getText().equals(t.getSpace())) {
                         spot.setStyle("-fx-control-inner-background:#808080");
+                        for (Corporation corp : CorporationList.getInstance().getActiveCorps()) {
+                            if (corp.getTileList().contains(t)) {setStyle(corp, spot);}
+                        }
                     }
+
                 }
                 gridPane.add(spot, e, i);
             }
@@ -132,6 +198,13 @@ public class GameBoardScreen {
         cash.setPrefHeight(5);
         cash.setPrefWidth(120);
         gridPane.add(cash, 0, 10);
+
+        //Add Player turn text
+        TextArea playerUp = new TextArea(user.getName() + " is up!");
+        playerUp.setEditable(false);
+        playerUp.setPrefWidth(150);
+        playerUp.setPrefHeight(5);
+        gridPane.add(playerUp, 0, 15);
 
         // Add View Your Stocks Button
         Button viewStocks = new Button("Your Stocks");
@@ -148,80 +221,111 @@ public class GameBoardScreen {
 
         // Displays the end game button if game can be ended
         Button endGame = new Button("End Game");
+        if (GameSystem.getInstance().endGameCheck()) gridPane.add(endGame, 11, 15, 2, 1);
 
-        if (GameSystem.getInstance().endGameCheck()) gridPane.add(endGame, 10, 13);
+        //setup game end button
+        endGame.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                EndGameScreen end = new EndGameScreen();
+                primaryStage.setScene(end.getScene(primaryStage));
+                primaryStage.show();
+            }
+        });
+
         GameSystem.getInstance().drawTile(user);
 
         // setup tile buttons
         Button tile1 = new Button(user.getHand().get(0).getSpace());
-        tile1.setPrefHeight(50);
+        tile1.setPrefHeight(5);
         tile1.setPrefWidth(150);
-        gridPane.add(tile1, 1, 15, 2, 1);
+        gridPane.add(tile1, 11, 1, 2, 1);
 
         Button tile2 = new Button(user.getHand().get(1).getSpace());
-        tile2.setPrefHeight(50);
+        tile2.setPrefHeight(5);
         tile2.setPrefWidth(150);
-        gridPane.add(tile2, 3, 15, 2, 1);
+        gridPane.add(tile2, 11, 3, 2, 1);
 
         Button tile3 = new Button(user.getHand().get(2).getSpace());
-        tile3.setPrefHeight(50);
+        tile3.setPrefHeight(5);
         tile3.setPrefWidth(150);
-        gridPane.add(tile3, 5, 15, 2, 1);
+        gridPane.add(tile3, 11, 5, 2, 1);
 
         Button tile4 = new Button(user.getHand().get(3).getSpace());
-        tile4.setPrefHeight(50);
+        tile4.setPrefHeight(5);
         tile4.setPrefWidth(150);
-        gridPane.add(tile4, 7, 15, 2, 1);
+        gridPane.add(tile4, 11, 7, 2, 1);
 
         Button tile5 = new Button(user.getHand().get(4).getSpace());
-        tile5.setPrefHeight(50);
+        tile5.setPrefHeight(5);
         tile5.setPrefWidth(150);
-        gridPane.add(tile5, 9, 15,2, 1);
+        gridPane.add(tile5, 11, 9,2, 1);
 
         Button tile6 = new Button(user.getHand().get(5).getSpace());
-        tile6.setPrefHeight(50);
+        tile6.setPrefHeight(5);
         tile6.setPrefWidth(150);
-        gridPane.add(tile6, 11, 15, 2, 1);
+        gridPane.add(tile6, 11, 11, 2, 1);
 
         tile1.setOnAction(event -> {
-            GameSystem.getInstance().playATile(user, user.getHand().remove(0), primaryStage);
+            GameSystem.getInstance().playATile(user, user.getHand().get(0), primaryStage);
             user.addTile(Pile.getInstance().drawTile());
             BuyStockScreen purchase = new BuyStockScreen();
             primaryStage.setScene(purchase.getScene(primaryStage, user));
         });
 
         tile2.setOnAction(event -> {
-            GameSystem.getInstance().playATile(user, user.getHand().remove(1), primaryStage);
+            GameSystem.getInstance().playATile(user, user.getHand().get(1), primaryStage);
             user.addTile(Pile.getInstance().drawTile());
             BuyStockScreen purchase = new BuyStockScreen();
             primaryStage.setScene(purchase.getScene(primaryStage, user));            });
 
         tile3.setOnAction(event -> {
-            GameSystem.getInstance().playATile(user, user.getHand().remove(2), primaryStage);
+            GameSystem.getInstance().playATile(user, user.getHand().get(2), primaryStage);
             user.addTile(Pile.getInstance().drawTile());
             BuyStockScreen purchase = new BuyStockScreen();
             primaryStage.setScene(purchase.getScene(primaryStage, user));
         });
 
         tile4.setOnAction(event -> {
-            GameSystem.getInstance().playATile(user, user.getHand().remove(3), primaryStage);
+            GameSystem.getInstance().playATile(user, user.getHand().get(3), primaryStage);
             user.addTile(Pile.getInstance().drawTile());
             BuyStockScreen purchase = new BuyStockScreen();
             primaryStage.setScene(purchase.getScene(primaryStage, user));
         });
 
         tile5.setOnAction(event -> {
-            GameSystem.getInstance().playATile(user, user.getHand().remove(4), primaryStage);
+            GameSystem.getInstance().playATile(user, user.getHand().get(4), primaryStage);
             user.addTile(Pile.getInstance().drawTile());
             BuyStockScreen purchase = new BuyStockScreen();
             primaryStage.setScene(purchase.getScene(primaryStage, user));
         });
 
         tile6.setOnAction(event -> {
-            GameSystem.getInstance().playATile(user, user.getHand().remove(5), primaryStage);
+            GameSystem.getInstance().playATile(user, user.getHand().get(5), primaryStage);
             user.addTile(Pile.getInstance().drawTile());
             BuyStockScreen purchase = new BuyStockScreen();
             primaryStage.setScene(purchase.getScene(primaryStage, user));
         });
+    }
+
+    private void setStyle(Corporation corp, TextArea spot) {
+        switch (corp.getName()) {
+            case "Sackson" -> spot.setStyle("-fx-control-inner-background:#dc143c");
+            case "America" -> spot.setStyle("-fx-control-inner-background:#FFFFFF");
+            case "Fusion" -> spot.setStyle("-fx-control-inner-background:#00ff00");
+            case "Quantum" -> spot.setStyle("-fx-control-inner-background:#0000ff");
+            case "Zeta" -> spot.setStyle("-fx-control-inner-background:#FFFF00");
+            case "Hydra" -> spot.setStyle("-fx-control-inner-background:#FFA500");
+            case "Phoenix" -> spot.setStyle("-fx-control-inner-background:#C724B1");
+        }
+    }
+
+    private void difficultyError(Window owner) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Difficulty Error!");
+        alert.setHeaderText(null);
+        alert.setContentText("You have selected a feature that is only available in advanced mode but are playing in normal mode.");
+        alert.initOwner(owner);
+        alert.show();
     }
 }

@@ -9,6 +9,14 @@ import javafx.stage.Stage;
 import spock.lang.Specification;
 
 class GameboardTest extends Specification {
+    //Set up method
+    def setup() {
+        GameSystem.INSTANCE = null
+        Gameboard.INSTANCE = null
+        CorporationList.INSTANCE = null
+        Pile.instance = null
+    }
+
     //test for getInstance()
     def "get an instance"() {
         setup:
@@ -41,7 +49,7 @@ class GameboardTest extends Specification {
         def tile = new Tile(1, 'A' as char)
         def stage = Mock(Stage)
         player.addTile(tile)
-        board.placeTile(player, tile, stage)
+        board.tilesPlayed.add(tile)
 
         when:
         def result = board.getTilesPlayed()

@@ -20,6 +20,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
+
 public class MainScreen extends Application {
 
     @Override
@@ -65,6 +67,20 @@ public class MainScreen extends Application {
         loadGameButton.setPrefWidth(600);
         gridPane.add(loadGameButton, 0, 1, 3, 1);
         GridPane.setMargin(loadGameButton, new Insets(20, 0,20,0));
+
+        // Set load game logic
+        loadGameButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    GameSystem.getInstance().loadGameSystem();
+                    GameBoardScreen loaded = new GameBoardScreen();
+                    Scene scene = loaded.getScene(primaryStage, GameSystem.getInstance().playerTurn());
+                    primaryStage.setScene(scene);
+                    primaryStage.show();
+                } catch (FileNotFoundException ignored) {}
+            }
+        });
 
         // Add Exit Button
         Button exitButton = new Button("Exit");

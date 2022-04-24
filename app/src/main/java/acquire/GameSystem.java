@@ -36,7 +36,7 @@ public class GameSystem {
      */
     protected GameSystem() {
 
-        initializeGame(isHardMode, numOfPlayers);
+       // initializeGame(isHardMode, numOfPlayers);
     }
 
     protected static GameSystem getInstance(){
@@ -76,10 +76,6 @@ public class GameSystem {
         return null;
     }
 
-
-
-
-
     /**
      *  Method to initialize all the objects for a new game
      * upon initializing game, system should initialize all require objects
@@ -87,8 +83,9 @@ public class GameSystem {
      */
     protected void initializeGame(boolean isHardMode, int numberOfPlayers){ //numberOfPlayers should come in from UI
         newGame();
+        setNumOfPlayers(numberOfPlayers);
         //instantiate the game board and fill it with players
-        if (isHardMode == false) {
+        if (!isHardMode) {
             Gameboard.getInstance().initializeGame(numberOfPlayers);
             //instantiate a pile of tiles
             Pile.getInstance();
@@ -97,6 +94,7 @@ public class GameSystem {
             CorporationList.getInstance();
             LOGGER.info("Game initialized in easy mode");
         }else{
+            setHardMode(true);
             //same initialization but without hints and hide player's stocks
             Gameboard.getInstance().initializeGame(numberOfPlayers);
             //instantiate a pile of tiles
@@ -110,21 +108,17 @@ public class GameSystem {
 
 
     /**
-     * new game resets all of the fields to
-     * defaults of 0 or false
+     * Resets all values to 0 or null for a new game
      */
-    private void newGame(){
-        setNumOfPlayers(0);
-        while(playerList.size() != 0){
-            playerList.remove(0);
-        }
+    private void newGame() {
+        playerList = new ArrayList<>();
         isHardMode = false;
         turnCounter = 0;
         Gameboard.getInstance().newGame();
         CorporationList.getInstance().newGame();
         Pile.getInstance().newGame();
+        mergerPlayerOrder = new ArrayList<>();
     }
-
 
     /**
      * At the beginning of a players turn they play a tile
@@ -222,10 +216,15 @@ public class GameSystem {
      * This method should be checked after every players turn
      */
     protected boolean removeUnplayableTile(Player player){
+
+        ArrayList<Tile> tilesToRemove = new ArrayList<>();
         for(Tile tile : player.getHand()){
             if(!Gameboard.getInstance().isValidTilePlay(tile)){ //if is not a valid play
-                player.removeTile(tile);
+                tilesToRemove.add(tile);
             }
+        }
+        for(Tile tile : tilesToRemove) {
+            player.getHand().remove(tile);
         }
         return true;
     }
@@ -285,7 +284,6 @@ public class GameSystem {
         return false; //Game cannot be ended yet do not present option to end
     }
 
-
     /**
      * Method that ends the game by selling all players' stocks and ordering them according to who has the most money
      * @return  LinkedList<Player>  The ordered list of players
@@ -295,15 +293,15 @@ public class GameSystem {
             HashMap<Player, Integer> stockCounts = new HashMap<>();
             for (Player player : Gameboard.getInstance().getPlayers()) {
                 stockCounts.put(player, player.getStocks().get(activeCorp));
-                player.sellFullPricedStock(activeCorp, player.getStocks().get(activeCorp));
+                player.sellFullPricedStock(activeCorp, player.getStocks().get(activeCorp.getName()));
             }
             giveMajorityMinorityStockHolder(stockCounts, activeCorp);
         }
         for (Corporation inactiveCorp : CorporationList.getInstance().getInactiveCorps()) {
             HashMap<Player, Integer> stockCounts = new HashMap<>();
             for (Player player : Gameboard.getInstance().getPlayers()) {
-                stockCounts.put(player, player.getStocks().get(inactiveCorp));
-                player.sellFullPricedStock(inactiveCorp, player.getStocks().get(inactiveCorp));
+                stockCounts.put(player, player.getStocks().get(inactiveCorp.getName()));
+                player.sellFullPricedStock(inactiveCorp, player.getStocks().get(inactiveCorp.getName()));
             }
             giveMajorityMinorityStockHolder(stockCounts, inactiveCorp);
         }
@@ -337,6 +335,26 @@ public class GameSystem {
         Player minorityHolder = null;
         boolean tie = false;
         for (Player player : Gameboard.getInstance().getPlayers()) {
+            if (majorityHolder == null) {
+                minorityHolder = majorityHolder;
+                majorityHolder = player;
+            } else if (minorityHolder == null) {
+                minorityHolder = player;
+            } else {
+                try {
+                    if (stockCounts.get(majorityHolder) < stockCounts.get(player)) {
+                        minorityHolder = majorityHolder;
+
+                        majorityHolder = player;
+                    } else if (stockCounts.get(minorityHolder) < stockCounts.get(player)) {
+                        minorityHolder = player;
+                    }
+                } catch (NullPointerException e){
+                    //
+                }
+            }
+
+            /*
             if ( (majorityHolder == null) || stockCounts.get(majorityHolder) < stockCounts.get(player) ) {
                 minorityHolder = majorityHolder;
 
@@ -344,6 +362,8 @@ public class GameSystem {
             }else if (minorityHolder == null || stockCounts.get(minorityHolder) < stockCounts.get(player) ) {
                 minorityHolder = player;
             }
+
+             */
         }
         //tie pays out half of the combined payouts
         if(stockCounts.get(minorityHolder) == stockCounts.get(majorityHolder)){
@@ -366,8 +386,12 @@ public class GameSystem {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .create();
+
+        LinkedList<Player> copiedPlayers = Gameboard.getInstance().getPlayers();
         try{
-            gson.toJson(GameSystem.getInstance(), writer); //Not appending to keep file fresh on new save
+
+            gson.toJson( GameSystem.getInstance(), writer); //Not appending to keep file fresh on new save
+
             Pile.getInstance().savePile();
             CorporationList.getInstance().saveCorpList();
             Gameboard.getInstance().saveGameboard();
@@ -390,12 +414,17 @@ public class GameSystem {
 
         Pile.getInstance().loadPile();
         CorporationList.getInstance().loadCorpList();
+        GameSystem.getInstance().loadGameSystemMethod();
         Gameboard.getInstance().loadGameboard();
 
+
+
+    }
+    protected void loadGameSystemMethod() throws FileNotFoundException {
         Gson gson = new Gson();
         Reader reader = new FileReader("acquire/app/jsonsave/gamesystem.json");
-        GameSystem newGameSystem = gson.fromJson(reader, (Type) GameSystem.class);
-        GameSystem.getInstance().isHardMode = newGameSystem.isHardMode;
+        GameSystem newGameSystem = gson.fromJson(reader,  GameSystem.class);
+        isHardMode = newGameSystem.isHardMode;
         GameSystem.getInstance().numOfPlayers = newGameSystem.numOfPlayers;
         GameSystem.getInstance().playerList = newGameSystem.playerList;
         GameSystem.getInstance().turnCounter = newGameSystem.turnCounter;
