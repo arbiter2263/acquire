@@ -24,12 +24,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.Random;
 
 public class GameBoardScreen {
     static private Player user;
@@ -156,7 +154,13 @@ public class GameBoardScreen {
         gridPane.add(viewOthers, 0, 5);
 
         viewOthers.setOnAction(event -> {
-
+            if (GameSystem.getInstance().isHardMode()) {
+                AdvancedScreen view = new AdvancedScreen();
+                Scene scene = view.getScene(primaryStage, user);
+                primaryStage.setScene(scene);
+                primaryStage.show();
+            }
+            else {difficultyError(gridPane.getScene().getWindow());}
         });
 
         // Create rectangle to make board cohesive
@@ -213,7 +217,7 @@ public class GameBoardScreen {
 
         // Displays the end game button if game can be ended
         Button endGame = new Button("End Game");
-        if (GameSystem.getInstance().endGameCheck()) gridPane.add(endGame, 11, 15);
+        if (GameSystem.getInstance().endGameCheck()) gridPane.add(endGame, 11, 15, 2, 1);
 
         //setup game end button
         endGame.setOnAction(new EventHandler<ActionEvent>() {
@@ -310,5 +314,14 @@ public class GameBoardScreen {
             case "Hydra" -> spot.setStyle("-fx-control-inner-background:#FFA500");
             case "Phoenix" -> spot.setStyle("-fx-control-inner-background:#C724B1");
         }
+    }
+
+    private void difficultyError(Window owner) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Difficulty Error!");
+        alert.setHeaderText(null);
+        alert.setContentText("You have selected a feature that is only available in advanced mode but are playing in normal mode.");
+        alert.initOwner(owner);
+        alert.show();
     }
 }

@@ -95,6 +95,8 @@ public class CorporationList {
                     activeCorps.add(corporation);
                     //Remove corp from inactiveCorps
                     iterator.remove();
+                    //Account for founder's stock
+                    corporation.setStockCount(corporation.getStockCount()+1);
                     LOGGER.info("Corporation {} was activated", corporation.getName());
                     return;
                 }
