@@ -8,6 +8,7 @@ package acquire;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -176,9 +177,7 @@ public class Gameboard {
         for (int index : indexes) {
             for (Player player : players) {
                 if (player.getStockCount(CorporationList.getInstance().getActiveCorps().get(index).getName()) > 0) {
-                    if (!hasStake.contains(player)) {
                         hasStake.add(player);
-                    }
                 }
             }
         }
@@ -217,24 +216,30 @@ public class Gameboard {
                 }
             }
         }
-        for (int i=0; i<indexes.size(); i++) {
-            if (CorporationList.getInstance().getActiveCorps().get(indexes.get(i)).getName().equals(biggestCorp.getName())) {indexes.remove(i);}
-        }
 
         biggestCorp.addTile(tile);
         for (int i=0; i<indexes.size(); i++) {
-            Corporation c = CorporationList.getInstance().getActiveCorps().get(indexes.get(i));
-            CorporationList.getInstance().deactivateCorp(c);
+            if (CorporationList.getInstance().getActiveCorps().get(indexes.get(i)) != biggestCorp) {
+                Corporation c = CorporationList.getInstance().getActiveCorps().get(indexes.get(i));
+                CorporationList.getInstance().deactivateCorp(c);
+            }
         }
 
+        LOGGER.info(checkStakes(indexes).toString());
         shareHolders = checkStakes(indexes);
         LOGGER.info(shareHolders.toString());
         LOGGER.info(checkStakes(indexes).toString());
         MergerScreen playerChoices = new MergerScreen();
-        corpName = null;
         try {
-            primaryStage.setScene(playerChoices.getScene(primaryStage, shareHolders.remove(), biggestCorp.getName(),
-                    CorporationList.getInstance().getActiveCorps().get(indexes.get(0)).getName()));
+            for (int e=0; e<shareHolders.size(); e++) {
+                for (int i=0; i<indexes.size(); i++) {
+                    Corporation def = CorporationList.getInstance().getActiveCorps().get(indexes.get(i));
+                    Stage merger = new Stage();
+                    Scene scene = playerChoices.getScene(merger, shareHolders.get(e), biggestCorp.getName(), def.getName());
+                    merger.setScene(scene);
+                    merger.showAndWait();
+                }
+            }
         } catch (FileNotFoundException ignored) {}
     }
 

@@ -80,7 +80,7 @@ public class MergerScreen {
             public void handle(ActionEvent event) {
                 SellStockScreen sell = new SellStockScreen();
                 try {
-                    primaryStage.setScene(sell.getScene(primaryStage, user, corporation2)) ;
+                    primaryStage.setScene(sell.getScene(primaryStage, user, corporation2, corporation1)) ;
                 } catch (FileNotFoundException ignored) {}
             }
         });
@@ -96,8 +96,9 @@ public class MergerScreen {
         holdButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
+                primaryStage.close();
             }
         });
     }
+
 }
