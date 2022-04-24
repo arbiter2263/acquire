@@ -36,7 +36,7 @@ public class GameSystem {
      */
     protected GameSystem() {
 
-        initializeGame(isHardMode, numOfPlayers);
+       // initializeGame(isHardMode, numOfPlayers);
     }
 
     protected static GameSystem getInstance(){
@@ -110,11 +110,7 @@ public class GameSystem {
      * Resets all values to 0 or null for a new game
      */
     private void newGame() {
-        try {
-            while (playerList.size() != 0) {
-                playerList.remove(0);
-            }
-        } catch (NullPointerException ignored) {}
+        playerList = new ArrayList<>();
         isHardMode = false;
         turnCounter = 0;
         Gameboard.getInstance().newGame();
@@ -362,8 +358,12 @@ public class GameSystem {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .create();
+
+        LinkedList<Player> copiedPlayers = Gameboard.getInstance().getPlayers();
         try{
-            gson.toJson(GameSystem.getInstance(), writer); //Not appending to keep file fresh on new save
+
+            gson.toJson( GameSystem.getInstance(), writer); //Not appending to keep file fresh on new save
+
             Pile.getInstance().savePile();
             CorporationList.getInstance().saveCorpList();
             Gameboard.getInstance().saveGameboard();
@@ -386,12 +386,17 @@ public class GameSystem {
 
         Pile.getInstance().loadPile();
         CorporationList.getInstance().loadCorpList();
+        GameSystem.getInstance().loadGameSystemMethod();
         Gameboard.getInstance().loadGameboard();
 
+
+
+    }
+    protected void loadGameSystemMethod() throws FileNotFoundException {
         Gson gson = new Gson();
         Reader reader = new FileReader("acquire/app/jsonsave/gamesystem.json");
-        GameSystem newGameSystem = gson.fromJson(reader, (Type) GameSystem.class);
-        GameSystem.getInstance().isHardMode = newGameSystem.isHardMode;
+        GameSystem newGameSystem = gson.fromJson(reader,  GameSystem.class);
+        isHardMode = newGameSystem.isHardMode;
         GameSystem.getInstance().numOfPlayers = newGameSystem.numOfPlayers;
         GameSystem.getInstance().playerList = newGameSystem.playerList;
         GameSystem.getInstance().turnCounter = newGameSystem.turnCounter;

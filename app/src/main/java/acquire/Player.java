@@ -16,7 +16,7 @@ public class Player {
     @NonNull @Getter @Setter private String name;
     @Getter private int money;
     @Getter private LinkedList<Tile> hand;
-    @NonNull @Getter private Hashtable<Corporation, Integer> stocks = new Hashtable<Corporation, Integer>();
+    @NonNull @Getter private Hashtable<String, Integer> stocks = new Hashtable<String, Integer>();
     private static Logger LOGGER = LoggerFactory.getLogger(Player.class);
 
     /**
@@ -30,11 +30,11 @@ public class Player {
         this.stocks = new Hashtable<>();
         // Add inactive corporations
         for (Corporation corp : CorporationList.getInstance().getInactiveCorps()) {
-            this.stocks.put(corp, 0);
+            this.stocks.put(corp.getName(), 0);
         }
         // Add active corporations -- should be an empty list ; future proofing
         for (Corporation corp : CorporationList.getInstance().getActiveCorps()) {
-            this.stocks.put(corp, 0);
+            this.stocks.put(corp.getName(), 0);
         }
     }
 
@@ -59,8 +59,8 @@ public class Player {
             if (this.money >= cost) {
                 money -= cost;
                 corp.stockBought();
-                int oldStockCount = this.stocks.get(corp);
-                this.stocks.replace(corp, (oldStockCount + 1));
+                int oldStockCount = this.stocks.get(corp.getName());
+                this.stocks.replace(corp.getName(), (oldStockCount + 1));
                 LOGGER.info("Player {} bought stock in corporation: {}", this, stockName);
                 return true;
             } else {
@@ -79,7 +79,7 @@ public class Player {
      * @throws NoSuchElementException  If the player has no stock in the defunct corporation
      */
     protected void tradeInStock(Corporation defunctCorp, Corporation survivingCorp, int amount) throws NoSuchElementException {
-        int oldCount = this.stocks.get(defunctCorp);
+        int oldCount = this.stocks.get(defunctCorp.getName());
         if (oldCount == 0) {
             throw new NoSuchElementException("Player " + this.name + " has no stock in company " + defunctCorp);
         } else{
@@ -88,8 +88,8 @@ public class Player {
             if (amount % 2 > 0) {
                 sellDefunctStock(defunctCorp, 1);
             }
-            this.stocks.replace(defunctCorp, newCountDefunct);
-            this.stocks.replace(survivingCorp, newStockCount);
+            this.stocks.replace(defunctCorp.getName(), newCountDefunct);
+            this.stocks.replace(survivingCorp.getName(), newStockCount);
         }
     }
 
@@ -114,7 +114,7 @@ public class Player {
             this.money += stockSellValue;
             counter--;
         }
-        this.stocks.replace(defunctCorp, (currentCount - stockCount) );
+        this.stocks.replace(defunctCorp.getName(), (currentCount - stockCount) );
     }
 
     /**
@@ -125,10 +125,10 @@ public class Player {
      *          player currently has in the corporation
      */
     protected void sellFullPricedStock(Corporation corp, int stockCount) throws IndexOutOfBoundsException{
-        int currentCount = this.stocks.get(corp);
+        int currentCount = this.stocks.get(corp.getName());
         if (currentCount < stockCount) {
             LOGGER.warn("IOB exception thrown for player {} not having sufficient stocks", this.name );
-            throw new IndexOutOfBoundsException("Player " + this.name + " has " + this.stocks.get(corp) +
+            throw new IndexOutOfBoundsException("Player " + this.name + " has " + this.stocks.get(corp.getName()) +
                     " stocks in corporation " + corp.getName() + " and can not sell " + stockCount + " stocks.");
         }
         int counter = stockCount;
@@ -137,7 +137,7 @@ public class Player {
             this.money += stockSellValue;
             counter--;
         }
-        this.stocks.replace(corp, (currentCount - stockCount) );
+        this.stocks.replace(corp.getName(), (currentCount - stockCount) );
     }
 
     /**
@@ -145,8 +145,8 @@ public class Player {
      * @param newCorp  The newly formed corporation
      */
     protected void addFoundersStock(Corporation newCorp) {
-        int oldStockCount = this.stocks.get(newCorp);
-        this.stocks.replace(newCorp, oldStockCount + 1);
+        int oldStockCount = this.stocks.get(newCorp.getName());
+        this.stocks.replace(newCorp.getName(), oldStockCount + 1);
         LOGGER.info("Player {} formed corporation {} and they gained 1 stock in this corporation", this.name, newCorp.getName());
     }
 
@@ -191,7 +191,7 @@ public class Player {
      */
     protected int getStockCount(String corp) {
         int count;
-        count = stocks.get(CorporationList.getInstance().getCorporation(corp));
+        count = stocks.get(corp);
         return count;
     }
 

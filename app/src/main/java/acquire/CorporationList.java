@@ -197,6 +197,7 @@ public class CorporationList {
         //Now replace current instance with saved instance corporations
         CorporationList.getInstance().activeCorps = newCorpList.activeCorps;
         CorporationList.getInstance().inactiveCorps = newCorpList.inactiveCorps;
+        LOGGER.info("Loaded game with {} active corps and {} inactive corps", activeCorps.size(), inactiveCorps.size());
     }
 
     /**
@@ -207,14 +208,17 @@ public class CorporationList {
      */
     protected void newGame(){
 
+        ArrayList<Corporation> deactivateList = new ArrayList<>();
+        for(Corporation corp : activeCorps){
+            deactivateList.add(corp);
+        }
+        for(Corporation corp : deactivateList){
+            deactivateCorp(corp);
+        }
         for(Corporation corp : inactiveCorps){
             corp.newGame();
         }
 
-        for(Corporation corp : activeCorps){
-            corp.newGame();
-            deactivateCorp(corp);
-        }
     }
 
 }
