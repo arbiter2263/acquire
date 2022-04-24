@@ -131,6 +131,10 @@ public class GameBoardScreen {
             public void handle(ActionEvent event) {
                 try {
                     GameSystem.getInstance().loadGameSystem();
+                    GameBoardScreen loaded = new GameBoardScreen();
+                    Scene scene = loaded.getScene(primaryStage, GameSystem.getInstance().playerTurn());
+                    primaryStage.setScene(scene);
+                    primaryStage.show();
                 } catch (FileNotFoundException ignored) {}
             }
         });
