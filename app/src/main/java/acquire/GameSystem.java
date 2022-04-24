@@ -288,15 +288,15 @@ public class GameSystem {
             HashMap<Player, Integer> stockCounts = new HashMap<>();
             for (Player player : Gameboard.getInstance().getPlayers()) {
                 stockCounts.put(player, player.getStocks().get(activeCorp));
-                player.sellFullPricedStock(activeCorp, player.getStocks().get(activeCorp));
+                player.sellFullPricedStock(activeCorp, player.getStocks().get(activeCorp.getName()));
             }
             giveMajorityMinorityStockHolder(stockCounts, activeCorp);
         }
         for (Corporation inactiveCorp : CorporationList.getInstance().getInactiveCorps()) {
             HashMap<Player, Integer> stockCounts = new HashMap<>();
             for (Player player : Gameboard.getInstance().getPlayers()) {
-                stockCounts.put(player, player.getStocks().get(inactiveCorp));
-                player.sellFullPricedStock(inactiveCorp, player.getStocks().get(inactiveCorp));
+                stockCounts.put(player, player.getStocks().get(inactiveCorp.getName()));
+                player.sellFullPricedStock(inactiveCorp, player.getStocks().get(inactiveCorp.getName()));
             }
             giveMajorityMinorityStockHolder(stockCounts, inactiveCorp);
         }
@@ -330,6 +330,26 @@ public class GameSystem {
         Player minorityHolder = null;
         boolean tie = false;
         for (Player player : Gameboard.getInstance().getPlayers()) {
+            if (majorityHolder == null) {
+                minorityHolder = majorityHolder;
+                majorityHolder = player;
+            } else if (minorityHolder == null) {
+                minorityHolder = player;
+            } else {
+                try {
+                    if (stockCounts.get(majorityHolder) < stockCounts.get(player)) {
+                        minorityHolder = majorityHolder;
+
+                        majorityHolder = player;
+                    } else if (stockCounts.get(minorityHolder) < stockCounts.get(player)) {
+                        minorityHolder = player;
+                    }
+                } catch (NullPointerException e){
+                    //
+                }
+            }
+
+            /*
             if ( (majorityHolder == null) || stockCounts.get(majorityHolder) < stockCounts.get(player) ) {
                 minorityHolder = majorityHolder;
 
@@ -337,6 +357,8 @@ public class GameSystem {
             }else if (minorityHolder == null || stockCounts.get(minorityHolder) < stockCounts.get(player) ) {
                 minorityHolder = player;
             }
+
+             */
         }
         //tie pays out half of the combined payouts
         if(stockCounts.get(minorityHolder) == stockCounts.get(majorityHolder)){
