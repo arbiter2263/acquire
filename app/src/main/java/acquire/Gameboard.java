@@ -239,13 +239,11 @@ public class Gameboard {
             }
         }
 
-        biggestCorp.addTile(tile);
-        for (int i=0; i<indexes.size(); i++) {
-            if (CorporationList.getInstance().getActiveCorps().get(indexes.get(i)) != biggestCorp) {
-                Corporation c = CorporationList.getInstance().getActiveCorps().get(indexes.get(i));
-                CorporationList.getInstance().deactivateCorp(c);
-            }
-        }
+        LOGGER.info(checkStakes(indexes).toString());
+        shareHolders = checkStakes(indexes);
+        LOGGER.info(shareHolders.toString());
+        LOGGER.info(checkStakes(indexes).toString());
+
     }
 
     /**
@@ -397,12 +395,17 @@ public class Gameboard {
         Stage test = new Stage();
         test.setScene(makeCorpScreen.getScene(test, player));
         test.showAndWait();
-        Corporation corp = CorporationList.getInstance().getCorporation(corpName);
-        CorporationList.getInstance().activateCorp(corp);
-        corp.addTile(tile);
-        corp.addTile(Gameboard.getInstance().board[rowColumnTile2[0]][rowColumnTile2[1]]);
-        LOGGER.info("New corporation was formed");
-        player.addFoundersStock(corp);
+        if (corpName == null) {
+            return;
+        } else {
+            Corporation corp = CorporationList.getInstance().getCorporation(corpName);
+            CorporationList.getInstance().activateCorp(corp);
+            corp.addTile(tile);
+            corp.addTile(Gameboard.getInstance().board[rowColumnTile2[0]][rowColumnTile2[1]]);
+            LOGGER.info("New corporation was formed");
+            player.addFoundersStock(corp);
+            corpName = null;
+        }
     }
 
     /**
