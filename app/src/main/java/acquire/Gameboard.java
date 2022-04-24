@@ -199,7 +199,7 @@ public class Gameboard {
                 MergerTieScreen tieScreen = new MergerTieScreen();
                 try {
                     Stage test = new Stage();
-                    primaryStage.setScene(tieScreen.getScene(test, player, biggestCorp.getName(), corp.getName()));
+                    test.setScene(tieScreen.getScene(test, player, biggestCorp.getName(), corp.getName()));
                     test.showAndWait();
                 } catch (FileNotFoundException e) {
                     //it didn't work
@@ -227,6 +227,8 @@ public class Gameboard {
         }
 
         shareHolders = checkStakes(indexes);
+        LOGGER.info(shareHolders.toString());
+        LOGGER.info(checkStakes(indexes).toString());
         MergerScreen playerChoices = new MergerScreen();
         corpName = null;
         try {
