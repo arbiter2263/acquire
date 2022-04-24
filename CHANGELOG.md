@@ -1,15 +1,26 @@
 # Changelog
 This document contains a summary of changes for this project
 
+## [1.0.1] 04-24-2022
+### Added
+- PNGs to represent each corporation
+- Workflow to automatically build and test the project on push to main/develop
+- Folder to hold generated artifacts
+### Changed
+- Fixed tests that broke due to developmental changes
+- Internal functionality of some methods
+### Removed
+- Nothing removed
+
 ## [1.0.0] 04-10-2022
 ### Added
 - User interface
-- additional testing 
+- additional testing
 ### Changed
 - adjusted some class method logic
 - some testing adjusted for better coverage
 ### Removed
-- Nothing removed 
+- Nothing removed
 
 ## [0.1.1] 04-10-2022
 ### Added

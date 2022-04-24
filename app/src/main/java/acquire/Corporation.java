@@ -13,8 +13,8 @@ import org.slf4j.LoggerFactory;
 @EqualsAndHashCode @ToString
 public class Corporation {
     @NonNull @Getter @Setter private String name;
-    @Getter private LinkedList<Tile> tileList;
-    @Getter private int stockCount;
+    @Getter protected LinkedList<Tile> tileList;
+    @Getter @Setter private int stockCount;
     @Getter private static final int STOCKCAP = 25;
     @Getter private boolean stockCapMet;
     @Getter private int stockPrice;
@@ -41,6 +41,15 @@ public class Corporation {
             return true;
         }
         return false;
+    }
+
+    protected int getStocksAvailable() {
+        if (stockCapMet) {return 0;}
+        else {
+            int available;
+            available = 25 - this.stockCount;
+            return available;
+        }
     }
 
     /**

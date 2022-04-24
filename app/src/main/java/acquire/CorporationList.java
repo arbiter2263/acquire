@@ -33,8 +33,8 @@ public class CorporationList {
         this.inactiveCorps = new ArrayList<Corporation>();
         this.activeCorps = new ArrayList<Corporation>();
         //Initialize all possible corporations as members of inactiveCorps
-        for (int i = 0; i < CORPORATIONS.length; i++){
-            inactiveCorps.add(new Corporation(CORPORATIONS[i]));
+        for (String corporation : CORPORATIONS) {
+            inactiveCorps.add(new Corporation(corporation));
         }
     }
 
@@ -95,6 +95,8 @@ public class CorporationList {
                     activeCorps.add(corporation);
                     //Remove corp from inactiveCorps
                     iterator.remove();
+                    //Account for founder's stock
+                    corporation.setStockCount(corporation.getStockCount()+1);
                     LOGGER.info("Corporation {} was activated", corporation.getName());
                     return;
                 }
@@ -120,6 +122,10 @@ public class CorporationList {
                     //Remove corp from activeCorps
                     iterator.remove();
                     LOGGER.info("Corporation {} was moved to inactive state", corporation.getName());
+                    //remove tiles from tilelist
+                    while(corporation.getTileList().size() != 0) {
+                        corporation.getTileList().remove();
+                    }
                     return;
                 }
             }
@@ -193,6 +199,7 @@ public class CorporationList {
         //Now replace current instance with saved instance corporations
         CorporationList.getInstance().activeCorps = newCorpList.activeCorps;
         CorporationList.getInstance().inactiveCorps = newCorpList.inactiveCorps;
+        LOGGER.info("Loaded game with {} active corps and {} inactive corps", activeCorps.size(), inactiveCorps.size());
     }
 
     /**
@@ -202,17 +209,16 @@ public class CorporationList {
      * stats to default and deactivate them
      */
     protected void newGame(){
-        INSTANCE = new CorporationList();
-        /*
+        ArrayList<Corporation> deactivateList = new ArrayList<>();
+        for(Corporation corp : activeCorps){
+            deactivateList.add(corp);
+        }
+        for(Corporation corp : deactivateList){
+            deactivateCorp(corp);
+        }
         for(Corporation corp : inactiveCorps){
             corp.newGame();
         }
-
-        for(Corporation corp : activeCorps){
-            corp.newGame();
-            deactivateCorp(corp);
-        }
-        */
     }
 
 }
