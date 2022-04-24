@@ -63,7 +63,7 @@ class GameSystemTest extends Specification {
         def result1 = CorporationList.getInstance().getCorporation(corp.getName()).getStockCount()
 
         then:
-        result1 == 1
+        result1 == 2
 
     }
 
