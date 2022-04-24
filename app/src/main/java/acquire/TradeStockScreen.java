@@ -5,7 +5,7 @@
 
 package acquire;
 
-import javafx.application.Application;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -20,9 +20,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import org.checkerframework.checker.units.qual.A;
-
-import javax.management.Notification;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
