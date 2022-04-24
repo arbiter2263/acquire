@@ -9,6 +9,14 @@ import javafx.stage.Stage;
 import spock.lang.Specification;
 
 class PlayerTest extends Specification {
+    //Set up method
+    def setup() {
+        GameSystem.INSTANCE = null
+        Gameboard.INSTANCE = null
+        CorporationList.INSTANCE = null
+        Pile.instance = null
+    }
+
     //test for getName()
     def "get a player's name"() {
         setup:

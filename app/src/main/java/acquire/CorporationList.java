@@ -202,7 +202,8 @@ public class CorporationList {
      * stats to default and deactivate them
      */
     protected void newGame(){
-
+        INSTANCE = new CorporationList();
+        /*
         for(Corporation corp : inactiveCorps){
             corp.newGame();
         }
@@ -211,6 +212,7 @@ public class CorporationList {
             corp.newGame();
             deactivateCorp(corp);
         }
+        */
     }
 
 }

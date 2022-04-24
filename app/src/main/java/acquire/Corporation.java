@@ -159,4 +159,10 @@ public class Corporation {
         updateStockPrice();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        Corporation corp = (Corporation) obj;
+        return this.getName() == corp.getName();
+    }
+
 }
