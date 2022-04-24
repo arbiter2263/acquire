@@ -84,10 +84,7 @@ public class MakeCorporationScreen {
             close.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    GameBoardScreen gbs = new GameBoardScreen();
-                    Scene scene = gbs.getScene(primaryStage, user);
-                    primaryStage.setScene(scene);
-                    primaryStage.show();
+                    primaryStage.close();
                 }
             });
         }
