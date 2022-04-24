@@ -49,7 +49,7 @@ class GameboardTest extends Specification {
         def tile = new Tile(1, 'A' as char)
         def stage = Mock(Stage)
         player.addTile(tile)
-        board.placeTile(player, tile, stage)
+        board.tilesPlayed.add(tile)
 
         when:
         def result = board.getTilesPlayed()

@@ -206,7 +206,6 @@ public class CorporationList {
      * stats to default and deactivate them
      */
     protected void newGame(){
-
         ArrayList<Corporation> deactivateList = new ArrayList<>();
         for(Corporation corp : activeCorps){
             deactivateList.add(corp);
@@ -217,7 +216,6 @@ public class CorporationList {
         for(Corporation corp : inactiveCorps){
             corp.newGame();
         }
-
     }
 
 }
