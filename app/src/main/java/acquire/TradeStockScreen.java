@@ -28,6 +28,14 @@ public class TradeStockScreen {
     static String corpSurviving;
     static String corpDefunct;
 
+    /**
+     * used by other scenes to access
+     * @param primaryStage stage scene is running on
+     * @param f player who is trading in stock
+     * @param surviving corporation that is absorbing
+     * @param defunct corporation that is being absorbed
+     * @return the setup scene
+     */
     public Scene getScene(Stage primaryStage, Player f, String surviving, String defunct) {
         GridPane gridPane = stockTrade();
         user = f;
@@ -40,6 +48,10 @@ public class TradeStockScreen {
         return scene;
     }
 
+    /**
+     * sets up the gridpane
+     * @return the setup gridpane
+     */
     private GridPane stockTrade() {
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
@@ -49,6 +61,12 @@ public class TradeStockScreen {
         return gridPane;
     }
 
+    /**
+     * adds controls to the gridpane
+     * @param primaryStage stage scene is running on
+     * @param gridPane gridpane that needs controls added to
+     * @throws FileNotFoundException if can't find image associated with corporation
+     */
     private void addUIControls(Stage primaryStage, GridPane gridPane) throws FileNotFoundException {
         // Add Header
         Label headerLabel = new Label("Trading stocks was selected, please enter how many you want to trade. \nRemember that trading stocks is a 2 to 1 ratio of defunct to merged stocks.");

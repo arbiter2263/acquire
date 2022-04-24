@@ -32,6 +32,12 @@ import java.util.LinkedList;
 public class GameBoardScreen {
     static private Player user;
 
+    /**
+     * used to create and access the gameboard scene
+     * @param primaryStage stage the scene will be ran on
+     * @param e Player whose turn it is
+     * @return gameboard scene
+     */
     protected Scene getScene(Stage primaryStage, Player e) {
         GridPane gridPane = new GridPane();
         user = e;
@@ -41,6 +47,10 @@ public class GameBoardScreen {
         return scene;
     }
 
+    /**
+     * Sets up the gridpane used for organizing
+     * @param gridPane gridpane that needs to be setup
+     */
     private void setup(GridPane gridPane) {
         gridPane.setAlignment(Pos.TOP_CENTER);
         gridPane.setBackground(new Background(new BackgroundFill(Color.web("#CBC3E3"), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -58,6 +68,11 @@ public class GameBoardScreen {
         }
     }
 
+    /**
+     * adds controls to the gridpane
+     * @param primaryStage stage that can be changed to other scenes
+     * @param gridPane gridpane controls organized on
+     */
     private void addUIControls(Stage primaryStage, GridPane gridPane) {
         // Hint Button
         try {
@@ -308,6 +323,11 @@ public class GameBoardScreen {
         });
     }
 
+    /**
+     * sets the style of a textArea given, used for the gameboard visualization where textareas represent tiles
+     * @param corp corporation textarea tile is contained in
+     * @param spot textarea representing tile
+     */
     private void setStyle(Corporation corp, TextArea spot) {
         switch (corp.getName()) {
             case "Sackson" -> spot.setStyle("-fx-control-inner-background:#dc143c");
@@ -320,6 +340,10 @@ public class GameBoardScreen {
         }
     }
 
+    /**
+     * throws out error if user tries to access screen only allowed in advanced mode while not in advanced mode
+     * @param owner window the alert goes to
+     */
     private void difficultyError(Window owner) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Difficulty Error!");

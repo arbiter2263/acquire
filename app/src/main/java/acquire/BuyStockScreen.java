@@ -29,6 +29,12 @@ public class BuyStockScreen {
     static LinkedList<String> tempStock= new LinkedList<>();
     static int counter;
 
+    /**
+     * used by other scenes to access this scene
+     * @param primaryStage stage scene is ran on
+     * @param e player that is being prompted to buy stock
+     * @return the setup scene
+     */
     protected Scene getScene(Stage primaryStage, Player e) {
         GridPane gridPane = new GridPane();
         user = e;
@@ -39,7 +45,8 @@ public class BuyStockScreen {
     }
 
     /**
-     * Method to setup gridPane
+     * method to setup gridpane
+     * @param gridPane gridpane that needs setup
      */
     private void gameSetup(GridPane gridPane) {
         counter = 0;
@@ -52,6 +59,7 @@ public class BuyStockScreen {
 
     /**
      * Method to setup the user interface the scene uses
+     * @param primaryStage stage scene will be ran on
      * @param gridPane allows for organization of user interface
      */
     private void addUIControls(Stage primaryStage, GridPane gridPane) {
@@ -317,6 +325,7 @@ public class BuyStockScreen {
      * Handles errors and math for the user interface balance after purchase
      * @param balance user balance with previous selected purchases accounted for
      * @param cost cost of the stock selected
+     * @param gridPane gridpane used to find the window alert is displayed to
      * @return balance user would have after pressing submit
      */
     private String calculateBalance(int balance, int cost, GridPane gridPane) {
@@ -330,6 +339,11 @@ public class BuyStockScreen {
         return Integer.toString(balance);
     }
 
+    /**
+     * sets up base error alert logic
+     * @param owner window it will be displayed to
+     * @param message message shown in alert
+     */
     private void showAlert(Window owner, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Account Error!");
@@ -339,6 +353,10 @@ public class BuyStockScreen {
         alert.show();
     }
 
+    /**
+     * sets the style of the buy stock buttons depending on if the corporation associated with them is active or not
+     * @param buy button that is being edited
+     */
     private void setStyle(Button buy) {
         if (CorporationList.getInstance().getActiveCorps().contains(CorporationList.getInstance().getCorporation(buy.getText()))) {
             switch (buy.getText()) {
@@ -355,6 +373,10 @@ public class BuyStockScreen {
 
     }
 
+    /**
+     * the code for an alert telling the user that they have selected the maximum number of stocks
+     * @param owner window the alert will be displayed to
+     */
     private void showAlertStock(Window owner) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Selection Error!");
@@ -364,6 +386,10 @@ public class BuyStockScreen {
         alert.show();
     }
 
+    /**
+     * alert that tells the user the stock they have selected to purchase cannot be purchased because the corporation associated with it is inactive
+     * @param owner window the alert will be displayed to
+     */
     private void alertStockNA(Window owner) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Selection Error!");
