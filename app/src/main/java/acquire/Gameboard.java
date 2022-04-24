@@ -137,9 +137,10 @@ public class Gameboard {
         for (Corporation corp : CorporationList.getInstance().getActiveCorps()) {
             for (Tile tile : unincorporatedTilesPlayed){
                 if (doesTileTouchCorp(tile, corp)) {
-                    corp.addTile((tile));
+                    if(!corp.tileList.contains(tile)) {
+                        corp.addTile((tile));
+                    }
                     removeTheseTiles.add(tile);
-
                 }
             }
         }
@@ -232,7 +233,8 @@ public class Gameboard {
         MergerScreen playerChoices = new MergerScreen();
         corpName = null;
         try {
-            primaryStage.setScene(playerChoices.getScene(primaryStage, shareHolders.remove(), biggestCorp.getName(), CorporationList.getInstance().getActiveCorps().get(indexes.get(0)).getName()));
+            primaryStage.setScene(playerChoices.getScene(primaryStage, shareHolders.remove(), biggestCorp.getName(),
+                    CorporationList.getInstance().getActiveCorps().get(indexes.get(0)).getName()));
         } catch (FileNotFoundException ignored) {}
     }
 
@@ -488,9 +490,7 @@ public class Gameboard {
         Gameboard.getInstance().board = newGameboard.board;
         Gameboard.getInstance().tilesPlayed = newGameboard.tilesPlayed;
         Gameboard.getInstance().unincorporatedTilesPlayed = newGameboard.unincorporatedTilesPlayed;
-        for(Player player : GameSystem.getInstance().getPlayerList()){
-            players.add(player);
-        }
+        players.addAll(GameSystem.getInstance().getPlayerList());
         LOGGER.info("Board loaded with {} tiles played", tilesPlayed.size());
         LOGGER.info("Gameboard loaded with {} tiles played, and {} players.", tilesPlayed.size(), players.size());
 
