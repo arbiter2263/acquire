@@ -24,28 +24,19 @@ import javafx.stage.Stage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class SellStockScreen extends Application {
-    static String corporation;
-    static Player user;
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Sell Stock");
-        GridPane gridPane = stockSell();
-        addUIControls(gridPane);
-        Scene scene9 = new Scene(gridPane, 1200, 800);
-        ColumnConstraints columnOneConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        ColumnConstraints columnTwoConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        ColumnConstraints columnThreeConstraints = new ColumnConstraints(100, 350, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.CENTER);
-        gridPane.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstraints, columnThreeConstraints);
-        primaryStage.setScene(scene9);
-        primaryStage.show();
+public class SellStockScreen {
+
+    protected Scene getScene(Stage primaryStage, Player e, String defunct, String active) throws FileNotFoundException {
+        Player user;
+        GridPane gridPane = new GridPane();
+        user = e;
+        Scene scene = new Scene(gridPane, 1200, 800);
+        stockSell(gridPane);
+        addUIControls(primaryStage, gridPane, user, defunct, active);
+        return scene;
     }
 
-    private GridPane stockSell() {
-        GridPane gridPane = new GridPane();
+    private GridPane stockSell(GridPane gridPane) {
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setBackground(new Background(new BackgroundFill(Color.web("#CBC3E3"), CornerRadii.EMPTY, Insets.EMPTY)));
         gridPane.setPadding(new Insets(10, 10, 10, 10));
@@ -54,7 +45,7 @@ public class SellStockScreen extends Application {
         return gridPane;
     }
 
-    private void addUIControls(GridPane gridPane) throws FileNotFoundException {
+    private void addUIControls(Stage primaryStage, GridPane gridPane, Player user, String defunct, String active) throws FileNotFoundException {
         // Add Header
         Label headerLabel = new Label("Selling stocks was selected, please enter how many stocks you would like to sell");
         headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
@@ -62,14 +53,14 @@ public class SellStockScreen extends Application {
         GridPane.setHalignment(headerLabel, HPos.CENTER);
         GridPane.setMargin(headerLabel, new Insets(20, 0,20,0));
 
-        //Corporation Image
-        FileInputStream inputstream = new FileInputStream(corporation + ".png");
+        //defunct Image
+        FileInputStream inputstream = new FileInputStream(defunct + ".png");
         Image corpImage = new Image(inputstream);
         ImageView imageView = new ImageView(corpImage);
         gridPane.add(imageView, 0, 1);
 
         // Stock Count Prompt
-        Label stockCount = new Label("You have " + Integer.toString(user.getStocks().get(corporation)) + "stocks in this corporation. \nHow many would you like to sell?");
+        Label stockCount = new Label("You have " + Integer.toString(user.getStocks().get(defunct)) + "stocks in this corporation. \nHow many would you like to sell?");
         stockCount.setPrefHeight(100);
         gridPane.add(stockCount, 1,1);
 
@@ -98,6 +89,7 @@ public class SellStockScreen extends Application {
                         user.sellDefunctStock(CorporationList.getInstance().getCorporation(""), Integer.parseInt(numStock.getText()));
                         Alert success = new Alert(Alert.AlertType.INFORMATION, "Stocks Sold!");
                         success.show();
+                        if (checkIfDone(user, CorporationList.getInstance().getCorporation(defunct))) {primaryStage.close();}
                     }
                     catch (final NumberFormatException e) {
                         Alert emptyField = new Alert(Alert.AlertType.ERROR, "Please enter an integer lower than or equal to your current stock count in the text field.");
@@ -118,7 +110,10 @@ public class SellStockScreen extends Application {
         tradeButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
+                TradeStockScreen trade = new TradeStockScreen();
+                Scene scene = trade.getScene(primaryStage, user, defunct, active);
+                primaryStage.setScene(scene);
+                primaryStage.show();
             }
         });
         // Add Hold Button
@@ -135,14 +130,12 @@ public class SellStockScreen extends Application {
             public void handle(ActionEvent event) {
                     Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to hold stock in the defunct corporation? This will end selling and trading in stock.");
                     confirm.showAndWait();
-                    if (confirm.getResult() == ButtonType.YES) {}
+                    if (confirm.getResult() == ButtonType.YES) {primaryStage.close();}
                 }
             });
     }
 
-    public static void main(Player e, String name) {
-        user = e;
-        corporation = name;
-        launch();
+    private boolean checkIfDone(Player user, Corporation defunct) {
+        return user.getStockCount(defunct.getName()) == 0;
     }
 }

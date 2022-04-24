@@ -31,23 +31,14 @@ public class MergerTieScreen {
     protected Scene getScene(Stage primaryStage, Player e, String k, String f) throws FileNotFoundException {
         GridPane gridPane = new GridPane();
         user = e;
+        corporation1 = k;
+        corporation2 = f;
         Scene scene = new Scene(gridPane, 1200, 800);
         gameSetup(gridPane);
         addUIControls(primaryStage, gridPane);
         return scene;
     }
-/*
-    protected void loadScene(Stage primary, Player e, String k, String f) throws FileNotFoundException {
-        primary.setTitle("Merger Tie");
-        gameSetup();
-        addUIControls(gridPane);
-        user = e;
-        corporation1 = f;
-        corporation2 = k;
-        Scene scene14 = new Scene(gridPane, 1200, 800);
-        primary.setScene(scene14);
-    }
-*/
+
     private GridPane gameSetup(GridPane gridPane) {
         gridPane.setAlignment(Pos.TOP_CENTER);
         gridPane.setHgap(10);
@@ -57,12 +48,12 @@ public class MergerTieScreen {
     }
 
     private void addUIControls(Stage primaryStage, GridPane gridPane) throws FileNotFoundException {
-        TextArea merger = new TextArea("A merger has occurred between these 2 corporations: REPLACE ME 1 and REPLACE ME 2. The Corporations are the same size, select a corporation you would like to merge and take over. ");
+        TextArea merger = new TextArea("A merger has occurred between these 2 corporations: " + corporation1 + " and " + corporation2 + ". The Corporations are the same size, select a corporation you would like to merge and take over. ");
         merger.setWrapText(true);
-        merger.setPrefHeight(100);
+        merger.setPrefHeight(150);
         merger.setEditable(false);
         merger.setStyle("-fx-control-inner-background:#CBC3E3; -fx-font-size: 2em;");
-        gridPane.add(merger, 0, 0, 3, 1);
+        gridPane.add(merger, 0, 0, 2, 1);
 
         // Add image of first corporation
         FileInputStream inputstream = new FileInputStream(corporation1 + ".png");
@@ -77,17 +68,18 @@ public class MergerTieScreen {
         gridPane.add(imageView2, 2, 1);
 
         Button corp1 = new Button(corporation1);
+        corp1.setPrefWidth(300);
         gridPane.add(corp1, 0, 2);
 
         Button corp2 = new Button(corporation2);
+        corp2.setPrefWidth(300);
         gridPane.add(corp2, 2, 2);
 
         corp1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Gameboard.getInstance().setCorpName(corp1.getText());
-                GameBoardScreen goBack = new GameBoardScreen();
-                primaryStage.setScene(goBack.getScene(primaryStage, user));
+                primaryStage.close();
             }
         });
 
@@ -95,8 +87,7 @@ public class MergerTieScreen {
             @Override
             public void handle(ActionEvent event) {
                 Gameboard.getInstance().setCorpName(corp1.getText());
-                GameBoardScreen goBack = new GameBoardScreen();
-                primaryStage.setScene(goBack.getScene(primaryStage, user));
+                primaryStage.close();
             }
         });
     }

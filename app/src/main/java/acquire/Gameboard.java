@@ -8,10 +8,13 @@ package acquire;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import lombok.*;
 import org.slf4j.Logger;
@@ -21,6 +24,7 @@ import org.slf4j.LoggerFactory;
 public class Gameboard {
     @Getter private LinkedList<Player> players;
     @Getter private LinkedList<Tile> tilesPlayed;
+    @Getter private ArrayList<Tile> unincorporatedTilesPlayed;
     @Getter private Tile[][] board;
     @VisibleForTesting
     private static Gameboard INSTANCE = null; // Field to hold singleton instance of class
@@ -33,6 +37,7 @@ public class Gameboard {
         this.players = new LinkedList<Player>();
         this.tilesPlayed = new LinkedList<Tile>();
         this.board = new Tile[12][9];
+        this.unincorporatedTilesPlayed = new ArrayList<>();
     }
 
     /**
@@ -52,9 +57,9 @@ public class Gameboard {
      */
     protected void initializeGame(int numOfPlayers){
         for (int i = 0; i < numOfPlayers; i++) {
-            getInstance().players.add(new Player("Player " + i));
+            int e = i+1;
+            getInstance().players.add(new Player("Player " + e));
         }
-        LOGGER.info("Game initialized for {} players", numOfPlayers);
     }
 
     /**
@@ -93,10 +98,12 @@ public class Gameboard {
     protected boolean placeTile(Player player, Tile tile, Stage primaryStage) {
         if(isValidTilePlay(tile)) {
             LinkedList<Integer> indexes = new LinkedList<Integer>();
+            unincorporatedTilesPlayed.add(tile);
             if (CorporationList.getInstance().getActiveCorps().size() > 0) {
                 for (int i = 0; i < CorporationList.getInstance().getActiveCorps().size(); i++) {
                     if (doesTileTouchCorp(tile, CorporationList.getInstance().getActiveCorps().get(i))) {
                         indexes.add(i);
+                        unincorporatedTilesPlayed.remove(tile);
                     }
                 }
             }
@@ -106,16 +113,43 @@ public class Gameboard {
                 expandCorp(tile, indexes.get(0));
             } else if (isTouchingPlacedTile(tile)[0] > -1){
                 makeNewCorp(player, tile, isTouchingPlacedTile(tile), primaryStage);
-            } else {
-                //just place tile
             }
             addTileToBoard(tile);
             LOGGER.info("Tile {} was added to the gameboard", tile.getSpace());
+            if(CorporationList.getInstance().getActiveCorps().size() != 0) {
+                unincorporatedTileCheck();
+            }
             return true;
         } else {
             return false;
         }
     }
+
+
+    /**
+     * Method to check the board's unincorporated tiles that
+     * were played previously, if they are touching a newly placed
+     * tile in a corporation, it will be removed from the
+     * unincorporated list and added to the corporation size
+     */
+
+    private void unincorporatedTileCheck(){
+        ArrayList<Tile> removeTheseTiles = new ArrayList<>();
+        for (Corporation corp : CorporationList.getInstance().getActiveCorps()) {
+            for (Tile tile : unincorporatedTilesPlayed){
+                if (doesTileTouchCorp(tile, corp)) {
+                    if(!corp.tileList.contains(tile)) {
+                        corp.addTile((tile));
+                    }
+                    removeTheseTiles.add(tile);
+                }
+            }
+        }
+        for(Tile tile : removeTheseTiles){
+            unincorporatedTilesPlayed.remove(tile);
+        }
+    }
+
 
     /**
      * Method that checks if a tile is touching the side of any tile within a given corporation
@@ -126,7 +160,6 @@ public class Gameboard {
     private boolean doesTileTouchCorp(Tile tile, Corporation corporation) {
         int[] rowColumn = getRowColumnTile(tile);
         LinkedList<Tile> corpTiles = corporation.getTileList();
-
         for (Tile tileX : corpTiles) {
             int[] tileXRowColumn = getRowColumnTile(tileX);
             if (tileXRowColumn[0] == rowColumn[0] && ( tileXRowColumn[1] == rowColumn[1]+1 || tileXRowColumn[1] == rowColumn[1]-1) ) {
@@ -139,32 +172,65 @@ public class Gameboard {
     }
 
     /**
+     * Method to find players that have a stock in select corporations
+     * @param indexes indexes of corporations involved in merger in ActiveCorporations
+     * @return return linkedlist of players that have stocks in the company
+     */
+    private LinkedList<Player> checkStakes(LinkedList<Integer> indexes) {
+        LinkedList<Player> hasStake = new LinkedList<>();
+        for (int index : indexes) {
+            for (Player player : players) {
+                if (player.getStockCount(CorporationList.getInstance().getActiveCorps().get(index).getName()) > 0) {
+                        hasStake.add(player);
+                }
+            }
+        }
+        return hasStake;
+    }
+
+    /**
      * Method to merger corporations together
      * @param tile  The tile that started the merger
      * @param indexes  The indexes for the corporations involved
      */
     private void merger(Player player, Tile tile, LinkedList<Integer> indexes, Stage primaryStage){
-        //Will need to cooperate with the merger screen
-        // needs user input
-        Corporation biggestCorp = new Corporation("fakeCorp");
-        for (int index : indexes) {
-            Corporation corp = CorporationList.getInstance().getActiveCorps().get(index);
+        LinkedList<Player> shareHolders;
+        Corporation biggestCorp = CorporationList.getInstance().getActiveCorps().get(indexes.getFirst());
+        for (int i = 1; i < indexes.size(); i++) {
+            Corporation corp = CorporationList.getInstance().getActiveCorps().get(indexes.get(i));
             if (corp.getTileList().size() == biggestCorp.getTileList().size()) {
                 //We have a tie
                 MergerTieScreen tieScreen = new MergerTieScreen();
                 try {
                     Stage test = new Stage();
-                    primaryStage.setScene(tieScreen.getScene(test, player, biggestCorp.getName(), corp.getName()));
+                    test.setScene(tieScreen.getScene(test, player, biggestCorp.getName(), corp.getName()));
                     test.showAndWait();
                 } catch (FileNotFoundException e) {
                     //it didn't work
                 }
                 biggestCorp = CorporationList.getInstance().getCorporation(corpName);
-                corpName = null;
             } else if (corp.getTileList().size() > biggestCorp.getTileList().size()) {
                 biggestCorp = corp;
             }
         }
+
+        LOGGER.info(checkStakes(indexes).toString());
+        shareHolders = checkStakes(indexes);
+        LOGGER.info(shareHolders.toString());
+        LOGGER.info(checkStakes(indexes).toString());
+        MergerScreen playerChoices = new MergerScreen();
+        try {
+            for (Player shareHolder : shareHolders) {
+                for (Integer index : indexes) {
+                    Corporation def = CorporationList.getInstance().getActiveCorps().get(index);
+                    Stage merger = new Stage();
+                    Scene scene = playerChoices.getScene(merger, shareHolder, biggestCorp.getName(), def.getName());
+                    merger.setScene(scene);
+                    merger.showAndWait();
+                }
+            }
+        } catch (FileNotFoundException ignored) {}
+
         for (int index : indexes) {
             if (CorporationList.getInstance().getActiveCorps().get(index) != biggestCorp) {
                 for (Tile t : CorporationList.getInstance().getActiveCorps().get(index).getTileList()) {
@@ -172,11 +238,12 @@ public class Gameboard {
                 }
             }
         }
-        biggestCorp.addTile(tile);
-        for (int index : indexes) {
-            Corporation c = CorporationList.getInstance().getActiveCorps().get(index);
-            CorporationList.getInstance().deactivateCorp(c);
-        }
+
+        LOGGER.info(checkStakes(indexes).toString());
+        shareHolders = checkStakes(indexes);
+        LOGGER.info(shareHolders.toString());
+        LOGGER.info(checkStakes(indexes).toString());
+
     }
 
     /**
@@ -328,12 +395,17 @@ public class Gameboard {
         Stage test = new Stage();
         test.setScene(makeCorpScreen.getScene(test, player));
         test.showAndWait();
-        Corporation corp = CorporationList.getInstance().getCorporation(corpName);
-        CorporationList.getInstance().activateCorp(corp);
-        corp.addTile(tile);
-        corp.addTile(Gameboard.getInstance().board[rowColumnTile2[0]][rowColumnTile2[1]]);
-        LOGGER.info("New corporation was formed");
-        player.addFoundersStock(corp);
+        if (corpName == null) {
+            return;
+        } else {
+            Corporation corp = CorporationList.getInstance().getCorporation(corpName);
+            CorporationList.getInstance().activateCorp(corp);
+            corp.addTile(tile);
+            corp.addTile(Gameboard.getInstance().board[rowColumnTile2[0]][rowColumnTile2[1]]);
+            LOGGER.info("New corporation was formed");
+            player.addFoundersStock(corp);
+            corpName = null;
+        }
     }
 
     /**
@@ -395,6 +467,7 @@ public class Gameboard {
         Gameboard.getInstance().tilesPlayed = new LinkedList<Tile>();
         Gameboard.getInstance().players = new LinkedList<Player>();
         Gameboard.getInstance().board = new Tile[12][9];
+        Gameboard.getInstance().unincorporatedTilesPlayed = new ArrayList<>();
     }
 
     /**
@@ -429,7 +502,10 @@ public class Gameboard {
         Gameboard newGameboard = gson.fromJson(reader, (Type) Gameboard.class);
         Gameboard.getInstance().board = newGameboard.board;
         Gameboard.getInstance().tilesPlayed = newGameboard.tilesPlayed;
-        Gameboard.getInstance().players = newGameboard.players;
+        Gameboard.getInstance().unincorporatedTilesPlayed = newGameboard.unincorporatedTilesPlayed;
+        players.addAll(GameSystem.getInstance().getPlayerList());
+        LOGGER.info("Board loaded with {} tiles played", tilesPlayed.size());
+        LOGGER.info("Gameboard loaded with {} tiles played, and {} players.", tilesPlayed.size(), players.size());
 
     }
 

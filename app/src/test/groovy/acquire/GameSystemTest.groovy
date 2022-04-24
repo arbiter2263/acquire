@@ -10,6 +10,13 @@ import spock.lang.Specification
 
 
 class GameSystemTest extends Specification {
+    //Set up method
+    def setup() {
+        GameSystem.INSTANCE = null
+        Gameboard.INSTANCE = null
+        CorporationList.INSTANCE = null
+        Pile.instance = null
+    }
 
     // initializeGame()
 
@@ -32,7 +39,7 @@ class GameSystemTest extends Specification {
 
         when:
 
-        def result = player.getStocks().get(corp)
+        def result = player.getStocks().get(corp.getName())
         then:
         result == 8
 
@@ -56,7 +63,7 @@ class GameSystemTest extends Specification {
         def result1 = CorporationList.getInstance().getCorporation(corp.getName()).getStockCount()
 
         then:
-        result1 == 1
+        result1 == 2
 
     }
 
@@ -119,11 +126,14 @@ class GameSystemTest extends Specification {
         CorporationList.INSTANCE = null
         Gameboard.INSTANCE = null
         Pile.instance = null
+        def sys = GameSystem.getInstance()
+        def board = Gameboard.getInstance()
+        def corpList = CorporationList.getInstance()
         def player = new Player("name")
-        def corp1 = CorporationList.getInstance().getCorporation("America")
-        CorporationList.getInstance().activateCorp(corp1)
-        def corp2 = CorporationList.getInstance().getCorporation("Phoenix")
-        CorporationList.getInstance().activateCorp(corp2)
+        def corp1 = corpList.getCorporation("America")
+        corpList.activateCorp(corp1)
+        def corp2 = corpList.getCorporation("Phoenix")
+        corpList.activateCorp(corp2)
         int amount = 2
 
         player.buyStock(corp1.getName())
@@ -131,12 +141,12 @@ class GameSystemTest extends Specification {
         player.buyStock(corp1.getName())
         player.buyStock(corp1.getName())
 
-        GameSystem.getInstance().tradeStock(player, corp1, corp2, amount)
+        sys.tradeStock(player, corp1, corp2, amount)
 
         expect:
-        player.getStocks().get(corp1) == 2
-        corp1.getStockCount() == 2
-        corp2.getStockCount() == 1
+        player.getStocks().get(corp1.getName()) == 2
+        corp1.getStockCount() == 1
+        corp2.getStockCount() == 3
     }
 
     // sellDefunctStock(Player player, Corporation corp, int sellAmount)
@@ -160,7 +170,7 @@ class GameSystemTest extends Specification {
         GameSystem.getInstance().sellDefunctStock(player, corp, 1)
 
         then:
-        player.getStocks().get(corp) == 2
+        player.getStocks().get(corp.getName()) == 2
         corp.getStockCount() == 2
 
     }
@@ -461,10 +471,10 @@ class GameSystemTest extends Specification {
 
         for(int i = 0; i < 10; i++){
             player1.buyStock(corp.getName())
-           // player2.buyStock(corp1.getName())
+            // player2.buyStock(corp1.getName())
         }
         for(int i = 0; i < 3; i++){
-           player2.buyStock(corp.getName())
+            player2.buyStock(corp.getName())
             //player1.buyStock(corp1.getName())
         }
 
@@ -554,9 +564,9 @@ class GameSystemTest extends Specification {
 
 
         then:
-                                            //corp tied bonus    corp1 minority bonus
+        //corp tied bonus    corp1 minority bonus
         player1.getMoney() == 26700 //23700  // 0 + (12 * 600 + 4500) + (5 * 1200 + 6000)
-                                            //corp tied bonus     corp1 majority bonus
+        //corp tied bonus     corp1 majority bonus
         player2.getMoney() == 29100 //32100  // 0 + (12 * 600 + 4500)  +  (7 * 1200 + 12000)
 
         player3.getMoney() == 3600      // 0 + (2 * 600 + 0) + (2 * 1200 + 0)

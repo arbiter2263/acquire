@@ -4,6 +4,8 @@
  */
 
 package acquire;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,9 +14,23 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
+
 public class MergerScreen {
-    static GridPane gridPane = new GridPane();
     static Player user;
+    static String corporation1;
+    static String corporation2;
+
+    protected Scene getScene(Stage primaryStage, Player e, String k, String defunct) throws FileNotFoundException {
+        GridPane gridPane = new GridPane();
+        user = e;
+        corporation1 = k;
+        corporation2 = defunct;
+        Scene scene = new Scene(gridPane, 1200, 800);
+        gameSetup(gridPane);
+        addUIControls(primaryStage, gridPane);
+        return scene;
+    }
 
     private GridPane gameSetup(GridPane gridPane) {
         gridPane.setAlignment(Pos.TOP_CENTER);
@@ -24,8 +40,8 @@ public class MergerScreen {
         return gridPane;
     }
 
-    private void addUIControls(GridPane gridPane) {
-        TextArea merger = new TextArea("A merger has occurred between these 2 corporations: REPLACE ME 1 and REPLACE ME 2. What would you like to do with your stocks for REPLACE ME 3 corporation which is now defunct?");
+    private void addUIControls(Stage primaryStage, GridPane gridPane) {
+        TextArea merger = new TextArea("A merger has occurred between these 2 corporations: " + corporation1 + " and " + corporation2 + ". What would you like to do with your stocks for " + corporation2 + " which is now defunct?");
         merger.setWrapText(true);
         merger.setPrefHeight(100);
         merger.setEditable(false);
@@ -58,15 +74,31 @@ public class MergerScreen {
         holdButton.setStyle("-fx-background-color:#ADD8E6; -fx-border-color:#000000");
         gridPane.add(holdButton, 2, 3, 1, 1);
         GridPane.setMargin(holdButton, new Insets(20, 0,20,0));
-    }
 
-    protected void loadScene(Stage primary, Player e) {
-        primary.setTitle("Buy Stock");
-        gameSetup(gridPane);
-        Scene scene11 = new Scene(gridPane, 1200, 800);
-        addUIControls(gridPane);
-        user = e;
-        primary.setScene(scene11);
+        sellButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                SellStockScreen sell = new SellStockScreen();
+                try {
+                    primaryStage.setScene(sell.getScene(primaryStage, user, corporation2, corporation1)) ;
+                } catch (FileNotFoundException ignored) {}
+            }
+        });
+
+        tradeButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                TradeStockScreen trade = new TradeStockScreen();
+                primaryStage.setScene(trade.getScene(primaryStage, user, corporation1, corporation2));
+            }
+        });
+
+        holdButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                primaryStage.close();
+            }
+        });
     }
 
 }

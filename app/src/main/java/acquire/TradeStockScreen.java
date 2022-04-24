@@ -31,6 +31,18 @@ public class TradeStockScreen {
     static String corpSurviving;
     static String corpDefunct;
 
+    public Scene getScene(Stage primaryStage, Player f, String surviving, String defunct) {
+        GridPane gridPane = stockTrade();
+        user = f;
+        corpSurviving = surviving;
+        corpDefunct = defunct;
+        Scene scene = new Scene(gridPane);
+        try {
+            addUIControls(primaryStage, gridPane);
+        } catch (FileNotFoundException ignored) {}
+        return scene;
+    }
+
     private GridPane stockTrade() {
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
@@ -40,7 +52,7 @@ public class TradeStockScreen {
         return gridPane;
     }
 
-    private void addUIControls(GridPane gridPane) throws FileNotFoundException {
+    private void addUIControls(Stage primaryStage, GridPane gridPane) throws FileNotFoundException {
         // Add Header
         Label headerLabel = new Label("Trading stocks was selected, please enter how many you want to trade. \nRemember that trading stocks is a 2 to 1 ratio of defunct to merged stocks.");
         headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
@@ -112,14 +124,12 @@ public class TradeStockScreen {
             public void handle(ActionEvent event) {
                 Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to hold stock in the defunct corporation? This will end selling and trading in stock.");
                 confirm.showAndWait();
-                if (confirm.getResult() == ButtonType.YES) {}
+                if (confirm.getResult() == ButtonType.YES) {
+
+                }
             }
         });
     }
 
-    protected void loadScene(Stage primary, Player e, String f, String k) {
-        user = e;
-        corpSurviving = f;
-        corpDefunct = k;
-    }
+
 }

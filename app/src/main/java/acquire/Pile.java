@@ -69,7 +69,7 @@ public class Pile {
             }
         //After all are added, shuffle the deck
         } shuffle();
-        LOGGER.info("Pile was created");
+
     }
 
 
@@ -103,18 +103,19 @@ public class Pile {
            To get a randomly chosen tile.
         */
         Random random = new Random();
-        int randomInt = random.nextInt(pile.size());
-            if (pile.size() != 0) {
-                LOGGER.info("Tile {} was drawn and removed from the pile.", pile.get(randomInt).getSpace());
-                return pile.remove(randomInt);
-                //Print out remaining number of tiles?
 
-            } else if (pile.size() < 1) {
-                LOGGER.info("Pile was empty when player tried to draw");
-                    throw new IllegalArgumentException("The pile is empty, cannot draw more tiles");
+        if (pile.size() != 0) {
+            int randomInt = random.nextInt(pile.size());
+            LOGGER.info("Tile {} was drawn and removed from the pile.", pile.get(randomInt).getSpace());
+            return pile.remove(randomInt);
+            //Print out remaining number of tiles?
 
-            }
-            return null;
+        } else if (pile.size() < 1) {
+            LOGGER.info("Pile was empty when player tried to draw");
+                throw new IllegalArgumentException("The pile is empty, cannot draw more tiles");
+
+        }
+        return null;
        }
 
 
@@ -158,15 +159,12 @@ public class Pile {
      */
     protected void loadPile() throws FileNotFoundException {
         //Empty old instance pile so it can be replaced with the load instance
-        if(pile.size() > 0){
-            while(pile.size() > 0){
-                pile.remove(0);
-            }
-        }
+        pile = new ArrayList<>();
         Gson gson = new Gson();
         Reader reader = new FileReader("acquire/app/jsonsave/pile.json");
         Pile newPile = gson.fromJson(reader, (Type) Pile.class);
         Pile.getInstance().pile = newPile.pile;
+        LOGGER.info("Loaded new pile with {} tiles in it", pile.size());
     }
 
     /**
@@ -175,5 +173,6 @@ public class Pile {
      */
     protected void newGame(){
         this.pile = new Pile().pile;
+        LOGGER.info("Pile was created");
     }
 }

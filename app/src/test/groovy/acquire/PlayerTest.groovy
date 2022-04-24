@@ -100,7 +100,7 @@ class PlayerTest extends Specification {
         when:
         def stockList = player.getStocks()
         def corp = CorporationList.getInstance().getCorporation("Sackson")
-        def result = stockList.get(corp)
+        def result = stockList.get(corp.getName())
 
         then:
         result == 0
