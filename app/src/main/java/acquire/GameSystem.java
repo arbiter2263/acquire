@@ -353,17 +353,6 @@ public class GameSystem {
                     //
                 }
             }
-
-            /*
-            if ( (majorityHolder == null) || stockCounts.get(majorityHolder) < stockCounts.get(player) ) {
-                minorityHolder = majorityHolder;
-
-                majorityHolder = player;
-            }else if (minorityHolder == null || stockCounts.get(minorityHolder) < stockCounts.get(player) ) {
-                minorityHolder = player;
-            }
-
-             */
         }
         //tie pays out half of the combined payouts
         if(stockCounts.get(minorityHolder) == stockCounts.get(majorityHolder)){
@@ -416,10 +405,15 @@ public class GameSystem {
         CorporationList.getInstance().loadCorpList();
         GameSystem.getInstance().loadGameSystemMethod();
         Gameboard.getInstance().loadGameboard();
-
-
-
     }
+
+
+    /**
+     * loadGameSystemMethod Used by gameSystem class to
+     * load in a previous instance of the gameSystem
+     *
+     * @throws FileNotFoundException
+     */
     protected void loadGameSystemMethod() throws FileNotFoundException {
         Gson gson = new Gson();
         Reader reader = new FileReader("acquire/app/jsonsave/gamesystem.json");

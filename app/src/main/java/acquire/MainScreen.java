@@ -9,11 +9,8 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -24,8 +21,12 @@ import java.io.FileNotFoundException;
 
 public class MainScreen extends Application {
 
+    /**
+     * required by javaFX, used to start the app
+     * @param primaryStage stage scene will be ran on
+     */
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         primaryStage.setTitle("Acquire");
         GridPane gridPane = mainScreen();
         Scene scene = new Scene(gridPane, 1200, 800);
@@ -34,6 +35,10 @@ public class MainScreen extends Application {
         primaryStage.show();
     }
 
+    /**
+     * sets up gridpane controls will be implemented on
+     * @return the setup gridpane
+     */
     private GridPane mainScreen() {
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
@@ -43,6 +48,11 @@ public class MainScreen extends Application {
         return gridPane;
     }
 
+    /**
+     * adds controls to the gridpane
+     * @param primaryStage stage the scene will be changed on given certain user input
+     * @param gridPane gridpane controls need to be added to
+     */
     private void addUIControls(Stage primaryStage, GridPane gridPane) {
         // Add New Game Button
         Button newGameButton = new Button("New Game");

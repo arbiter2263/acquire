@@ -21,6 +21,15 @@ public class MergerScreen {
     static String corporation1;
     static String corporation2;
 
+    /**
+     * screen user gets when a company they own stock in was de-activated in a merger
+     * @param primaryStage stage the scene runs on, used to switch between options later
+     * @param e player whose stock is being managed
+     * @param k corporation that absorbed corporation user has stock in
+     * @param defunct corporation that was absorbed
+     * @return the setup scene
+     * @throws FileNotFoundException if the pictures for corporations aren't found
+     */
     protected Scene getScene(Stage primaryStage, Player e, String k, String defunct) throws FileNotFoundException {
         GridPane gridPane = new GridPane();
         user = e;
@@ -32,6 +41,11 @@ public class MergerScreen {
         return scene;
     }
 
+    /**
+     * sets up the gridpane used for organization
+     * @param gridPane gridapne that needs setup
+     * @return the setup gridpane
+     */
     private GridPane gameSetup(GridPane gridPane) {
         gridPane.setAlignment(Pos.TOP_CENTER);
         gridPane.setHgap(10);
@@ -40,6 +54,11 @@ public class MergerScreen {
         return gridPane;
     }
 
+    /**
+     * adds controls to the gridpane
+     * @param primaryStage stage that will have scene changed depending on user input
+     * @param gridPane gridpane that needs controls added
+     */
     private void addUIControls(Stage primaryStage, GridPane gridPane) {
         TextArea merger = new TextArea("A merger has occurred between these 2 corporations: " + corporation1 + " and " + corporation2 + ". What would you like to do with your stocks for " + corporation2 + " which is now defunct?");
         merger.setWrapText(true);
