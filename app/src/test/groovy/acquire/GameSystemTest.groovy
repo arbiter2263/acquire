@@ -572,5 +572,55 @@ class GameSystemTest extends Specification {
         player3.getMoney() == 3600      // 0 + (2 * 600 + 0) + (2 * 1200 + 0)
 
     }
+    /**
+     * test to check if the new game method resets
+     * the gamesystem fields to "default"
+     */
+    def "New game method for game system"() {
+        setup:
+        GameSystem.INSTANCE = null
+        CorporationList.INSTANCE = null
+        Gameboard.INSTANCE = null
+        Pile.instance = null
+        def sys = GameSystem.getInstance()
+        def board = Gameboard.getInstance()
+        def corpList = CorporationList.getInstance()
+        def pile = Pile.getInstance()
 
+        board.initializeGame(2)
+        def player1 = board.getPlayers().get(0)
+        def player2 = board.getPlayers().get(1)
+
+        sys.playerList.add(player1)
+        sys.playerList.add(player2)
+        sys.isHardMode = true
+        sys.turnCounter = 3
+
+
+        when:
+        GameSystem.getInstance().newGame()
+
+        then:
+        sys.playerList.size() == 0
+        sys.isHardMode == false
+        sys.turnCounter == 0
+
+    }
+    def "Initialize gamesystem test"(){
+        setup:
+        GameSystem.INSTANCE = null
+        CorporationList.INSTANCE = null
+        Gameboard.INSTANCE = null
+        Pile.instance = null
+
+        def sys = GameSystem.getInstance()
+        when:
+        sys.initializeGame(true, 3)
+
+        then:
+        sys.numOfPlayers == 3
+        sys.isHardMode == true
+        Pile.getInstance().size() == 108
+        CorporationList.getInstance().getInactiveCorps().size() == 7
+    }
 }
