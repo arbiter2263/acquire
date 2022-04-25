@@ -606,6 +606,9 @@ class GameSystemTest extends Specification {
         sys.turnCounter == 0
 
     }
+    /**
+     * Testing initialize game feature
+     */
     def "Initialize gamesystem test"(){
         setup:
         GameSystem.INSTANCE = null

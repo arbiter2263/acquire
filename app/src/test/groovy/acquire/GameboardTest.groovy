@@ -69,6 +69,7 @@ class GameboardTest extends Specification {
         then:
         result.length == 12
     }
+
     def "get the playing board's column count"() {
         setup:
         Gameboard.INSTANCE = null
@@ -192,5 +193,30 @@ class GameboardTest extends Specification {
 
         then:
         result[1] == 2
+    }
+
+    /**
+     * Expanding a corporation
+     */
+
+    def "Expand an existing corporation"() {
+        setup:
+        def stage = Mock(Stage)
+        Gameboard.INSTANCE = null
+        def board = Gameboard.getInstance()
+        def player = new Player("Player 1")
+        def tile = new Tile(1, 'A' as char)
+        def tile2 = new Tile(1, "B" as char)
+        def tile3 = new Tile(1, "C" as char)
+        def corp = CorporationList.getInstance().getCorporation("America")
+        CorporationList.getInstance().activateCorp(corp)
+        corp.tileList.add(tile)
+        corp.tileList.add(tile2)
+
+        when:
+        board.expandCorp(tile3, 0)
+
+        then:
+        corp.tileList.size() == 3
     }
 }
