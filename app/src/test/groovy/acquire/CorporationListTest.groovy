@@ -111,8 +111,21 @@ class CorporationListTest extends Specification {
 
         then:
         list.checkStatus(corp.getName()) == true
+    }
 
+    //test for newGame()
+    def "try to reset the CorporationList for a new game"() {
+        setup:
+        CorporationList.INSTANCE = null;
+        def corpList = CorporationList.getInstance()
+        def corp = corpList.getCorporation("America")
+        corpList.activateCorp(corp)
 
+        when:
+        corpList.newGame()
+
+        then:
+        corpList.getActiveCorps().size() == 0
     }
 
 }

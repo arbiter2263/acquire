@@ -1,6 +1,19 @@
 # Changelog
 This document contains a summary of changes for this project
 
+## [1.1.0] 04-24-2022
+### Added
+- Save and load functionality
+- Ability to get in game hints
+- Arrows to navigate through hints
+- Additionally UI alerts for common errors
+- Advanced mode fleshed out
+- General logging
+### Changed
+- Internal functionality of some methods
+### Removed
+- 'HoldStockScreen' removed due to simplicity and ease of incorporating into 'MergerScreen'
+
 ## [1.0.1] 04-24-2022
 ### Added
 - PNGs to represent each corporation

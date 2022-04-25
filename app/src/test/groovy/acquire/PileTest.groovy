@@ -93,4 +93,18 @@ class PileTest extends Specification{
 
         assert pile.toString().getClass() == String
     }
+
+    def "new game"(){
+        given:
+        Pile.instance = null
+        def pile = new Pile()
+        for(int i = 0; i < 50; i++){
+            pile.drawTile()
+        }
+        when:
+        pile.newGame()
+
+        then:
+        pile.size() == 108
+    }
 }

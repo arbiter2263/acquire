@@ -5,31 +5,24 @@
 
 package acquire;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.stage.Window;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.LinkedList;
 
 public class AdvancedScreen {
+    /**
+     * used by other scenes to access the scene
+     * @param primaryStage stage scene is running on
+     * @param user player whose turn it is
+     * @return the finished scene
+     */
     protected Scene getScene(Stage primaryStage, Player user) {
         GridPane gridPane = new GridPane();
         Scene scene = new Scene(gridPane, 1200, 800);
@@ -38,6 +31,10 @@ public class AdvancedScreen {
         return scene;
     }
 
+    /**
+     * sets up the gridpane used for organizing the scene
+     * @param gridPane gridpane that needs organized
+     */
     private void setup(GridPane gridPane) {
         gridPane.setAlignment(Pos.TOP_CENTER);
         gridPane.setBackground(new Background(new BackgroundFill(Color.web("#CBC3E3"), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -46,6 +43,12 @@ public class AdvancedScreen {
         gridPane.setVgap(10);
     }
 
+    /**
+     * adds controls to the gridpane
+     * @param primaryStage stage scene will be ran on
+     * @param gridPane gridpane controls will be added to
+     * @param user player whose turn it is
+     */
     private void addUIControls(Stage primaryStage, GridPane gridPane, Player user) {
         TextArea playerStats = new TextArea();
         for (Player player : GameSystem.getInstance().getPlayerList()) {

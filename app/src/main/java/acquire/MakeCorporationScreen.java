@@ -26,6 +26,12 @@ import java.util.ArrayList;
 public class MakeCorporationScreen {
     static Player user;
 
+    /**
+     * used to get the make corporation screen
+     * @param primaryStage stage that the scene will be run on
+     * @param e player that has option to make the corporation
+     * @return the setup make corporation scene
+     */
     protected Scene getScene(Stage primaryStage, Player e) {
         GridPane gridPane = new GridPane();
         user = e;
@@ -35,6 +41,11 @@ public class MakeCorporationScreen {
         return scene;
     }
 
+    /**
+     * used to setup the gridpane used to organize scene
+     * @param gridPane gridpane that needs setup
+     * @return setup gridpane
+     */
     private GridPane stockSell(GridPane gridPane) {
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setBackground(new Background(new BackgroundFill(Color.web("#CBC3E3"), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -44,6 +55,11 @@ public class MakeCorporationScreen {
         return gridPane;
     }
 
+    /**
+     * adds controls to the gridpane
+     * @param primaryStage stage the scene will be changed on depending on user input
+     * @param gridPane gridpane controls need added to
+     */
     private void addUIControls(Stage primaryStage, GridPane gridPane) {
         if (CorporationList.getInstance().getInactiveCorps().size() > 0) {
             //Add label

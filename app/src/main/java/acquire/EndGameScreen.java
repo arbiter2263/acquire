@@ -22,6 +22,11 @@ import java.util.LinkedList;
 
 public class EndGameScreen {
 
+    /**
+     * used by other scenes to access this scene
+     * @param primaryStage stage will be ran on
+     * @return the setup scene
+     */
     protected Scene getScene(Stage primaryStage) {
         GridPane gridPane = new GridPane();
         gridSetup(gridPane);
@@ -29,6 +34,11 @@ public class EndGameScreen {
         return new Scene(gridPane, 1200, 800);
     }
 
+    /**
+     * sets up the gridpane used to organize scene
+     * @param gridPane gridpane that needs setup
+     * @return setup gridpane
+     */
     private GridPane gridSetup(GridPane gridPane) {
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setBackground(new Background(new BackgroundFill(Color.web("#CBC3E3"), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -37,6 +47,10 @@ public class EndGameScreen {
         return gridPane;
     }
 
+    /**
+     * adds the parts to the gridpane
+     * @param gridPane gridpane that needs stuff added to it
+     */
     private void addUIControls(GridPane gridPane) {
         // Add Label
         Label conclusion = new Label("The Game has Concluded!");

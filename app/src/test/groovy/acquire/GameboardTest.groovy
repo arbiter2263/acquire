@@ -69,6 +69,7 @@ class GameboardTest extends Specification {
         then:
         result.length == 12
     }
+
     def "get the playing board's column count"() {
         setup:
         Gameboard.INSTANCE = null
@@ -192,5 +193,109 @@ class GameboardTest extends Specification {
 
         then:
         result[1] == 2
+    }
+
+    /**
+     * Expanding a corporation
+     */
+
+    def "Expand an existing corporation"() {
+        setup:
+        def stage = Mock(Stage)
+        Gameboard.INSTANCE = null
+        def board = Gameboard.getInstance()
+        def player = new Player("Player 1")
+        def tile = new Tile(1, 'A' as char)
+        def tile2 = new Tile(1, "B" as char)
+        def tile3 = new Tile(1, "C" as char)
+        def corp = CorporationList.getInstance().getCorporation("America")
+        CorporationList.getInstance().activateCorp(corp)
+        corp.tileList.add(tile)
+        corp.tileList.add(tile2)
+
+        when:
+        board.expandCorp(tile3, 0)
+
+        then:
+        corp.tileList.size() == 3
+    }
+    def "get unincorporatedTilesPlayed"() {
+        setup:
+        Gameboard.INSTANCE = null
+        def board = Gameboard.getInstance()
+
+        when:
+        def tiles = board.getUnincorporatedTilesPlayed()
+
+        then:
+        tiles.isEmpty()
+    }
+    def "get the game board"() {
+        setup:
+        Gameboard.INSTANCE = null
+        def board = Gameboard.getInstance()
+
+        when:
+        def grabbedBoard = board.getBoard()
+
+        then:
+        grabbedBoard.length == 12
+    }
+    def "check if gameboard equals gameboard"() {
+        setup:
+        Gameboard.INSTANCE = null
+        def board = Gameboard.getInstance()
+
+        when:
+        def result = Gameboard.getInstance()
+
+        then:
+        board == result
+    }
+    def "try to remove unincorporatedTiles"() {
+        setup:
+        Gameboard.INSTANCE = null
+        CorporationList.INSTANCE = null
+        def board = Gameboard.getInstance()
+        def corpList = CorporationList.getInstance()
+        def corp = corpList.getCorporation("America")
+        def tile1 = new Tile(1, 'A' as char)
+        def tile2 = new Tile(2, 'A' as char)
+        def player = new Player("test")
+        def stage = Mock(Stage)
+        corpList.activateCorp(corp)
+        corp.addTile(tile1)
+        corp.addTile(tile2)
+        board.placeTile(player, tile1, stage)
+        board.placeTile(player, tile2, stage)
+
+        when:
+        board.unincorporatedTileCheck()
+
+        then:
+        board.getUnincorporatedTilesPlayed().isEmpty()
+    }
+    def "check if a player has stake in a corporation they don't have stock for"() {
+        setup:
+        Gameboard.INSTANCE = null
+        CorporationList.INSTANCE = null
+        def board = Gameboard.getInstance()
+        def corpList = CorporationList.getInstance()
+        def corp = corpList.getCorporation("America")
+        def tile1 = new Tile(1, 'A' as char)
+        def tile2 = new Tile(2, 'A' as char)
+        corpList.activateCorp(corp)
+        corp.addTile(tile1)
+        corp.addTile(tile2)
+        def player = new Player("test")
+        def stage = Mock(Stage)
+        def indexes = new LinkedList<Integer>()
+        indexes.add(0)
+
+        when:
+        def result = board.checkStakes(indexes)
+
+        then:
+        result.size() == 0
     }
 }

@@ -5,7 +5,7 @@
 
 package acquire;
 
-import javafx.application.Application;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -20,9 +20,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import org.checkerframework.checker.units.qual.A;
-
-import javax.management.Notification;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
@@ -31,6 +28,14 @@ public class TradeStockScreen {
     static String corpSurviving;
     static String corpDefunct;
 
+    /**
+     * used by other scenes to access
+     * @param primaryStage stage scene is running on
+     * @param f player who is trading in stock
+     * @param surviving corporation that is absorbing
+     * @param defunct corporation that is being absorbed
+     * @return the setup scene
+     */
     public Scene getScene(Stage primaryStage, Player f, String surviving, String defunct) {
         GridPane gridPane = stockTrade();
         user = f;
@@ -43,6 +48,10 @@ public class TradeStockScreen {
         return scene;
     }
 
+    /**
+     * sets up the gridpane
+     * @return the setup gridpane
+     */
     private GridPane stockTrade() {
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
@@ -52,6 +61,12 @@ public class TradeStockScreen {
         return gridPane;
     }
 
+    /**
+     * adds controls to the gridpane
+     * @param primaryStage stage scene is running on
+     * @param gridPane gridpane that needs controls added to
+     * @throws FileNotFoundException if can't find image associated with corporation
+     */
     private void addUIControls(Stage primaryStage, GridPane gridPane) throws FileNotFoundException {
         // Add Header
         Label headerLabel = new Label("Trading stocks was selected, please enter how many you want to trade. \nRemember that trading stocks is a 2 to 1 ratio of defunct to merged stocks.");
@@ -88,7 +103,12 @@ public class TradeStockScreen {
         sellButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
+                SellStockScreen sell = new SellStockScreen();
+                try {
+                    Scene scene = sell.getScene(primaryStage, user, corpDefunct, corpSurviving);
+                    primaryStage.setScene(scene);
+                    primaryStage.show();
+                } catch (FileNotFoundException ignore) {}
             }
         });
 
@@ -125,7 +145,7 @@ public class TradeStockScreen {
                 Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to hold stock in the defunct corporation? This will end selling and trading in stock.");
                 confirm.showAndWait();
                 if (confirm.getResult() == ButtonType.YES) {
-
+                    primaryStage.close();
                 }
             }
         });
