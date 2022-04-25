@@ -7,15 +7,12 @@ package acquire;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.gson.Gson;
-
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.*;
-
 import com.google.gson.GsonBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import lombok.*;
 
 @EqualsAndHashCode @ToString

@@ -28,6 +28,15 @@ public class MergerTieScreen {
     static String corporation1;
     static String corporation2;
 
+    /**
+     * used by other scenes to switch to this scene
+     * @param primaryStage stage scene will be on
+     * @param e player that has to choose between which corporation to keep and which to de-activate
+     * @param k name of first company involved in merger
+     * @param f name of second company involved in merger
+     * @return the setup merger tie screen
+     * @throws FileNotFoundException if corporation pictures aren't found
+     */
     protected Scene getScene(Stage primaryStage, Player e, String k, String f) throws FileNotFoundException {
         GridPane gridPane = new GridPane();
         user = e;
@@ -39,6 +48,11 @@ public class MergerTieScreen {
         return scene;
     }
 
+    /**
+     * sets up gridpane used to organize scene
+     * @param gridPane gridpane that needs setup
+     * @return the setup gridpane
+     */
     private GridPane gameSetup(GridPane gridPane) {
         gridPane.setAlignment(Pos.TOP_CENTER);
         gridPane.setHgap(10);
@@ -47,6 +61,12 @@ public class MergerTieScreen {
         return gridPane;
     }
 
+    /**
+     * adds controls to the gridpane
+     * @param primaryStage stage the scene will be changed on if user selects various input
+     * @param gridPane gridpane that controls need to be added to
+     * @throws FileNotFoundException if can't find the picture associated with the corporation
+     */
     private void addUIControls(Stage primaryStage, GridPane gridPane) throws FileNotFoundException {
         TextArea merger = new TextArea("A merger has occurred between these 2 corporations: " + corporation1 + " and " + corporation2 + ". The Corporations are the same size, select a corporation you would like to merge and take over. ");
         merger.setWrapText(true);

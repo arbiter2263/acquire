@@ -19,6 +19,11 @@ import javafx.stage.Stage;
 import java.util.LinkedList;
 
 public class GameSetupScreen {
+    /**
+     * Sets up the gridpane used for organizing
+     * @param gridPane gridpane that needs to be setup
+     * @return gridpane after being setup
+     */
     private GridPane gameSetup(GridPane gridPane) {
         gridPane.setAlignment(Pos.TOP_CENTER);
         gridPane.setBackground(new Background(new BackgroundFill(Color.web("#CBC3E3"), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -27,6 +32,11 @@ public class GameSetupScreen {
         return gridPane;
     }
 
+    /**
+     * sets up controls on the gridpane
+     * @param primaryStage stage that will have scene changed when user finishes setting up the game
+     * @param gridPane gridpane controls added to
+     */
     protected void addUIControls(Stage primaryStage, GridPane gridPane) {
         // Add Player Count Choicebox
         ChoiceBox<String> playerCount = new ChoiceBox<>();
@@ -74,6 +84,11 @@ public class GameSetupScreen {
         });
     }
 
+    /**
+     * used to access the scene from other scenes
+     * @param primaryStage stage scene is setup on
+     * @return the setup game setup scene
+     */
     protected Scene getScene(Stage primaryStage) {
         GridPane gridPane = new GridPane();
         Scene scene = new Scene(gridPane, 1200, 800);
