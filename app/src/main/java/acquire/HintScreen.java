@@ -5,14 +5,11 @@
 
 package acquire;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -20,20 +17,18 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.stage.Window;
-import org.w3c.dom.Text;
-
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.Random;
+
 
 public class HintScreen {
+    /**
+     * used by other scenes to access the hint scene
+     * @param primaryStage stage scene will be placed on
+     * @return the setup hint scene
+     */
     protected Scene getScene(Stage primaryStage) {
         GridPane gridPane = new GridPane();
         setup(gridPane);
@@ -41,6 +36,10 @@ public class HintScreen {
         return new Scene(gridPane, 1200, 800);
     }
 
+    /**
+     * sets up the gridpane used to organize contents on scene
+     * @param gridPane gridpane that needs setup
+     */
     private void setup(GridPane gridPane) {
         gridPane.setAlignment(Pos.TOP_CENTER);
         gridPane.setBackground(new Background(new BackgroundFill(Color.web("#CBC3E3"), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -49,6 +48,11 @@ public class HintScreen {
         gridPane.setVgap(10);
     }
 
+    /**
+     * adds the controls to the gridpane
+     * @param primaryStage stage changing the scene of if user selects certain input
+     * @param gridPane gridpane controls are to be added to
+     */
     private void addUIControls(Stage primaryStage, GridPane gridPane) {
         // Add hint Label
         Label hintLabel = new Label("Here are some Hints!");

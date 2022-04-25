@@ -26,6 +26,15 @@ import java.io.FileNotFoundException;
 
 public class SellStockScreen {
 
+    /**
+     * used by other scenes to access this scene
+     * @param primaryStage stage scene will be ran on
+     * @param e player that wants to sell stock
+     * @param defunct corporation that is going defunct
+     * @param active corporation that is staying active
+     * @return the setup scene
+     * @throws FileNotFoundException if can't find the image associated with the corporation
+     */
     protected Scene getScene(Stage primaryStage, Player e, String defunct, String active) throws FileNotFoundException {
         Player user;
         GridPane gridPane = new GridPane();
@@ -36,6 +45,11 @@ public class SellStockScreen {
         return scene;
     }
 
+    /**
+     * sets up the gridpane used to organize scene
+     * @param gridPane gridpane that needs setup
+     * @return returns the setup gridpane
+     */
     private GridPane stockSell(GridPane gridPane) {
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setBackground(new Background(new BackgroundFill(Color.web("#CBC3E3"), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -45,6 +59,15 @@ public class SellStockScreen {
         return gridPane;
     }
 
+    /**
+     * add controls to the gridpane
+     * @param primaryStage stage scene is running on and will have new scene if user selects various input
+     * @param gridPane gridpane needs controls added to
+     * @param user player that is selling stock
+     * @param defunct corporation that has stock being sold
+     * @param active corporation that is alive
+     * @throws FileNotFoundException if doesn't find image associated with corporation
+     */
     private void addUIControls(Stage primaryStage, GridPane gridPane, Player user, String defunct, String active) throws FileNotFoundException {
         // Add Header
         Label headerLabel = new Label("Selling stocks was selected, please enter how many stocks you would like to sell");
@@ -135,6 +158,12 @@ public class SellStockScreen {
             });
     }
 
+    /**
+     * checks if all of the stocks have been sold
+     * @param user player selling stocks
+     * @param defunct corporations stocks being sold from
+     * @return true if user has sold all stock, false if still has stocks
+     */
     private boolean checkIfDone(Player user, Corporation defunct) {
         return user.getStockCount(defunct.getName()) == 0;
     }

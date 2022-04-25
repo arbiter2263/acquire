@@ -6,7 +6,6 @@
 package acquire;
 
 import java.util.*;
-
 import lombok.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
