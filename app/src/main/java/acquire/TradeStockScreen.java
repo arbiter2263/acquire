@@ -103,7 +103,12 @@ public class TradeStockScreen {
         sellButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
+                SellStockScreen sell = new SellStockScreen();
+                try {
+                    Scene scene = sell.getScene(primaryStage, user, corpDefunct, corpSurviving);
+                    primaryStage.setScene(scene);
+                    primaryStage.show();
+                } catch (FileNotFoundException ignore) {}
             }
         });
 
@@ -140,7 +145,7 @@ public class TradeStockScreen {
                 Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to hold stock in the defunct corporation? This will end selling and trading in stock.");
                 confirm.showAndWait();
                 if (confirm.getResult() == ButtonType.YES) {
-
+                    primaryStage.close();
                 }
             }
         });
